@@ -1,5 +1,6 @@
 package webserver;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +23,7 @@ public class WebApplicationServer {
         this.executor = Executors.newFixedThreadPool(threadPoolSize);
     }
 
-    public void run() throws Exception {
+    public void run() {
 
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
@@ -37,7 +38,10 @@ public class WebApplicationServer {
                     dependency.getHttpRequestHeadParserFactory(),
                     dependency.getHttpResponseHeaderFactory()));
             }
-        } finally {
+        } catch (IOException e) {
+            logger.error("Error in Web Application Server: ", e);
+        }
+        finally {
             executor.shutdown();
         }
     }

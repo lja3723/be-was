@@ -15,12 +15,9 @@ public class MainApplication {
             port = Integer.parseInt(args[0]);
         }
 
-        WebApplicationServer webApplicationServer = new WebApplicationServer(port, DEFAULT_THREAD_POOL_SIZE, new WebApplicationServerProductionDependency());
-        try {
-            webApplicationServer.run();
-        } catch (Exception e) {
-            //TODO: 강력한 로깅 및 예외 처리 로직 구현 필요
-            e.printStackTrace();
-        }
+        WebApplicationServer webApplicationServer = new WebApplicationServer(
+            port, DEFAULT_THREAD_POOL_SIZE, new WebApplicationServerProductionDependency());
+
+        webApplicationServer.run();
     }
 }
