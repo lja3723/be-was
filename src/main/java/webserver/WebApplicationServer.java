@@ -34,7 +34,8 @@ public class WebApplicationServer {
                     connection,
                     dependency.getHttpRequestHeaderFactory(),
                     dependency.getHttpFieldParser(),
-                    dependency.getHttpRequestHeadParserFactory()));
+                    dependency.getHttpRequestHeadParserFactory(),
+                    dependency.getHttpResponseHeaderFactory()));
             }
         } finally {
             executor.shutdown();
