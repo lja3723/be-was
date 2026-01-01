@@ -1,4 +1,4 @@
-package webserver.httpheader.request;
+package webserver.httpheader.request.header;
 
 import webserver.httpheader.HttpHeader;
 import webserver.httpheader.HttpMethod;

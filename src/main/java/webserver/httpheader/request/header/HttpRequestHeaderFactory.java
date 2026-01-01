@@ -1,4 +1,4 @@
-package webserver.httpheader.request;
+package webserver.httpheader.request.header;
 
 import java.io.InputStream;
 import webserver.httpheader.HttpHeaderFactory;
