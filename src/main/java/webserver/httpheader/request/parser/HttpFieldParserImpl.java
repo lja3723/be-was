@@ -8,8 +8,8 @@ import webserver.httpheader.field.HttpFieldKey;
 public class HttpFieldParserImpl implements HttpFieldParser {
     private static final Logger log = LoggerFactory.getLogger(HttpFieldParserImpl.class);
 
-    //  괄호 ()를 모두 치환후, ,로 split후 ;로 split
-    // 치환되었던 ()를 원복
+    // TODO: 괄호 ()를 모두 치환후, ,로 split후 ;로 split. 그리고 치환되었던 ()를 원복
+
     @Override
     public HttpField parse(String rawFieldLine) {
         HttpField result = new HttpField();

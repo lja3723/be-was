@@ -1,17 +1,19 @@
 package webserver.handler;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.httpheader.request.HttpRequestHeader;
-import webserver.httpheader.request.HttpRequestHeaderFactory;
+import webserver.exception.ResourceNotFoundException;
+import webserver.handler.response.ResponseHandler;
+import webserver.handler.response.SuccessResponseHandler;
+import webserver.httpheader.request.header.HttpRequestHeader;
+import webserver.httpheader.request.header.HttpRequestHeaderFactory;
 import webserver.httpheader.request.parser.HttpFieldParser;
 import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
+import webserver.httpheader.response.header.HttpResponseHeaderFactory;
 
 public class HttpClientRequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientRequestHandler.class);
@@ -20,15 +22,18 @@ public class HttpClientRequestHandler implements Runnable {
     private final HttpRequestHeaderFactory httpRequestHeaderFactory;
     private final HttpFieldParser httpFieldParser;
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
+    private final HttpResponseHeaderFactory httpResponseHeaderFactory;
 
     public HttpClientRequestHandler(Socket connectionSocket,
                           HttpRequestHeaderFactory httpRequestHeaderFactory,
                           HttpFieldParser httpFieldParser,
-                          HttpRequestHeadParserFactory httpRequestHeadParserFactory) {
+                          HttpRequestHeadParserFactory httpRequestHeadParserFactory,
+                          HttpResponseHeaderFactory httpResponseHeaderFactory) {
         this.connection = connectionSocket;
         this.httpRequestHeaderFactory = httpRequestHeaderFactory;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeadParserFactory = httpRequestHeadParserFactory;
+        this.httpResponseHeaderFactory = httpResponseHeaderFactory;
     }
 
     public void run() {
@@ -44,20 +49,20 @@ public class HttpClientRequestHandler implements Runnable {
                 in, httpRequestHeadParserFactory, httpFieldParser);
 
             logHttpRequestHeader(httpRequestHeader);
+            handleResponse(new SuccessResponseHandler(), httpRequestHeader, out);
 
-            //TODO: 응답 리팩터링
-            //TODO: 정적 파일 응답 처리
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "<h1>Hello World</h1>".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            logger.error("404 Not Found: {}", e.getMessage());
+            //TODO: 404 응답 처리
+        }
+        catch (Exception e) {
+            logger.error("500 Internal Server Error: {}", e.getMessage());
+            e.printStackTrace();
+            //TODO: 500 응답 처리
         }
     }
 
-    public void logHttpRequestHeader(HttpRequestHeader header) {
+    private void logHttpRequestHeader(HttpRequestHeader header) {
         logger.debug("----- HTTP Request Header -----");
         logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method, header.path, header.version);
         header.fields.forEach(field ->
@@ -65,24 +70,11 @@ public class HttpClientRequestHandler implements Runnable {
         );
     }
 
-    //TODO: 응답 리팩터링
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void handleResponse(ResponseHandler responseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
+        responseHandler.setHttpResponseHeaderFactory(httpResponseHeaderFactory);
+        responseHandler.setHttpRequestHeader(httpRequestHeader);
+        responseHandler.setOutputStream(out);
+        responseHandler.handleResponse();
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
 }
