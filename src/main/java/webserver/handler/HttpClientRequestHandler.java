@@ -41,10 +41,7 @@ public class HttpClientRequestHandler implements Runnable {
             connection.getInetAddress(),
             connection.getPort());
 
-        try {
-            InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream();
-
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequestHeader httpRequestHeader = httpRequestHeaderFactory.create(
                 in, httpRequestHeadParserFactory, httpFieldParser);
 
