@@ -2,7 +2,7 @@ package webserver.handler.response.util;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
-import webserver.exception.InternalServerError;
+import webserver.exception.InternalServerErrorException;
 import webserver.httpheader.response.header.HttpResponseHeader;
 
 public class HttpResponseWriter {
@@ -32,13 +32,13 @@ public class HttpResponseWriter {
         return builder.toString();
     }
 
-    public void flushResponse() throws InternalServerError {
+    public void flushResponse() throws InternalServerErrorException {
         try {
             dataOutputStream.writeBytes(encodeHeader());
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         } catch (Exception e) {
-            throw new InternalServerError("Failed to flush response", e);
+            throw new InternalServerErrorException("Failed to flush response", e);
         }
 
     }
