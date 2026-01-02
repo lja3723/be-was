@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.exception.InternalServerError;
+import webserver.exception.InternalServerErrorException;
 import webserver.exception.ResourceNotFoundException;
+import webserver.handler.response.util.HttpResponseWriter;
+import webserver.handler.response.util.ResourcePath;
 import webserver.httpheader.HttpVersion;
 import webserver.httpheader.request.header.HttpRequestHeader;
-import webserver.httpheader.response.ContentType;
 import webserver.httpheader.response.HttpStatus;
 import webserver.httpheader.response.header.HttpResponseHeader;
 import webserver.httpheader.response.header.HttpResponseHeaderFactory;
@@ -43,59 +44,30 @@ public class SuccessResponseHandler implements ResponseHandler {
         //TODO: 응답 리팩터링
         //TODO: 정적 파일 응답 처리
 
-        String resourcePath = getResourcePath(httpRequestHeader.path);
+        ResourcePath resourcePath = new ResourcePath(httpRequestHeader.path);
         logger.debug("request path: {}, resource Path: {}", httpRequestHeader.path, resourcePath);
 
-        InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath);
-        if (is == null) {
-            throw new ResourceNotFoundException("Resource not found: " + resourcePath);
-        }
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath.getResourcePath()))  {
+            if (is == null) {
+                throw new ResourceNotFoundException("Resource not found: " + resourcePath);
+            }
 
-        try {
             byte[] body = is.readAllBytes();
-
             HttpResponseHeader responseHeader = httpResponseHeaderFactory.builder()
                 .version(HttpVersion.HTTP_1_1)
                 .status(HttpStatus.OK)
-                .contentType(getContentType(resourcePath))
+                .contentType(resourcePath.getContentType())
                 .body(body)
                 .build();
 
             //TODO: 로딩이 잘 안되는 것 디버깅으로 찾아내기
-            flushResponse(outputStream, responseHeader, body);
+            HttpResponseWriter responseWriter = new HttpResponseWriter(outputStream, responseHeader, body);
+            responseWriter.flushResponse();
 
             // response200Header(dos, body.length);
             // responseBody(dos, body);
         } catch (IOException e) {
-            throw new InternalServerError(e.getMessage(), e);
-        }
-    }
-
-    protected ContentType getContentType(String resourcePath) {
-        String[] roots = resourcePath.split("/");
-        String[] parts = roots[roots.length - 1].split("\\.");
-        String extension = parts[parts.length - 1].toLowerCase();
-        return ContentType.fromFileExtension(extension);
-    }
-
-    protected String getResourcePath(String requestPath) {
-        if (requestPath.equals("/")) {
-            requestPath = "/index.html";
-        }
-        return "static" + requestPath;
-    }
-
-    protected void flushResponse(OutputStream os, HttpResponseHeader responseHeader, byte[] body) {
-        DataOutputStream dos = new DataOutputStream(os);
-        logger.debug("Response Header: {}", responseHeader.toString());
-        logger.debug("Response Body: {}", body);
-
-        try {
-            dos.writeBytes(responseHeader.toString());
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            throw new InternalServerError(e.getMessage(), e);
+            throw new InternalServerErrorException(e.getMessage(), e);
         }
     }
 
