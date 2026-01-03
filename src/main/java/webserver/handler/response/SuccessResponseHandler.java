@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.exception.InternalServerErrorException;
 import webserver.exception.ResourceNotFoundException;
-import webserver.handler.response.util.HttpResponseWriter;
+import webserver.handler.response.util.ResponseOutputStreamWriter;
 import webserver.handler.response.util.ResourcePath;
 import webserver.header.HttpVersion;
 import webserver.header.request.header.HttpRequestHeader;
@@ -68,7 +68,7 @@ public class SuccessResponseHandler implements ResponseHandler {
 
             // HTTP Response를 OutputStream으로 전송
             //TODO: 로딩이 잘 안되는 것 디버깅으로 찾아내기
-            HttpResponseWriter responseWriter = new HttpResponseWriter(outputStream, responseHeader, body);
+            ResponseOutputStreamWriter responseWriter = new ResponseOutputStreamWriter(outputStream, responseHeader, body);
             responseWriter.flushResponse();
 
             // response200Header(dos, body.length);

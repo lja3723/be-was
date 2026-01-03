@@ -10,13 +10,13 @@ import webserver.header.response.header.HttpResponseHeader;
  * <p>Socket을 통해 열려 있는 {@link OutputStream}으로 {@link HttpResponseHeader} 및
  * byte[] body 배열을 직렬화 후 전달한 후 flush를 수행하여 HTTP Response를 클라이언트에 전달함</p>
  */
-public class HttpResponseWriter {
+public class ResponseOutputStreamWriter {
 
     private final DataOutputStream dataOutputStream;
     private final HttpResponseHeader responseHeader;
     private final byte[] body;
 
-    public HttpResponseWriter(OutputStream outputStream, HttpResponseHeader responseHeader, byte[] body) {
+    public ResponseOutputStreamWriter(OutputStream outputStream, HttpResponseHeader responseHeader, byte[] body) {
         this.dataOutputStream = new DataOutputStream(outputStream);
         this.responseHeader = responseHeader;
         this.body = body;
