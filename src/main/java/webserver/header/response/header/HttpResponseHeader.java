@@ -1,7 +1,7 @@
 package webserver.header.response.header;
 
 import webserver.header.HttpHeader;
-import webserver.header.response.HttpStatus;
+import webserver.header.HttpStatus;
 
 /**
  * HTTP Response Header를 표현하는 Data Class

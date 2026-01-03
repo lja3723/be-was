@@ -12,7 +12,7 @@ import webserver.handler.util.ResponseOutputStreamWriter;
 import webserver.handler.util.ResourcePath;
 import webserver.header.HttpVersion;
 import webserver.header.request.header.HttpRequestHeader;
-import webserver.header.response.HttpStatus;
+import webserver.header.HttpStatus;
 import webserver.header.response.header.HttpResponseHeader;
 import webserver.header.response.header.HttpResponseHeaderFactory;
 

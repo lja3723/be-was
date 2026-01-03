@@ -1,4 +1,4 @@
-package webserver.header.request.parser;
+package webserver.header.parser;
 
 /**
  * HTTP Request의 Head 부분을 파싱하는 Parser를 생성하는 팩토리 인터페이스

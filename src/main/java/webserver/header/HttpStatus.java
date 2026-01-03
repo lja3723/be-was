@@ -1,4 +1,4 @@
-package webserver.header.response;
+package webserver.header;
 
 /**
  * HTTP Status를 표현하는 Enum 클래스

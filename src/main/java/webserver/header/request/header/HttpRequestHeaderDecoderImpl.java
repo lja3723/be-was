@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
 import webserver.header.HttpHeader;
-import webserver.header.request.parser.HttpFieldParser;
-import webserver.header.request.parser.HttpRequestHeadParser;
-import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.parser.HttpFieldParser;
+import webserver.header.parser.HttpRequestHeadParser;
+import webserver.header.parser.HttpRequestHeadParserFactory;
 
 /**
  * 클라이언트 Request의 InputStream을 파싱하여 HttpRequestHeader 객체를 생성하는 팩토리 인터페이스 구현체

@@ -2,10 +2,10 @@ package webserver;
 
 import webserver.header.request.header.HttpRequestHeaderDecoder;
 import webserver.header.request.header.HttpRequestHeaderDecoderImpl;
-import webserver.header.request.parser.HttpFieldParser;
-import webserver.header.request.parser.HttpFieldParserImpl;
-import webserver.header.request.parser.HttpRequestHeadParserFactory;
-import webserver.header.request.parser.HttpRequestHeadParserFactoryImpl;
+import webserver.header.parser.HttpFieldParser;
+import webserver.header.parser.HttpFieldParserImpl;
+import webserver.header.parser.HttpRequestHeadParserFactory;
+import webserver.header.parser.HttpRequestHeadParserFactoryImpl;
 import webserver.header.response.header.HttpResponseHeaderFactory;
 import webserver.header.response.header.HttpResponseHeaderFactoryImpl;
 

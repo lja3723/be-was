@@ -1,8 +1,8 @@
 package webserver;
 
 import webserver.header.request.header.HttpRequestHeaderDecoder;
-import webserver.header.request.parser.HttpFieldParser;
-import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.parser.HttpFieldParser;
+import webserver.header.parser.HttpRequestHeadParserFactory;
 import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**

@@ -2,8 +2,8 @@ package webserver.header.request.header;
 
 import java.io.InputStream;
 import webserver.header.HttpHeaderFactory;
-import webserver.header.request.parser.HttpFieldParser;
-import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.parser.HttpFieldParser;
+import webserver.header.parser.HttpRequestHeadParserFactory;
 
 /**
  * 클라이언트 Request의 InputStream을 파싱하여 HttpRequestHeader 객체를 생성하는 팩토리 인터페이스

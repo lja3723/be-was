@@ -6,8 +6,8 @@ import webserver.header.HttpHeader;
 import webserver.header.HttpVersion;
 import webserver.header.field.HttpField;
 import webserver.header.field.HttpFieldKey;
-import webserver.header.response.ContentType;
-import webserver.header.response.HttpStatus;
+import webserver.header.ContentType;
+import webserver.header.HttpStatus;
 
 /**
  * HTTP Response Header를 빌드하는 Builder 구현체

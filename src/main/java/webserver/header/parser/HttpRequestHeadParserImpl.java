@@ -1,4 +1,4 @@
-package webserver.header.request.parser;
+package webserver.header.parser;
 
 import webserver.header.HttpMethod;
 import webserver.header.HttpVersion;

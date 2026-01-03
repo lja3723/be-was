@@ -3,6 +3,8 @@ package webserver.header.request.parser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import webserver.header.parser.HttpFieldParser;
+import webserver.header.parser.HttpFieldParserImpl;
 
 class HttpFieldParserImplTest {
 
