@@ -1,4 +1,4 @@
-package webserver.handler.response.util;
+package webserver.handler.util;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package webserver.handler.response.util;
+package webserver.handler.util;
 
 import webserver.header.response.ContentType;
 
