@@ -21,8 +21,8 @@ import webserver.header.response.header.HttpResponseHeaderFactory;
  * <p>{@link Socket}으로부터 클라이언트와의 {@link InputStream}과 {@link OutputStream}을 획득한 후
  * 서버가 클라이언트의 HTTP Request에 대한 적절한 Response를 생성하는 거시적인 동작을 담당한다.</p>
  */
-public class HttpClientRequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientRequestHandler.class);
+public class ClientRequestHandler implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
 
     private final Socket connection;
     private final HttpRequestHeaderDecoder httpRequestHeaderDecoder;
@@ -38,7 +38,7 @@ public class HttpClientRequestHandler implements Runnable {
      * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
      * @param httpResponseHeaderFactory HTTP response header factory의 구현체
      */
-    public HttpClientRequestHandler(Socket connectionSocket,
+    public ClientRequestHandler(Socket connectionSocket,
                           HttpRequestHeaderDecoder httpRequestHeaderDecoder,
                           HttpFieldParser httpFieldParser,
                           HttpRequestHeadParserFactory httpRequestHeadParserFactory,
