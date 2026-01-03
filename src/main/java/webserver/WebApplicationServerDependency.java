@@ -1,9 +1,9 @@
 package webserver;
 
-import webserver.httpheader.request.header.HttpRequestHeaderDecoder;
-import webserver.httpheader.request.parser.HttpFieldParser;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
+import webserver.header.request.header.HttpRequestHeaderDecoder;
+import webserver.header.request.parser.HttpFieldParser;
+import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * 웹 애플리케이션 서버가 필요로 하는 의존성들을 제공하는 인터페이스

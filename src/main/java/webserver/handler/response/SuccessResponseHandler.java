@@ -10,11 +10,11 @@ import webserver.exception.InternalServerErrorException;
 import webserver.exception.ResourceNotFoundException;
 import webserver.handler.response.util.HttpResponseWriter;
 import webserver.handler.response.util.ResourcePath;
-import webserver.httpheader.HttpVersion;
-import webserver.httpheader.request.header.HttpRequestHeader;
-import webserver.httpheader.response.HttpStatus;
-import webserver.httpheader.response.header.HttpResponseHeader;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
+import webserver.header.HttpVersion;
+import webserver.header.request.header.HttpRequestHeader;
+import webserver.header.response.HttpStatus;
+import webserver.header.response.header.HttpResponseHeader;
+import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler

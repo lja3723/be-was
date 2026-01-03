@@ -1,6 +1,6 @@
 package webserver.handler.response.util;
 
-import webserver.httpheader.response.ContentType;
+import webserver.header.response.ContentType;
 
 /**
  * HTTP request의 Path로 파생시킬 수 있는 Resource Path 및 기타 정보를 제공하는 유틸리티 클래스

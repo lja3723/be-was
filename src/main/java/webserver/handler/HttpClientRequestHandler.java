@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import webserver.exception.ResourceNotFoundException;
 import webserver.handler.response.ResponseHandler;
 import webserver.handler.response.SuccessResponseHandler;
-import webserver.httpheader.request.header.HttpRequestHeader;
-import webserver.httpheader.request.header.HttpRequestHeaderDecoder;
-import webserver.httpheader.request.parser.HttpFieldParser;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
+import webserver.header.request.header.HttpRequestHeader;
+import webserver.header.request.header.HttpRequestHeaderDecoder;
+import webserver.header.request.parser.HttpFieldParser;
+import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.

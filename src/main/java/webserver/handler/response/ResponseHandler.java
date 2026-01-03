@@ -1,8 +1,8 @@
 package webserver.handler.response;
 
 import java.io.OutputStream;
-import webserver.httpheader.request.header.HttpRequestHeader;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
+import webserver.header.request.header.HttpRequestHeader;
+import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * HTTP Protocol을 준수하는 HTTP Response를 Output stream으로 전송할 수 있다.

@@ -1,13 +1,13 @@
 package webserver;
 
-import webserver.httpheader.request.header.HttpRequestHeaderDecoder;
-import webserver.httpheader.request.header.HttpRequestHeaderDecoderImpl;
-import webserver.httpheader.request.parser.HttpFieldParser;
-import webserver.httpheader.request.parser.HttpFieldParserImpl;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactoryImpl;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
-import webserver.httpheader.response.header.HttpResponseHeaderFactoryImpl;
+import webserver.header.request.header.HttpRequestHeaderDecoder;
+import webserver.header.request.header.HttpRequestHeaderDecoderImpl;
+import webserver.header.request.parser.HttpFieldParser;
+import webserver.header.request.parser.HttpFieldParserImpl;
+import webserver.header.request.parser.HttpRequestHeadParserFactory;
+import webserver.header.request.parser.HttpRequestHeadParserFactoryImpl;
+import webserver.header.response.header.HttpResponseHeaderFactory;
+import webserver.header.response.header.HttpResponseHeaderFactoryImpl;
 
 /**
  * Web Application Server의 Production Environment에서 사용되는 의존성 구현체
