@@ -18,7 +18,7 @@ class HttpFieldParserImplTest {
         var result = parser.parse(rawFieldLine);
 
         // then
-        assertEquals("Content-Type", result.key.getValue());
-        assertEquals("text/html; charset=UTF-8", result.value);
+        assertEquals("Content-Type", result.key().getValue());
+        assertEquals("text/html; charset=UTF-8", result.value());
     }
 }
