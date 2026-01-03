@@ -42,7 +42,7 @@ public class WebApplicationServer {
                 // Thread 생성 대신 작업 제출
                 executor.execute(new HttpClientRequestHandler(
                     connection,
-                    dependency.getHttpRequestHeaderFactory(),
+                    dependency.getHttpRequestHeaderDecoder(),
                     dependency.getHttpFieldParser(),
                     dependency.getHttpRequestHeadParserFactory(),
                     dependency.getHttpResponseHeaderFactory()));

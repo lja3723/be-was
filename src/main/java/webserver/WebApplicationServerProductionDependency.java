@@ -1,7 +1,7 @@
 package webserver;
 
-import webserver.httpheader.request.header.HttpRequestHeaderFactory;
-import webserver.httpheader.request.header.HttpRequestHeaderFactoryImpl;
+import webserver.httpheader.request.header.HttpRequestHeaderDecoder;
+import webserver.httpheader.request.header.HttpRequestHeaderDecoderImpl;
 import webserver.httpheader.request.parser.HttpFieldParser;
 import webserver.httpheader.request.parser.HttpFieldParserImpl;
 import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
@@ -16,7 +16,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
 
     private final HttpFieldParser httpFieldParser = new HttpFieldParserImpl();
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory = new HttpRequestHeadParserFactoryImpl();
-    private final HttpRequestHeaderFactory httpRequestHeaderFactory = new HttpRequestHeaderFactoryImpl();
+    private final HttpRequestHeaderDecoder httpRequestHeaderDecoder = new HttpRequestHeaderDecoderImpl();
     private final HttpResponseHeaderFactory httpResponseHeaderFactory = new HttpResponseHeaderFactoryImpl();
 
     @Override
@@ -30,8 +30,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     }
 
     @Override
-    public HttpRequestHeaderFactory getHttpRequestHeaderFactory() {
-        return httpRequestHeaderFactory;
+    public HttpRequestHeaderDecoder getHttpRequestHeaderDecoder() {
+        return httpRequestHeaderDecoder;
     }
 
     @Override

@@ -14,7 +14,7 @@ import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
 /**
  * 클라이언트 Request의 InputStream을 파싱하여 HttpRequestHeader 객체를 생성하는 팩토리 인터페이스 구현체
  */
-public class HttpRequestHeaderFactoryImpl implements HttpRequestHeaderFactory{
+public class HttpRequestHeaderDecoderImpl implements HttpRequestHeaderDecoder {
 
     @Override
     public HttpRequestHeader create(InputStream inputStream,

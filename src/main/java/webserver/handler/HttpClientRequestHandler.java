@@ -10,7 +10,7 @@ import webserver.exception.ResourceNotFoundException;
 import webserver.handler.response.ResponseHandler;
 import webserver.handler.response.SuccessResponseHandler;
 import webserver.httpheader.request.header.HttpRequestHeader;
-import webserver.httpheader.request.header.HttpRequestHeaderFactory;
+import webserver.httpheader.request.header.HttpRequestHeaderDecoder;
 import webserver.httpheader.request.parser.HttpFieldParser;
 import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
 import webserver.httpheader.response.header.HttpResponseHeaderFactory;
@@ -25,7 +25,7 @@ public class HttpClientRequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientRequestHandler.class);
 
     private final Socket connection;
-    private final HttpRequestHeaderFactory httpRequestHeaderFactory;
+    private final HttpRequestHeaderDecoder httpRequestHeaderDecoder;
     private final HttpFieldParser httpFieldParser;
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
     private final HttpResponseHeaderFactory httpResponseHeaderFactory;
@@ -33,18 +33,18 @@ public class HttpClientRequestHandler implements Runnable {
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
      * @param connectionSocket 서버와 클라이언트간에 연결된 통신 회선
-     * @param httpRequestHeaderFactory HTTP Request header factory의 구현체
+     * @param httpRequestHeaderDecoder HTTP Request header factory의 구현체
      * @param httpFieldParser HTTP header field parser의 구현체
      * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
      * @param httpResponseHeaderFactory HTTP response header factory의 구현체
      */
     public HttpClientRequestHandler(Socket connectionSocket,
-                          HttpRequestHeaderFactory httpRequestHeaderFactory,
+                          HttpRequestHeaderDecoder httpRequestHeaderDecoder,
                           HttpFieldParser httpFieldParser,
                           HttpRequestHeadParserFactory httpRequestHeadParserFactory,
                           HttpResponseHeaderFactory httpResponseHeaderFactory) {
         this.connection = connectionSocket;
-        this.httpRequestHeaderFactory = httpRequestHeaderFactory;
+        this.httpRequestHeaderDecoder = httpRequestHeaderDecoder;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeadParserFactory = httpRequestHeadParserFactory;
         this.httpResponseHeaderFactory = httpResponseHeaderFactory;
@@ -59,7 +59,7 @@ public class HttpClientRequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestHeader httpRequestHeader = httpRequestHeaderFactory.create(
+            HttpRequestHeader httpRequestHeader = httpRequestHeaderDecoder.create(
                 in, httpRequestHeadParserFactory, httpFieldParser);
 
             logHttpRequestHeader(httpRequestHeader);
