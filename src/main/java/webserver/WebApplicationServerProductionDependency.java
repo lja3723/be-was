@@ -9,6 +9,9 @@ import webserver.httpheader.request.parser.HttpRequestHeadParserFactoryImpl;
 import webserver.httpheader.response.header.HttpResponseHeaderFactory;
 import webserver.httpheader.response.header.HttpResponseHeaderFactoryImpl;
 
+/**
+ * Web Application Server의 Production Environment에서 사용되는 의존성 구현체
+ */
 public class WebApplicationServerProductionDependency implements WebApplicationServerDependency {
 
     private final HttpFieldParser httpFieldParser = new HttpFieldParserImpl();

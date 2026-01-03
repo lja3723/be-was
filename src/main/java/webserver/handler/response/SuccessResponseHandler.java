@@ -16,6 +16,9 @@ import webserver.httpheader.response.HttpStatus;
 import webserver.httpheader.response.header.HttpResponseHeader;
 import webserver.httpheader.response.header.HttpResponseHeaderFactory;
 
+/**
+ * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler
+ */
 public class SuccessResponseHandler implements ResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SuccessResponseHandler.class);
@@ -44,14 +47,17 @@ public class SuccessResponseHandler implements ResponseHandler {
         //TODO: 응답 리팩터링
         //TODO: 정적 파일 응답 처리
 
-        ResourcePath resourcePath = new ResourcePath(httpRequestHeader.path);
-        logger.debug("request path: {}, resource Path: {}", httpRequestHeader.path, resourcePath);
+        // Http request의 path를 기반으로 resource path 연역
+        ResourcePath resourcePath = new ResourcePath(httpRequestHeader.path());
+        logger.debug("request path: {}, resource Path: {}", httpRequestHeader.path(), resourcePath);
 
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath.getResourcePath()))  {
+            // 요청에 맞는 리소스가 존재하지 않음
             if (is == null) {
                 throw new ResourceNotFoundException("Resource not found: " + resourcePath);
             }
 
+            // HTTP Response의 Header 생성
             byte[] body = is.readAllBytes();
             HttpResponseHeader responseHeader = httpResponseHeaderFactory.builder()
                 .version(HttpVersion.HTTP_1_1)
@@ -60,6 +66,7 @@ public class SuccessResponseHandler implements ResponseHandler {
                 .body(body)
                 .build();
 
+            // HTTP Response를 OutputStream으로 전송
             //TODO: 로딩이 잘 안되는 것 디버깅으로 찾아내기
             HttpResponseWriter responseWriter = new HttpResponseWriter(outputStream, responseHeader, body);
             responseWriter.flushResponse();
@@ -72,6 +79,7 @@ public class SuccessResponseHandler implements ResponseHandler {
     }
 
     //TODO: 응답 리팩터링
+    // Unused
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
@@ -84,6 +92,7 @@ public class SuccessResponseHandler implements ResponseHandler {
         }
     }
 
+    // Unused
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);

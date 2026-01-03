@@ -1,5 +1,9 @@
 package webserver.httpheader.response;
 
+/**
+ * HTTP Status를 표현하는 Enum 클래스
+ */
+// TODO: 필요 시 상태 코드 추가
 public enum HttpStatus {
     OK(200, "OK"),
     NOT_FOUND(404, "Not Found"),

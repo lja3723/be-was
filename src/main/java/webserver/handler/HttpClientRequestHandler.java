@@ -15,6 +15,12 @@ import webserver.httpheader.request.parser.HttpFieldParser;
 import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
 import webserver.httpheader.response.header.HttpResponseHeaderFactory;
 
+/**
+ * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
+ *
+ * <p>{@link Socket}으로부터 클라이언트와의 {@link InputStream}과 {@link OutputStream}을 획득한 후
+ * 서버가 클라이언트의 HTTP Request에 대한 적절한 Response를 생성하는 거시적인 동작을 담당한다.</p>
+ */
 public class HttpClientRequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientRequestHandler.class);
 
@@ -24,6 +30,14 @@ public class HttpClientRequestHandler implements Runnable {
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
     private final HttpResponseHeaderFactory httpResponseHeaderFactory;
 
+    /**
+     * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
+     * @param connectionSocket 서버와 클라이언트간에 연결된 통신 회선
+     * @param httpRequestHeaderFactory HTTP Request header factory의 구현체
+     * @param httpFieldParser HTTP header field parser의 구현체
+     * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
+     * @param httpResponseHeaderFactory HTTP response header factory의 구현체
+     */
     public HttpClientRequestHandler(Socket connectionSocket,
                           HttpRequestHeaderFactory httpRequestHeaderFactory,
                           HttpFieldParser httpFieldParser,
@@ -36,6 +50,9 @@ public class HttpClientRequestHandler implements Runnable {
         this.httpResponseHeaderFactory = httpResponseHeaderFactory;
     }
 
+    /**
+     * ExecutorService에 의해 호출되어 클라이언트와의 HTTP 통신을 처리
+     */
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}",
             connection.getInetAddress(),
@@ -59,14 +76,24 @@ public class HttpClientRequestHandler implements Runnable {
         }
     }
 
+    /**
+     * 파싱된 HTTP request header 내용을 logging
+     * @param header
+     */
     private void logHttpRequestHeader(HttpRequestHeader header) {
         logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method, header.path, header.version);
-        header.fields.forEach(field ->
-            logger.debug("Key -- {} / Value -- {}", field.key, field.value)
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.path(), header.common().version());
+        header.common().fields().forEach(field ->
+            logger.debug("Key -- {} / Value -- {}", field.key(), field.value())
         );
     }
 
+    /**
+     * HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 {@link ResponseHandler}에게 위임
+     * @param responseHandler
+     * @param httpRequestHeader
+     * @param out
+     */
     private void handleResponse(ResponseHandler responseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
         responseHandler.setHttpResponseHeaderFactory(httpResponseHeaderFactory);
         responseHandler.setHttpRequestHeader(httpRequestHeader);

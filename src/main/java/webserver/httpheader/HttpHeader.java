@@ -3,12 +3,10 @@ package webserver.httpheader;
 import java.util.List;
 import webserver.httpheader.field.HttpField;
 
-/*
- * Dataclass
- * HTTP 헤더의 버전과 필드들을 담고 있는 클래스
+/**
+ * <p>HTTP 헤더의 버전과 필드들을 담고 있는 Data Class</p>
+ * Response와 Request 헤더가 공통으로 가지는 속성들을 포함
  */
-public abstract class HttpHeader {
+public record HttpHeader(HttpVersion version, List<HttpField> fields) {
 
-    public HttpVersion version;
-    public List<HttpField> fields;
 }

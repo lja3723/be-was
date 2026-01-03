@@ -2,6 +2,9 @@ package webserver.httpheader.field;
 
 import java.util.HashMap;
 
+/**
+ * HTTP request/response Header의 Field Key를 표현
+ */
 public enum HttpFieldKey {
     CONTENT_TYPE("Content-Type"),
     CONTENT_LENGTH("Content-Length"),
@@ -35,6 +38,9 @@ public enum HttpFieldKey {
     WARNING("Warning"),
     UNKNOWN("Unknown");
 
+    /**
+     * HTTP Header Field Key에 실제로 들어가는 문자열 값
+     */
     private final String value;
 
     HttpFieldKey(String value) {
@@ -45,8 +51,15 @@ public enum HttpFieldKey {
         return value;
     }
 
+    /**
+     * String -> HttpFieldKey 매핑을 위한 HashMap
+     */
+    // TODO: String -> HttpFieldKey 빠른 매핑을 위한 방법이 이렇게 static이 적절한지 고민 필요
     private static HashMap<String, HttpFieldKey> valueMap = null;
 
+    /**
+     * 최초 매핑 사용 시 HashMap 초기화
+     */
     synchronized private static void initKeyMap() {
         if (valueMap != null) {
             return;
@@ -58,6 +71,11 @@ public enum HttpFieldKey {
         }
     }
 
+    /**
+     * 문자열로부터 HttpFieldKey 객체를 반환
+     * @param key HTTP Header Field Key 문자열
+     * @return 대응하는 HttpFieldKey 객체. 없을 경우 UNKNOWN 반환
+     */
     public static HttpFieldKey fromString(String key) {
         if (valueMap == null) {
             initKeyMap();

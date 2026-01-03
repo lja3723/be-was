@@ -1,8 +1,14 @@
 import webserver.WebApplicationServer;
 import webserver.WebApplicationServerProductionDependency;
 
+/**
+ * Main Application Entry 클래스
+ */
 public class MainApplication {
 
+    /**
+     * 기본 포트 번호 및 스레드 풀 크기
+     */
     public static final int DEFAULT_PORT = 8080;
     public static final int DEFAULT_THREAD_POOL_SIZE = 50;
 

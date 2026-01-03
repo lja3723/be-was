@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.handler.HttpClientRequestHandler;
 
+/**
+ * ServerSocket을 생성하고 클라이언트의 요청을 처리하는 Web Application Server 클래스
+ */
 public class WebApplicationServer {
     private static final Logger logger = LoggerFactory.getLogger(WebApplicationServer.class);
 
@@ -17,6 +20,12 @@ public class WebApplicationServer {
     private final WebApplicationServerDependency dependency;
     private final ExecutorService executor;
 
+    /**
+     * 생성자
+     * @param port 서버가 바인딩될 포트 번호
+     * @param threadPoolSize Thread Pool의 크기
+     * @param dependency 서버가 필요로 하는 의존성들을 제공하는 객체
+     */
     public WebApplicationServer(int port, int threadPoolSize, WebApplicationServerDependency dependency) {
         this.port = port;
         this.dependency = dependency;

@@ -1,36 +1,42 @@
 package webserver.httpheader.response.header;
 
 import java.util.ArrayList;
+import java.util.List;
+import webserver.httpheader.HttpHeader;
 import webserver.httpheader.HttpVersion;
 import webserver.httpheader.field.HttpField;
 import webserver.httpheader.field.HttpFieldKey;
 import webserver.httpheader.response.ContentType;
 import webserver.httpheader.response.HttpStatus;
 
+/**
+ * HTTP Response Header를 빌드하는 Builder 구현체
+ */
 public class HttpResponseHeaderBuilderImpl implements HttpResponseHeaderBuilder {
 
-    private final HttpResponseHeader header;
+    private HttpVersion version;
+    private HttpStatus status;
+    private final List<HttpField> fields;
 
     public HttpResponseHeaderBuilderImpl() {
-        this.header = new HttpResponseHeader();
-        header.fields = new ArrayList<>();
+        this.fields = new ArrayList<>();
     }
 
     @Override
     public HttpResponseHeaderBuilder version(HttpVersion version) {
-        header.version = version;
+        this.version = version;
         return this;
     }
 
     @Override
     public HttpResponseHeaderBuilder status(HttpStatus status) {
-        header.status = status;
+        this.status = status;
         return this;
     }
 
     @Override
     public HttpResponseHeaderBuilder field(HttpField field) {
-        header.fields.add(field);
+        this.fields.add(field);
         return this;
     }
 
@@ -44,17 +50,20 @@ public class HttpResponseHeaderBuilderImpl implements HttpResponseHeaderBuilder 
         if (category.equals("text") || category.equals("application")) {
             fieldValue += "; charset=UTF-8";
         }
-        header.fields.add(new HttpField(HttpFieldKey.CONTENT_TYPE, fieldValue));
+        this.fields.add(new HttpField(HttpFieldKey.CONTENT_TYPE, fieldValue));
         return this;
     }
 
     @Override
     public HttpResponseHeaderBuilder body(byte[] body) {
-        header.fields.add(new HttpField(HttpFieldKey.CONTENT_LENGTH, String.valueOf(body.length)));
+        this.fields.add(new HttpField(HttpFieldKey.CONTENT_LENGTH, String.valueOf(body.length)));
         return this;
     }
 
     public HttpResponseHeader build() {
-        return header;
+        return new HttpResponseHeader(
+            new HttpHeader(version, fields),
+            status
+        );
     }
 }

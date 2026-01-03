@@ -3,6 +3,10 @@ package webserver.httpheader.request.parser;
 import webserver.httpheader.HttpMethod;
 import webserver.httpheader.HttpVersion;
 
+/**
+ * HTTP Request의 Head 부분을 파싱하는 Parser 인터페이스 구현체
+ */
+// TODO: 추후 무상태 클래스로 리팩터링 예정
 public class HttpRequestHeadParserImpl implements HttpRequestHeadParser {
 
     private final String[] parts;

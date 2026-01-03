@@ -1,5 +1,8 @@
 package webserver.httpheader;
 
+/**
+ * HTTP Method를 표현하는 Enum 클래스
+ */
 public enum HttpMethod {
     GET("GET"),
     POST("POST"),
@@ -18,6 +21,7 @@ public enum HttpMethod {
         return value;
     }
 
+    // TODO: 더 빠른 탐색을 위해 Map으로 변경 고려
     public static HttpMethod fromString(String method) {
         for (HttpMethod httpMethod : HttpMethod.values()) {
             if (httpMethod.value.equalsIgnoreCase(method)) {
