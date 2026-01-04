@@ -29,3 +29,12 @@ be-was-2025: 코드스쿼드 백엔드 교육용 WAS 2025 개정판
 - [x] localhost:8080/index.html 요청 시 index.html 파일을 읽어서 응답하는 기능 구현
   - [ ] (TODO) requestbody를 유연하게 조립하는 방법을 고민하기
 - [x] OOP 원칙에 따라 클래스의 책임을 최대한 줄이고, 단위 테스트가 가능하도록 코드 구조 고민하기
+
+# TODO
+
+- Path에서 쿼리 파라미터 인식이 가능해야 함
+- String에서 Enum 매핑시 더 해시맵 사용 고려
+- 프로그램의 Exception을 모두 처리할 수 있는 전역 예외 처리기 구현
+  - 해당 예외 처리기에서 예외 전용 handler를 호출 가능하도록 변경
+- 경로 입력시 끝부분이 확장자가 없는 파일일 시 index.html로 매핑해주는 기능 구현
+  - ex) /user -> /user/index.html

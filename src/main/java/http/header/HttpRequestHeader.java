@@ -87,6 +87,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
                 .orElseThrow(() -> new RuntimeException("Empty request"));
 
             // Request의 첫 line(Head 부분) 파싱
+            // TODO: 추후 Builder 로 책임 위임 필요 (아닌가)
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
             HttpRequestHeaderBuilder builder = HttpRequestHeader.builder(httpRequestUrlParser)
                 .version(httpRequestHead.version())
