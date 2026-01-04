@@ -13,8 +13,7 @@ import webserver.handler.util.ResourcePath;
 import webserver.header.HttpVersion;
 import webserver.header.request.header.HttpRequestHeader;
 import webserver.header.HttpStatus;
-import webserver.header.response.header.HttpResponseHeader;
-import webserver.header.response.header.HttpResponseHeaderFactory;
+import webserver.header.HttpResponseHeader;
 
 /**
  * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler
@@ -23,14 +22,8 @@ public class SuccessResponseHandler implements ResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SuccessResponseHandler.class);
 
-    protected HttpResponseHeaderFactory httpResponseHeaderFactory;
     protected HttpRequestHeader httpRequestHeader;
     protected OutputStream outputStream;
-
-    @Override
-    public void setHttpResponseHeaderFactory(HttpResponseHeaderFactory httpResponseHeaderFactory) {
-        this.httpResponseHeaderFactory = httpResponseHeaderFactory;
-    }
 
     @Override
     public void setHttpRequestHeader(HttpRequestHeader httpRequestHeader) {
@@ -59,7 +52,7 @@ public class SuccessResponseHandler implements ResponseHandler {
 
             // HTTP Response의 Header 생성
             byte[] body = is.readAllBytes();
-            HttpResponseHeader responseHeader = httpResponseHeaderFactory.builder()
+            HttpResponseHeader responseHeader = HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
                 .status(HttpStatus.OK)
                 .contentType(resourcePath.getContentType())

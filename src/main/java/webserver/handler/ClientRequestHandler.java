@@ -13,7 +13,6 @@ import webserver.header.request.header.HttpRequestHeader;
 import webserver.header.request.header.HttpRequestHeaderDecoder;
 import webserver.header.parser.HttpFieldParser;
 import webserver.header.parser.HttpRequestHeadParserFactory;
-import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
@@ -28,7 +27,6 @@ public class ClientRequestHandler implements Runnable {
     private final HttpRequestHeaderDecoder httpRequestHeaderDecoder;
     private final HttpFieldParser httpFieldParser;
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
-    private final HttpResponseHeaderFactory httpResponseHeaderFactory;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
@@ -36,18 +34,15 @@ public class ClientRequestHandler implements Runnable {
      * @param httpRequestHeaderDecoder HTTP Request header factory의 구현체
      * @param httpFieldParser HTTP header field parser의 구현체
      * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
-     * @param httpResponseHeaderFactory HTTP response header factory의 구현체
      */
     public ClientRequestHandler(Socket connectionSocket,
                           HttpRequestHeaderDecoder httpRequestHeaderDecoder,
                           HttpFieldParser httpFieldParser,
-                          HttpRequestHeadParserFactory httpRequestHeadParserFactory,
-                          HttpResponseHeaderFactory httpResponseHeaderFactory) {
+                          HttpRequestHeadParserFactory httpRequestHeadParserFactory) {
         this.connection = connectionSocket;
         this.httpRequestHeaderDecoder = httpRequestHeaderDecoder;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeadParserFactory = httpRequestHeadParserFactory;
-        this.httpResponseHeaderFactory = httpResponseHeaderFactory;
     }
 
     /**
@@ -95,7 +90,6 @@ public class ClientRequestHandler implements Runnable {
      * @param out
      */
     private void handleResponse(ResponseHandler responseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
-        responseHandler.setHttpResponseHeaderFactory(httpResponseHeaderFactory);
         responseHandler.setHttpRequestHeader(httpRequestHeader);
         responseHandler.setOutputStream(out);
         responseHandler.handleResponse();

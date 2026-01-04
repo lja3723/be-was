@@ -2,7 +2,6 @@ package webserver.handler.response;
 
 import java.io.OutputStream;
 import webserver.header.request.header.HttpRequestHeader;
-import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * HTTP Protocol을 준수하는 HTTP Response를 Output stream으로 전송할 수 있다.
@@ -11,12 +10,6 @@ import webserver.header.response.header.HttpResponseHeaderFactory;
  */
 //TODO: 이름을 HttpResponseHandler로 변경할 필요가 있음
 public interface ResponseHandler {
-
-    /**
-     * {@code HttpResponseHeader}를 생성하는 Factory의 구현체를 주입받는다.
-     * @param httpResponseHeaderFactory {@code HttpResponseHeader}를 생성하는 Factory의 구현체
-     */
-    void setHttpResponseHeaderFactory (HttpResponseHeaderFactory httpResponseHeaderFactory);
 
     /**
      * 클라이언트의 HTTP request 정보의 참조를 전달받는다.

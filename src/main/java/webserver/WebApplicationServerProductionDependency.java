@@ -6,8 +6,6 @@ import webserver.header.parser.HttpFieldParser;
 import webserver.header.parser.HttpFieldParserImpl;
 import webserver.header.parser.HttpRequestHeadParserFactory;
 import webserver.header.parser.HttpRequestHeadParserFactoryImpl;
-import webserver.header.response.header.HttpResponseHeaderFactory;
-import webserver.header.response.header.HttpResponseHeaderFactoryImpl;
 
 /**
  * Web Application Server의 Production Environment에서 사용되는 의존성 구현체
@@ -17,7 +15,6 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private final HttpFieldParser httpFieldParser = new HttpFieldParserImpl();
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory = new HttpRequestHeadParserFactoryImpl();
     private final HttpRequestHeaderDecoder httpRequestHeaderDecoder = new HttpRequestHeaderDecoderImpl();
-    private final HttpResponseHeaderFactory httpResponseHeaderFactory = new HttpResponseHeaderFactoryImpl();
 
     @Override
     public HttpFieldParser getHttpFieldParser() {
@@ -32,10 +29,5 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     @Override
     public HttpRequestHeaderDecoder getHttpRequestHeaderDecoder() {
         return httpRequestHeaderDecoder;
-    }
-
-    @Override
-    public HttpResponseHeaderFactory getHttpResponseHeaderFactory() {
-        return httpResponseHeaderFactory;
     }
 }

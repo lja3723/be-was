@@ -3,7 +3,6 @@ package webserver;
 import webserver.header.request.header.HttpRequestHeaderDecoder;
 import webserver.header.parser.HttpFieldParser;
 import webserver.header.parser.HttpRequestHeadParserFactory;
-import webserver.header.response.header.HttpResponseHeaderFactory;
 
 /**
  * 웹 애플리케이션 서버가 필요로 하는 의존성들을 제공하는 인터페이스
@@ -25,10 +24,4 @@ public interface WebApplicationServerDependency {
      * HTTP Request Header 팩토리를 반환
      */
     HttpRequestHeaderDecoder getHttpRequestHeaderDecoder();
-
-    /**
-     * HTTP Response Header 팩토리를 반환
-     * <p>필요 없는 클래스로, 추후 간략화 예정</p>
-     */
-    HttpResponseHeaderFactory getHttpResponseHeaderFactory();
 }

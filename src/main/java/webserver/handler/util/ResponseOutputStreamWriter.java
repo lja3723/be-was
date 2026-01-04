@@ -3,7 +3,7 @@ package webserver.handler.util;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 import webserver.exception.InternalServerErrorException;
-import webserver.header.response.header.HttpResponseHeader;
+import webserver.header.HttpResponseHeader;
 
 /**
  * HTTP 응답을 작성하고 출력 스트림에 플러시하는 유틸리티 클래스
