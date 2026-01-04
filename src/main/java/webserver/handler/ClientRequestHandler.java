@@ -11,7 +11,7 @@ import webserver.handler.response.ResponseHandler;
 import webserver.handler.response.SuccessResponseHandler;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.HttpRequestHeadParserFactory;
+import webserver.http.parser.HttpRequestHeaderHeadParser;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
@@ -24,7 +24,7 @@ public class ClientRequestHandler implements Runnable {
 
     private final Socket connection;
     private final HttpFieldParser httpFieldParser;
-    private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
+    private final HttpRequestHeaderHeadParser httpRequestHeaderHeadParser;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
@@ -33,11 +33,11 @@ public class ClientRequestHandler implements Runnable {
      * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
      */
     public ClientRequestHandler(Socket connectionSocket,
-                          HttpFieldParser httpFieldParser,
-                          HttpRequestHeadParserFactory httpRequestHeadParserFactory) {
+                                HttpFieldParser httpFieldParser,
+                                HttpRequestHeaderHeadParser httpRequestHeaderHeadParser) {
         this.connection = connectionSocket;
         this.httpFieldParser = httpFieldParser;
-        this.httpRequestHeadParserFactory = httpRequestHeadParserFactory;
+        this.httpRequestHeaderHeadParser = httpRequestHeaderHeadParser;
     }
 
     /**
@@ -50,7 +50,7 @@ public class ClientRequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
-                in, httpRequestHeadParserFactory, httpFieldParser);
+                in, httpRequestHeaderHeadParser, httpFieldParser);
 
             logHttpRequestHeader(httpRequestHeader);
             handleResponse(new SuccessResponseHandler(), httpRequestHeader, out);

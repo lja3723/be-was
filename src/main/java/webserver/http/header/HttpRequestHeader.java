@@ -10,8 +10,7 @@ import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpHeader.HttpHeaderBuilder;
 import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.HttpRequestHeadParser;
-import webserver.http.parser.HttpRequestHeadParserFactory;
+import webserver.http.parser.HttpRequestHeaderHeadParser;
 
 /**
  * HTTP Request Header를 표현하는 Data Class
@@ -69,13 +68,13 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
     /**
      * InputStream을 파싱하여 HttpRequestHeader 객체를 생성
      * @param inputStream 클라이언트 Request의 InputStream
-     * @param httpRequestHeadParserFactory
+     * @param httpRequestHeaderHeadParser
      * @param httpFieldParser
      * @return 파싱된 HttpRequestHeader 객체
      */
     public static HttpRequestHeader decodeInputStream(
                   InputStream inputStream,
-                  HttpRequestHeadParserFactory httpRequestHeadParserFactory,
+                  HttpRequestHeaderHeadParser httpRequestHeaderHeadParser,
                   HttpFieldParser httpFieldParser) {
         try {
             // InputStream을 행 단위로 읽기 준비
@@ -84,11 +83,11 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
                 .orElseThrow(() -> new RuntimeException("Empty request"));
 
             // Request의 첫 line(Head 부분) 파싱
-            HttpRequestHeadParser httpRequestHeadParser = httpRequestHeadParserFactory.create(line);
+            HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
             HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
-                .version(httpRequestHeadParser.getVersion())
-                .method(httpRequestHeadParser.getMethod())
-                .path(httpRequestHeadParser.getPath());
+                .version(httpRequestHead.version())
+                .method(httpRequestHead.method())
+                .path(httpRequestHead.path());
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {

@@ -9,6 +9,7 @@ import webserver.http.ContentType;
  * <p>2. 리소스 경로에서 파일의 확장자가 무엇인지 파싱하는 기능
  * <ol>   예: {@code "index.html" -> "html", "style.css" -> "css", "/about -> html"}</ol><p/>
  */
+// TODO: 추후 record로 변경, HttpRequestHead가 사용, 파라미터 & 쿼리 요청도 받을 수 있도록 확장 필요
 public class ResourcePath {
 
     public String path;

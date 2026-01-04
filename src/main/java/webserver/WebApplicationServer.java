@@ -43,7 +43,7 @@ public class WebApplicationServer {
                 executor.execute(new ClientRequestHandler(
                     connection,
                     dependency.getHttpFieldParser(),
-                    dependency.getHttpRequestHeadParserFactory()));
+                    dependency.getHttpRequestHeaderHeadParser()));
             }
         } catch (IOException e) {
             logger.error("Error in Web Application Server: ", e);
