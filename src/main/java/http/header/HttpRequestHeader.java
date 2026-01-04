@@ -1,5 +1,6 @@
 package http.header;
 
+import http.field.HttpRequestUrl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,17 +15,20 @@ import http.parser.Parser;
 /**
  * HTTP Request Header를 표현하는 Data Class
  */
-public record HttpRequestHeader(HttpHeader common, HttpMethod method, String path) {
+public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpRequestUrl url) {
 
     /**
      * HttpRequestHeader 객체를 빌드하기 위한 빌더 클래스
      */
     public static class HttpRequestHeaderBuilder {
+
+        private final Parser<HttpRequestUrl, String> httpRequestUrlParser;
         private final HttpHeaderBuilder commonBuilder;
         private HttpMethod method;
-        private String path;
+        private String url;
 
-        public HttpRequestHeaderBuilder() {
+        public HttpRequestHeaderBuilder(Parser<HttpRequestUrl, String> httpRequestUrlParser) {
+            this.httpRequestUrlParser = httpRequestUrlParser;
             this.commonBuilder = HttpHeader.builder();
         }
 
@@ -43,8 +47,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
             return this;
         }
 
-        public HttpRequestHeaderBuilder path(String path) {
-            this.path = path;
+        public HttpRequestHeaderBuilder url(String url) {
+            this.url = url;
             return this;
         }
 
@@ -52,7 +56,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
             return new HttpRequestHeader(
                 commonBuilder.build(),
                 method,
-                path
+                httpRequestUrlParser.parse(url)
             );
         }
     }
@@ -60,8 +64,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
     /**
      * HttpRequestHeaderBuilder 인스턴스를 반환하는 정적 팩토리 메서드
      */
-    public static HttpRequestHeaderBuilder builder() {
-        return new HttpRequestHeaderBuilder();
+    public static HttpRequestHeaderBuilder builder(Parser<HttpRequestUrl, String> httpRequestUrlParser) {
+        return new HttpRequestHeaderBuilder(httpRequestUrlParser);
     }
 
     /**
@@ -74,7 +78,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
     public static HttpRequestHeader decodeInputStream(
                   InputStream inputStream,
                   Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
-                  Parser<HttpField, String> httpFieldParser) {
+                  Parser<HttpField, String> httpFieldParser,
+                  Parser<HttpRequestUrl, String> httpRequestUrlParser) {
         try {
             // InputStream을 행 단위로 읽기 준비
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -83,10 +88,10 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
 
             // Request의 첫 line(Head 부분) 파싱
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
-            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
+            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder(httpRequestUrlParser)
                 .version(httpRequestHead.version())
                 .method(httpRequestHead.method())
-                .path(httpRequestHead.path());
+                .url(httpRequestHead.path());
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {

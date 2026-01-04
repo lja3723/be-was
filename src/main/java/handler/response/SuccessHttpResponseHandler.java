@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import exception.InternalServerErrorException;
 import exception.ResourceNotFoundException;
 import handler.response.util.ResponseOutputStreamWriter;
-import http.field.ResourcePath;
+import http.field.HttpRequestUrl;
 import http.HttpVersion;
 import http.header.HttpRequestHeader;
 import http.HttpStatus;
@@ -31,14 +31,14 @@ public class SuccessHttpResponseHandler extends HttpResponseHandler {
         //TODO: 응답 리팩터링
         //TODO: 정적 파일 응답 처리
 
-        // Http request의 path를 기반으로 resource path 연역
-        ResourcePath resourcePath = new ResourcePath(httpRequestHeader.path());
-        logger.debug("request path: {}, resource Path: {}", httpRequestHeader.path(), resourcePath);
+        HttpRequestUrl httpRequestUrl = httpRequestHeader.url();
+        logger.debug("request url: {}, resource Path: {}", httpRequestHeader.url(),
+            httpRequestUrl);
 
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath.getResourcePath()))  {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(httpRequestUrl.resourcePath()))  {
             // 요청에 맞는 리소스가 존재하지 않음
             if (is == null) {
-                throw new ResourceNotFoundException("Resource not found: " + resourcePath);
+                throw new ResourceNotFoundException("Resource not found: " + httpRequestUrl);
             }
 
             // HTTP Response의 Header 생성
@@ -46,7 +46,7 @@ public class SuccessHttpResponseHandler extends HttpResponseHandler {
             HttpResponseHeader responseHeader = HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
                 .status(HttpStatus.OK)
-                .contentType(resourcePath.getContentType())
+                .contentType(httpRequestUrl.contentType())
                 .body(body)
                 .build();
 

@@ -1,5 +1,6 @@
 package handler;
 
+import http.field.HttpRequestUrl;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -27,6 +28,7 @@ public class ClientRequestHandler implements Runnable {
     private final Socket connection;
     private final Parser<HttpField, String> httpFieldParser;
     private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser;
+    private final Parser<HttpRequestUrl, String> httpRequestUrlParser;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
@@ -36,10 +38,12 @@ public class ClientRequestHandler implements Runnable {
      */
     public ClientRequestHandler(Socket connectionSocket,
                                 Parser<HttpField, String> httpFieldParser,
-                                Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser) {
+                                Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
+                                Parser<HttpRequestUrl, String> httpRequestUrlParser) {
         this.connection = connectionSocket;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeaderHeadParser = httpRequestHeaderHeadParser;
+        this.httpRequestUrlParser = httpRequestUrlParser;
     }
 
     /**
@@ -52,7 +56,10 @@ public class ClientRequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
-                in, httpRequestHeaderHeadParser, httpFieldParser);
+                in,
+                httpRequestHeaderHeadParser,
+                httpFieldParser,
+                httpRequestUrlParser);
 
             // HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 위임함
             logHttpRequestHeader(httpRequestHeader);
@@ -76,7 +83,7 @@ public class ClientRequestHandler implements Runnable {
      */
     private void logHttpRequestHeader(HttpRequestHeader header) {
         logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.path(),
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.url(),
             header.common().version());
         header.common().fields().forEach(field ->
             logger.debug("Key -- {} / Value -- {}", field.key(), field.value())

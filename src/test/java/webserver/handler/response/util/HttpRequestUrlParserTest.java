@@ -2,20 +2,22 @@ package webserver.handler.response.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import http.parser.HttpRequestUrlParser;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test_support.Pair;
-import http.field.ResourcePath;
 import http.ContentType;
 
-class ResourcePathTest {
+class HttpRequestUrlParserTest {
 
-    private ResourcePath resourcePath;
+    private HttpRequestUrlParser parser;
+    private String httpRequestUrl;
 
     @BeforeEach
     void setUp() {
-        resourcePath = new ResourcePath("/img/myimage.png");
+        parser = new HttpRequestUrlParser();
+        httpRequestUrl = "/img/myimage.png";
     }
 
     @Test
@@ -23,7 +25,7 @@ class ResourcePathTest {
         // given
         String expected = "static/img/myimage.png";
         // when
-        String actual = resourcePath.getResourcePath();
+        String actual = parser.parse(httpRequestUrl).resourcePath();
         // then
         assertEquals(expected, actual);
     }
@@ -31,10 +33,10 @@ class ResourcePathTest {
     @Test
     void getResourcePath_RootPath() {
         // given
-        ResourcePath rootResourcePath = new ResourcePath("/");
+        String rootHttpRequestUrl = "/";
         String expected = "static/index.html";
         // when
-        String actual = rootResourcePath.getResourcePath();
+        String actual = parser.parse(rootHttpRequestUrl).resourcePath();
         // then
         assertEquals(expected, actual);
     }
@@ -44,7 +46,7 @@ class ResourcePathTest {
         // given
         String expected = "myimage.png";
         // when
-        String actual = resourcePath.getFileName();
+        String actual = parser.parse(httpRequestUrl).fileName();
         // then
         assertEquals(expected, actual);
     }
@@ -71,10 +73,10 @@ class ResourcePathTest {
 
         inputOutputPair.forEach(pair -> {
             //when
-            ResourcePath resourcePath = new ResourcePath(pair.first());
+            String httpRequestUrl = pair.first();
 
             //then
-            ContentType actualContentType = resourcePath.getContentType();
+            ContentType actualContentType = parser.parse(httpRequestUrl).contentType();
             assertEquals(pair.second(), actualContentType);
         });
     }

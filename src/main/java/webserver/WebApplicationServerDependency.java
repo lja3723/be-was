@@ -1,6 +1,7 @@
 package webserver;
 
 import http.field.HttpField;
+import http.field.HttpRequestUrl;
 import http.header.HttpRequestHeaderHead;
 import http.parser.Parser;
 
@@ -15,9 +16,12 @@ public interface WebApplicationServerDependency {
     Parser<HttpField, String> getHttpFieldParser();
 
     /**
-     * HTTP Request Head 파서 팩토리를 반환
-     * <p>필요 없는 클래스로, 추후 간략화 예정</p>
+     * HTTP Request Head 파서를 반환
      */
     Parser<HttpRequestHeaderHead, String> getHttpRequestHeaderHeadParser();
 
+    /**
+     * HTTP Request URL 파서를 반환
+     */
+    Parser<HttpRequestUrl, String> getHttpRequestUrlParser();
 }
