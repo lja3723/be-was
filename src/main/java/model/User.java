@@ -1,10 +1,15 @@
 package model;
 
+/**
+ * <p>사용자 정보를 나타내는 모델 클래스</p>
+ */
+// TODO: {@code record} class로 변경 고려
 public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+
+    private final String userId;
+    private final String password;
+    private final String name;
+    private final String email;
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;

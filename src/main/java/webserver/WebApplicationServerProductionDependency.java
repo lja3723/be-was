@@ -1,38 +1,35 @@
 package webserver;
 
-import webserver.httpheader.request.header.HttpRequestHeaderFactory;
-import webserver.httpheader.request.header.HttpRequestHeaderFactoryImpl;
-import webserver.httpheader.request.parser.HttpFieldParser;
-import webserver.httpheader.request.parser.HttpFieldParserImpl;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactory;
-import webserver.httpheader.request.parser.HttpRequestHeadParserFactoryImpl;
-import webserver.httpheader.response.header.HttpResponseHeaderFactory;
-import webserver.httpheader.response.header.HttpResponseHeaderFactoryImpl;
+import http.field.HttpField;
+import http.field.HttpRequestUrl;
+import http.header.HttpRequestHeaderHead;
+import http.parser.HttpFieldParser;
+import http.parser.HttpRequestHeaderHeadParser;
+import http.parser.HttpRequestUrlParser;
+import http.parser.Parser;
 
+/**
+ * Web Application Server의 Production Environment에서 사용되는 의존성 구현체
+ */
 public class WebApplicationServerProductionDependency implements WebApplicationServerDependency {
 
-    private final HttpFieldParser httpFieldParser = new HttpFieldParserImpl();
-    private final HttpRequestHeadParserFactory httpRequestHeadParserFactory = new HttpRequestHeadParserFactoryImpl();
-    private final HttpRequestHeaderFactory httpRequestHeaderFactory = new HttpRequestHeaderFactoryImpl();
-    private final HttpResponseHeaderFactory httpResponseHeaderFactory = new HttpResponseHeaderFactoryImpl();
+    private final Parser<HttpField, String> httpFieldParser = new HttpFieldParser();
+    private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
+    private final Parser<HttpRequestUrl, String> httpRequestUrlParser = new HttpRequestUrlParser();
 
     @Override
-    public HttpFieldParser getHttpFieldParser() {
+    public Parser<HttpField, String> getHttpFieldParser() {
         return httpFieldParser;
     }
 
     @Override
-    public HttpRequestHeadParserFactory getHttpRequestHeadParserFactory() {
-        return httpRequestHeadParserFactory;
+    public Parser<HttpRequestHeaderHead, String> getHttpRequestHeaderHeadParser() {
+        return httpRequestHeaderHeadParser;
     }
 
     @Override
-    public HttpRequestHeaderFactory getHttpRequestHeaderFactory() {
-        return httpRequestHeaderFactory;
+    public Parser<HttpRequestUrl, String> getHttpRequestUrlParser() {
+        return httpRequestUrlParser;
     }
 
-    @Override
-    public HttpResponseHeaderFactory getHttpResponseHeaderFactory() {
-        return httpResponseHeaderFactory;
-    }
 }
