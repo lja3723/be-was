@@ -42,10 +42,8 @@ public class WebApplicationServer {
                 // Thread 생성 대신 작업 제출
                 executor.execute(new ClientRequestHandler(
                     connection,
-                    dependency.getHttpRequestHeaderDecoder(),
                     dependency.getHttpFieldParser(),
-                    dependency.getHttpRequestHeadParserFactory(),
-                    dependency.getHttpResponseHeaderFactory()));
+                    dependency.getHttpRequestHeadParserFactory()));
             }
         } catch (IOException e) {
             logger.error("Error in Web Application Server: ", e);

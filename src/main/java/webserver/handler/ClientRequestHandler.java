@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import webserver.exception.ResourceNotFoundException;
 import webserver.handler.response.ResponseHandler;
 import webserver.handler.response.SuccessResponseHandler;
-import webserver.header.request.header.HttpRequestHeader;
-import webserver.header.request.header.HttpRequestHeaderDecoder;
+import webserver.header.HttpRequestHeader;
 import webserver.header.parser.HttpFieldParser;
 import webserver.header.parser.HttpRequestHeadParserFactory;
 
@@ -24,23 +23,19 @@ public class ClientRequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
 
     private final Socket connection;
-    private final HttpRequestHeaderDecoder httpRequestHeaderDecoder;
     private final HttpFieldParser httpFieldParser;
     private final HttpRequestHeadParserFactory httpRequestHeadParserFactory;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
      * @param connectionSocket 서버와 클라이언트간에 연결된 통신 회선
-     * @param httpRequestHeaderDecoder HTTP Request header factory의 구현체
      * @param httpFieldParser HTTP header field parser의 구현체
      * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
      */
     public ClientRequestHandler(Socket connectionSocket,
-                          HttpRequestHeaderDecoder httpRequestHeaderDecoder,
                           HttpFieldParser httpFieldParser,
                           HttpRequestHeadParserFactory httpRequestHeadParserFactory) {
         this.connection = connectionSocket;
-        this.httpRequestHeaderDecoder = httpRequestHeaderDecoder;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeadParserFactory = httpRequestHeadParserFactory;
     }
@@ -54,7 +49,7 @@ public class ClientRequestHandler implements Runnable {
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestHeader httpRequestHeader = httpRequestHeaderDecoder.create(
+            HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
                 in, httpRequestHeadParserFactory, httpFieldParser);
 
             logHttpRequestHeader(httpRequestHeader);

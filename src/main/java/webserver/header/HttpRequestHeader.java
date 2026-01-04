@@ -1,4 +1,4 @@
-package webserver.header.request.header;
+package webserver.header;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,20 +6,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
-import webserver.header.HttpHeader;
 import webserver.header.parser.HttpFieldParser;
 import webserver.header.parser.HttpRequestHeadParser;
 import webserver.header.parser.HttpRequestHeadParserFactory;
 
 /**
- * 클라이언트 Request의 InputStream을 파싱하여 HttpRequestHeader 객체를 생성하는 팩토리 인터페이스 구현체
+ * HTTP Request Header를 표현하는 Data Class
  */
-public class HttpRequestHeaderDecoderImpl implements HttpRequestHeaderDecoder {
+public record HttpRequestHeader(HttpHeader common, HttpMethod method, String path) {
 
-    @Override
-    public HttpRequestHeader create(InputStream inputStream,
-        HttpRequestHeadParserFactory httpRequestHeadParserFactory, HttpFieldParser httpFieldParser) {
-
+    /**
+     * InputStream을 파싱하여 HttpRequestHeader 객체를 생성
+     * @param inputStream 클라이언트 Request의 InputStream
+     * @param httpRequestHeadParserFactory
+     * @param httpFieldParser
+     * @return 파싱된 HttpRequestHeader 객체
+     */
+    public static HttpRequestHeader decodeInputStream(InputStream inputStream,
+                             HttpRequestHeadParserFactory httpRequestHeadParserFactory,
+                             HttpFieldParser httpFieldParser) {
         try {
             // InputStream을 행 단위로 읽기 준비
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

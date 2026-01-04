@@ -11,7 +11,7 @@ import webserver.exception.ResourceNotFoundException;
 import webserver.handler.util.ResponseOutputStreamWriter;
 import webserver.handler.util.ResourcePath;
 import webserver.header.HttpVersion;
-import webserver.header.request.header.HttpRequestHeader;
+import webserver.header.HttpRequestHeader;
 import webserver.header.HttpStatus;
 import webserver.header.HttpResponseHeader;
 
