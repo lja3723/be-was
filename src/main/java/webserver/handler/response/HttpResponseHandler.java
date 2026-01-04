@@ -9,7 +9,7 @@ import webserver.http.header.HttpRequestHeader;
  * 적절한 적절한 HTTP Response를 생성 후 Socket의 Output으로 전송 가능해야 함</p>
  */
 //TODO: 이름을 HttpResponseHandler로 변경할 필요가 있음
-public interface ResponseHandler {
+public interface HttpResponseHandler {
 
     /**
      * 클라이언트의 HTTP request 정보의 참조를 전달받는다.

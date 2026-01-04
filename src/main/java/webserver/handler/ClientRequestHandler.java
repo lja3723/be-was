@@ -7,8 +7,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.exception.ResourceNotFoundException;
-import webserver.handler.response.ResponseHandler;
-import webserver.handler.response.SuccessResponseHandler;
+import webserver.handler.response.HttpResponseHandler;
+import webserver.handler.response.SuccessHttpResponseHandler;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeaderHeadParser;
@@ -53,7 +53,7 @@ public class ClientRequestHandler implements Runnable {
                 in, httpRequestHeaderHeadParser, httpFieldParser);
 
             logHttpRequestHeader(httpRequestHeader);
-            handleResponse(new SuccessResponseHandler(), httpRequestHeader, out);
+            handleResponse(new SuccessHttpResponseHandler(), httpRequestHeader, out);
 
         } catch (ResourceNotFoundException e) {
             logger.error("404 Not Found: {}", e.getMessage());
@@ -79,15 +79,15 @@ public class ClientRequestHandler implements Runnable {
     }
 
     /**
-     * HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 {@link ResponseHandler}에게 위임
-     * @param responseHandler
+     * HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 {@link HttpResponseHandler}에게 위임
+     * @param httpResponseHandler
      * @param httpRequestHeader
      * @param out
      */
-    private void handleResponse(ResponseHandler responseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
-        responseHandler.setHttpRequestHeader(httpRequestHeader);
-        responseHandler.setOutputStream(out);
-        responseHandler.handleResponse();
+    private void handleResponse(HttpResponseHandler httpResponseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
+        httpResponseHandler.setHttpRequestHeader(httpRequestHeader);
+        httpResponseHandler.setOutputStream(out);
+        httpResponseHandler.handleResponse();
     }
 
 }
