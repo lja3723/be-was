@@ -1,4 +1,4 @@
-package webserver.header;
+package webserver.http;
 
 /**
  * HTTP Response의 Content-Type을 표현하는 Enum 클래스

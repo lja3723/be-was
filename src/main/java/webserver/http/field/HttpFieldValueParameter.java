@@ -1,4 +1,4 @@
-package webserver.header.field;
+package webserver.http.field;
 
 /**
  * <p>HTTP Header Field Value의 Parameter를 표현</p>

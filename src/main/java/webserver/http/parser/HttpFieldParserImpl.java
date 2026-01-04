@@ -1,9 +1,9 @@
-package webserver.header.parser;
+package webserver.http.parser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.header.field.HttpField;
-import webserver.header.field.HttpFieldKey;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpFieldKey;
 
 /**
  * HTTP Header Field의 한 줄을 파싱하는 Parser 구현체

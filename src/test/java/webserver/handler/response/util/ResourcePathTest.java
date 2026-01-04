@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test_support.Pair;
 import webserver.handler.util.ResourcePath;
-import webserver.header.ContentType;
+import webserver.http.ContentType;
 
 class ResourcePathTest {
 

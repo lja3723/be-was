@@ -1,10 +1,10 @@
-package webserver.header.request.parser;
+package webserver.http.request.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import webserver.header.parser.HttpFieldParser;
-import webserver.header.parser.HttpFieldParserImpl;
+import webserver.http.parser.HttpFieldParser;
+import webserver.http.parser.HttpFieldParserImpl;
 
 class HttpFieldParserImplTest {
 

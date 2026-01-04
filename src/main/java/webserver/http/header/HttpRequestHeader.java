@@ -1,4 +1,4 @@
-package webserver.header;
+package webserver.http.header;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,9 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
-import webserver.header.parser.HttpFieldParser;
-import webserver.header.parser.HttpRequestHeadParser;
-import webserver.header.parser.HttpRequestHeadParserFactory;
+import webserver.http.HttpMethod;
+import webserver.http.parser.HttpFieldParser;
+import webserver.http.parser.HttpRequestHeadParser;
+import webserver.http.parser.HttpRequestHeadParserFactory;
 
 /**
  * HTTP Request Header를 표현하는 Data Class

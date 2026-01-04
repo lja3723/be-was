@@ -1,4 +1,4 @@
-package webserver.header;
+package webserver.http;
 
 /**
  * HTTP 버전을 나타내는 Enum

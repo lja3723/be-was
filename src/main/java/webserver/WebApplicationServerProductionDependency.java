@@ -1,9 +1,9 @@
 package webserver;
 
-import webserver.header.parser.HttpFieldParser;
-import webserver.header.parser.HttpFieldParserImpl;
-import webserver.header.parser.HttpRequestHeadParserFactory;
-import webserver.header.parser.HttpRequestHeadParserFactoryImpl;
+import webserver.http.parser.HttpFieldParser;
+import webserver.http.parser.HttpFieldParserImpl;
+import webserver.http.parser.HttpRequestHeadParserFactory;
+import webserver.http.parser.HttpRequestHeadParserFactoryImpl;
 
 /**
  * Web Application Server의 Production Environment에서 사용되는 의존성 구현체

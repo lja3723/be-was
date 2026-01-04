@@ -1,8 +1,9 @@
-package webserver.header;
+package webserver.http.header;
 
 import java.util.ArrayList;
 import java.util.List;
-import webserver.header.field.HttpField;
+import webserver.http.HttpVersion;
+import webserver.http.field.HttpField;
 
 /**
  * <p>HTTP 헤더의 버전과 필드들을 담고 있는 Data Class</p>

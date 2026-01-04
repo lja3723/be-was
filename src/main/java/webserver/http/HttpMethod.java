@@ -1,4 +1,4 @@
-package webserver.header;
+package webserver.http;
 
 /**
  * HTTP Method를 표현하는 Enum 클래스

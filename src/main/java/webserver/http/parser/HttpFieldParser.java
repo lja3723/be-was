@@ -1,6 +1,6 @@
-package webserver.header.parser;
+package webserver.http.parser;
 
-import webserver.header.field.HttpField;
+import webserver.http.field.HttpField;
 
 /**
  * HTTP Header Field의 한 줄을 파싱하는 Parser 인터페이스

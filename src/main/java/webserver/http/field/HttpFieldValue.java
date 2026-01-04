@@ -1,4 +1,4 @@
-package webserver.header.field;
+package webserver.http.field;
 
 import java.util.List;
 
