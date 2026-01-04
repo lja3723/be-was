@@ -29,13 +29,13 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
             return this;
         }
 
-        public HttpResponseHeaderBuilder status(HttpStatus status) {
-            this.status = status;
+        public HttpResponseHeaderBuilder field(HttpField field) {
+            commonBuilder.field(field);
             return this;
         }
 
-        public HttpResponseHeaderBuilder field(HttpField field) {
-            commonBuilder.field(field);
+        public HttpResponseHeaderBuilder status(HttpStatus status) {
+            this.status = status;
             return this;
         }
 

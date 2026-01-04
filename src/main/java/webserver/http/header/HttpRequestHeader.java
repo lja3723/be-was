@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Optional;
 import webserver.http.HttpMethod;
+import webserver.http.HttpVersion;
+import webserver.http.field.HttpField;
+import webserver.http.header.HttpHeader.HttpHeaderBuilder;
 import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeadParser;
 import webserver.http.parser.HttpRequestHeadParserFactory;
@@ -17,15 +19,64 @@ import webserver.http.parser.HttpRequestHeadParserFactory;
 public record HttpRequestHeader(HttpHeader common, HttpMethod method, String path) {
 
     /**
+     * HttpRequestHeader 객체를 빌드하기 위한 빌더 클래스
+     */
+    public static class HttpRequestHeaderBuilder {
+        private final HttpHeaderBuilder commonBuilder;
+        private HttpMethod method;
+        private String path;
+
+        public HttpRequestHeaderBuilder() {
+            this.commonBuilder = HttpHeader.builder();
+        }
+
+        public HttpRequestHeaderBuilder version(HttpVersion version) {
+            commonBuilder.version(version);
+            return this;
+        }
+
+        public HttpRequestHeaderBuilder field(HttpField field) {
+            commonBuilder.field(field);
+            return this;
+        }
+
+        public HttpRequestHeaderBuilder method(HttpMethod method) {
+            this.method = method;
+            return this;
+        }
+
+        public HttpRequestHeaderBuilder path(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public HttpRequestHeader build() {
+            return new HttpRequestHeader(
+                commonBuilder.build(),
+                method,
+                path
+            );
+        }
+    }
+
+    /**
+     * HttpRequestHeaderBuilder 인스턴스를 반환하는 정적 팩토리 메서드
+     */
+    public static HttpRequestHeaderBuilder builder() {
+        return new HttpRequestHeaderBuilder();
+    }
+
+    /**
      * InputStream을 파싱하여 HttpRequestHeader 객체를 생성
      * @param inputStream 클라이언트 Request의 InputStream
      * @param httpRequestHeadParserFactory
      * @param httpFieldParser
      * @return 파싱된 HttpRequestHeader 객체
      */
-    public static HttpRequestHeader decodeInputStream(InputStream inputStream,
-                             HttpRequestHeadParserFactory httpRequestHeadParserFactory,
-                             HttpFieldParser httpFieldParser) {
+    public static HttpRequestHeader decodeInputStream(
+                  InputStream inputStream,
+                  HttpRequestHeadParserFactory httpRequestHeadParserFactory,
+                  HttpFieldParser httpFieldParser) {
         try {
             // InputStream을 행 단위로 읽기 준비
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -34,20 +85,17 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
 
             // Request의 첫 line(Head 부분) 파싱
             HttpRequestHeadParser httpRequestHeadParser = httpRequestHeadParserFactory.create(line);
-            HttpRequestHeader result = new HttpRequestHeader(
-                new HttpHeader(
-                    httpRequestHeadParser.getVersion(),
-                    new ArrayList<>()),
-                httpRequestHeadParser.getMethod(),
-                httpRequestHeadParser.getPath()
-            );
+            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
+                .version(httpRequestHeadParser.getVersion())
+                .method(httpRequestHeadParser.getMethod())
+                .path(httpRequestHeadParser.getPath());
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                result.common().fields().add(httpFieldParser.parse(line));
+                builder.field(httpFieldParser.parse(line));
             }
 
-            return result;
+            return builder.build();
 
         } catch (IOException e) {
             throw new RuntimeException("Error reading request", e);
