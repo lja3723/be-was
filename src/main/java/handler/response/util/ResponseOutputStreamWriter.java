@@ -1,4 +1,4 @@
-package handler.util;
+package handler.response.util;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;

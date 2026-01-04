@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test_support.Pair;
-import handler.util.ResourcePath;
+import http.field.ResourcePath;
 import http.ContentType;
 
 class ResourcePathTest {

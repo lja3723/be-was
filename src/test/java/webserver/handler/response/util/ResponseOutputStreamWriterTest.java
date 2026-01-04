@@ -2,7 +2,7 @@ package webserver.handler.response.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import handler.util.ResponseOutputStreamWriter;
+import handler.response.util.ResponseOutputStreamWriter;
 
 class ResponseOutputStreamWriterTest {
 
