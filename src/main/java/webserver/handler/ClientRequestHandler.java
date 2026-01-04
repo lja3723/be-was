@@ -21,6 +21,7 @@ import webserver.http.parser.Parser;
  * 서버가 클라이언트의 HTTP Request에 대한 적절한 Response를 생성하는 거시적인 동작을 담당한다.</p>
  */
 public class ClientRequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
 
     private final Socket connection;
@@ -53,8 +54,10 @@ public class ClientRequestHandler implements Runnable {
             HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
                 in, httpRequestHeaderHeadParser, httpFieldParser);
 
+            // HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 위임함
             logHttpRequestHeader(httpRequestHeader);
-            handleResponse(new SuccessHttpResponseHandler(), httpRequestHeader, out);
+            HttpResponseHandler responseHandler = new SuccessHttpResponseHandler(httpRequestHeader, out);
+            responseHandler.handleResponse();
 
         } catch (ResourceNotFoundException e) {
             logger.error("404 Not Found: {}", e.getMessage());
@@ -73,22 +76,10 @@ public class ClientRequestHandler implements Runnable {
      */
     private void logHttpRequestHeader(HttpRequestHeader header) {
         logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.path(), header.common().version());
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.path(),
+            header.common().version());
         header.common().fields().forEach(field ->
             logger.debug("Key -- {} / Value -- {}", field.key(), field.value())
         );
     }
-
-    /**
-     * HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 {@link HttpResponseHandler}에게 위임
-     * @param httpResponseHandler
-     * @param httpRequestHeader
-     * @param out
-     */
-    private void handleResponse(HttpResponseHandler httpResponseHandler, HttpRequestHeader httpRequestHeader, OutputStream out) {
-        httpResponseHandler.setHttpRequestHeader(httpRequestHeader);
-        httpResponseHandler.setOutputStream(out);
-        httpResponseHandler.handleResponse();
-    }
-
 }

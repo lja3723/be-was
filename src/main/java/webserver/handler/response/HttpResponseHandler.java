@@ -9,18 +9,20 @@ import webserver.http.header.HttpRequestHeader;
  * 적절한 적절한 HTTP Response를 생성 후 Socket의 Output으로 전송 가능해야 함</p>
  */
 //TODO: 이름을 HttpResponseHandler로 변경할 필요가 있음
-public interface HttpResponseHandler {
+public abstract class HttpResponseHandler {
+
+    protected final HttpRequestHeader httpRequestHeader;
+    protected final OutputStream outputStream;
 
     /**
-     * 클라이언트의 HTTP request 정보의 참조를 전달받는다.
+     * 클라이언트의 HTTP request 정보, 클라이언트와 연결된 Socket의 OutputStream을 주입받는다.
      * @param httpRequestHeader
-     */
-    void setHttpRequestHeader(HttpRequestHeader httpRequestHeader);
-
-    /**
-     * 클라이언트와 연결된 Socket의 OutputStream을 주입받는다.
      * @param outputStream
      */
-    void setOutputStream(OutputStream outputStream);
-    void handleResponse();
+    public HttpResponseHandler(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
+        this.httpRequestHeader = httpRequestHeader;
+        this.outputStream = outputStream;
+    }
+
+    public abstract void handleResponse();
 }

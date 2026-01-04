@@ -18,21 +18,12 @@ import webserver.http.header.HttpResponseHeader;
 /**
  * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler
  */
-public class SuccessHttpResponseHandler implements HttpResponseHandler {
+public class SuccessHttpResponseHandler extends HttpResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SuccessHttpResponseHandler.class);
 
-    protected HttpRequestHeader httpRequestHeader;
-    protected OutputStream outputStream;
-
-    @Override
-    public void setHttpRequestHeader(HttpRequestHeader httpRequestHeader) {
-        this.httpRequestHeader = httpRequestHeader;
-    }
-
-    @Override
-    public void setOutputStream(OutputStream outputStream) {
-        this.outputStream = outputStream;
+    public SuccessHttpResponseHandler(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
+        super(httpRequestHeader, outputStream);
     }
 
     @Override
