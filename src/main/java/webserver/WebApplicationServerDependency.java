@@ -1,8 +1,8 @@
 package webserver;
 
-import webserver.http.field.HttpField;
-import webserver.http.header.HttpRequestHeaderHead;
-import webserver.http.parser.Parser;
+import http.field.HttpField;
+import http.header.HttpRequestHeaderHead;
+import http.parser.Parser;
 
 /**
  * 웹 애플리케이션 서버가 필요로 하는 의존성들을 제공하는 인터페이스

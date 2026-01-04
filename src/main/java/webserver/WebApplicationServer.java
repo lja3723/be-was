@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.ClientRequestHandler;
+import handler.ClientRequestHandler;
 
 /**
  * ServerSocket을 생성하고 클라이언트의 요청을 처리하는 Web Application Server 클래스
