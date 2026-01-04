@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 import webserver.exception.ResourceNotFoundException;
 import webserver.handler.response.HttpResponseHandler;
 import webserver.handler.response.SuccessHttpResponseHandler;
+import webserver.http.field.HttpField;
 import webserver.http.header.HttpRequestHeader;
-import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.HttpRequestHeaderHeadParser;
+import webserver.http.header.HttpRequestHeaderHead;
+import webserver.http.parser.Parser;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
@@ -23,18 +24,18 @@ public class ClientRequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
 
     private final Socket connection;
-    private final HttpFieldParser httpFieldParser;
-    private final HttpRequestHeaderHeadParser httpRequestHeaderHeadParser;
+    private final Parser<HttpField, String> httpFieldParser;
+    private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
      * @param connectionSocket 서버와 클라이언트간에 연결된 통신 회선
      * @param httpFieldParser HTTP header field parser의 구현체
-     * @param httpRequestHeadParserFactory HTTP header field parser factory의 구현체
+     * @param httpRequestHeaderHeadParser HTTP header head field parser 구현체
      */
     public ClientRequestHandler(Socket connectionSocket,
-                                HttpFieldParser httpFieldParser,
-                                HttpRequestHeaderHeadParser httpRequestHeaderHeadParser) {
+                                Parser<HttpField, String> httpFieldParser,
+                                Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser) {
         this.connection = connectionSocket;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeaderHeadParser = httpRequestHeaderHeadParser;

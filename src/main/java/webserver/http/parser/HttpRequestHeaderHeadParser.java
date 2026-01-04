@@ -5,11 +5,21 @@ import webserver.http.HttpVersion;
 import webserver.http.header.HttpRequestHeaderHead;
 
 /**
- * <p>HTTP Request의 Head 부분을 파싱하는 Parser 인터페이스</p>
- * request의 첫 번째 라인에서 얻을 수 있는 method, path, version 정보를 제공
- *
+ * HTTP Request의 Head 부분을 파싱하는 Parser 인터페이스 구현체
  */
-public interface HttpRequestHeaderHeadParser {
+public class HttpRequestHeaderHeadParser implements Parser<HttpRequestHeaderHead, String> {
 
-    HttpRequestHeaderHead parse(String rawRequestLine);
+    @Override
+    public HttpRequestHeaderHead parse(String rawRequestLine) {
+        String[] parts = rawRequestLine.split(" ");
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Invalid HTTP request line: " + rawRequestLine);
+        }
+
+        return new HttpRequestHeaderHead(
+            HttpMethod.fromString(parts[0]),
+            parts[1],
+            HttpVersion.fromString(parts[2])
+        );
+    }
 }

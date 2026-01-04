@@ -9,8 +9,7 @@ import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpHeader.HttpHeaderBuilder;
-import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.HttpRequestHeaderHeadParser;
+import webserver.http.parser.Parser;
 
 /**
  * HTTP Request Header를 표현하는 Data Class
@@ -74,8 +73,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, String pat
      */
     public static HttpRequestHeader decodeInputStream(
                   InputStream inputStream,
-                  HttpRequestHeaderHeadParser httpRequestHeaderHeadParser,
-                  HttpFieldParser httpFieldParser) {
+                  Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
+                  Parser<HttpField, String> httpFieldParser) {
         try {
             // InputStream을 행 단위로 읽기 준비
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

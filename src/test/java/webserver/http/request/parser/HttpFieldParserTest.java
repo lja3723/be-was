@@ -3,19 +3,20 @@ package webserver.http.request.parser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import webserver.http.field.HttpField;
 import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.HttpFieldParserImpl;
+import webserver.http.parser.Parser;
 
-class HttpFieldParserImplTest {
+class HttpFieldParserTest {
 
     @Test
     void parse() {
         // given
-        HttpFieldParser parser = new HttpFieldParserImpl();
+        Parser<HttpField, String> parser = new HttpFieldParser();
         String rawFieldLine = "Content-Type: text/html; charset=UTF-8";
 
         // when
-        var result = parser.parse(rawFieldLine);
+        HttpField result = parser.parse(rawFieldLine);
 
         // then
         assertEquals("Content-Type", result.key().getValue());
