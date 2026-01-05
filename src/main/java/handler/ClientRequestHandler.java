@@ -7,7 +7,6 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import exception.ResourceNotFoundException;
 import handler.response.HttpResponseHandler;
 import handler.response.SuccessHttpResponseHandler;
 import http.field.HttpField;
@@ -25,22 +24,27 @@ public class ClientRequestHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
 
-    private final Socket connection;
+    private final InputStream in;
+    private final OutputStream out;
     private final Parser<HttpField, String> httpFieldParser;
     private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser;
     private final Parser<HttpRequestUrl, String> httpRequestUrlParser;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
-     * @param connectionSocket 서버와 클라이언트간에 연결된 통신 회선
+     * @param in 서버와 클라이언트간에 연결된 통신 회선
+     * @param out 서버와 클라이언트간에 연결된 통신 회선
      * @param httpFieldParser HTTP header field parser의 구현체
      * @param httpRequestHeaderHeadParser HTTP header head field parser 구현체
+     * @param httpRequestUrlParser HTTP request URL parser 구현체
      */
-    public ClientRequestHandler(Socket connectionSocket,
+    public ClientRequestHandler(InputStream in,
+                                OutputStream out,
                                 Parser<HttpField, String> httpFieldParser,
                                 Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
                                 Parser<HttpRequestUrl, String> httpRequestUrlParser) {
-        this.connection = connectionSocket;
+        this.in = in;
+        this.out = out;
         this.httpFieldParser = httpFieldParser;
         this.httpRequestHeaderHeadParser = httpRequestHeaderHeadParser;
         this.httpRequestUrlParser = httpRequestUrlParser;
@@ -50,30 +54,21 @@ public class ClientRequestHandler implements Runnable {
      * ExecutorService에 의해 호출되어 클라이언트와의 HTTP 통신을 처리
      */
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}",
-            connection.getInetAddress(),
-            connection.getPort());
-
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try {
+            // InputStream으로부터 HTTP request header 파싱
             HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
                 in,
                 httpRequestHeaderHeadParser,
                 httpFieldParser,
                 httpRequestUrlParser);
+            logHttpRequestHeader(httpRequestHeader);
 
             // HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 위임함
-            logHttpRequestHeader(httpRequestHeader);
             HttpResponseHandler responseHandler = new SuccessHttpResponseHandler(httpRequestHeader, out);
             responseHandler.handleResponse();
 
-        } catch (ResourceNotFoundException e) {
-            logger.error("404 Not Found: {}", e.getMessage());
-            //TODO: 404 응답 처리
-        }
-        catch (Exception e) {
-            logger.error("500 Internal Server Error: {}", e.getMessage());
-            e.printStackTrace();
-            //TODO: 500 응답 처리
+        } catch (Exception e) {
+            // TODO: 서버의 Exception을 확장성 있게 잡아내어 핸들러로 넘겨주는 방식으로 수정 필요, 예외에 따른 적절한 HTTP 응답 처리 로직 구현 필요
         }
     }
 

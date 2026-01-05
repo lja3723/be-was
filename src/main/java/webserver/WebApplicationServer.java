@@ -1,6 +1,8 @@
 package webserver;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -32,26 +34,64 @@ public class WebApplicationServer {
         this.executor = Executors.newFixedThreadPool(threadPoolSize);
     }
 
-    public void run() {
-
+    /**
+     * 서버를 시작하고 클라이언트의 연결을 수락
+     */
+    public void startServer() {
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                // Thread 생성 대신 작업 제출
-                executor.execute(new ClientRequestHandler(
-                    connection,
-                    dependency.getHttpFieldParser(),
-                    dependency.getHttpRequestHeaderHeadParser(),
-                    dependency.getHttpRequestUrlParser()));
+                handleOpenedSocketConnection(connection);
             }
-        // TODO: 서버의 Exception을 확장성 있게 잡아내어 핸들러로 넘겨주는 방식으로 수정 필요
+
         } catch (IOException e) {
-            logger.error("Error in Web Application Server: ", e);
+            // ServerSocket 생성 또는 accept 실패시 잡아냄
+            // 로깅 메시지는 AI 도움을 받음
+            logger.error(
+                "Fatal error in Web Application Server. " +
+                    "Failed to bind or accept connections on port {}. Reason: {}",
+                port,
+                e.getMessage(),
+                e // 마지막 파라미터로 exception 객체 전달시 logger가 stack trace를 출력하게 됨
+            );
+
         }
         finally {
             executor.shutdown();
+        }
+    }
+
+    /**
+     * 새로 열린 소켓 연결을 처리
+     * @param connection 새로 열린 소켓 연결
+     */
+    public void handleOpenedSocketConnection(Socket connection) {
+
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+                connection.getInetAddress(),
+                connection.getPort());
+
+            // Thread 생성 대신 작업 제출
+            executor.execute(new ClientRequestHandler(
+                in, out,
+                dependency.getHttpFieldParser(),
+                dependency.getHttpRequestHeaderHeadParser(),
+                dependency.getHttpRequestUrlParser()));
+
+        } catch (IOException e) {
+            // InputStream 또는 OutputStream 획득 실패인 경우를 잡아냄
+            // 로깅 메시지는 AI 도움을 받음
+            logger.error(
+                "Failed to initialize I/O streams for client connection. " +
+                    "Client IP: {}, Client Port: {}, Reason: {}",
+                connection.getInetAddress(),
+                connection.getPort(),
+                e.getMessage(),
+                e
+            );
         }
     }
 }
