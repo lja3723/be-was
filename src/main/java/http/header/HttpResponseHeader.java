@@ -67,4 +67,23 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
     public static HttpResponseHeaderBuilder builder() {
         return new HttpResponseHeaderBuilder();
     }
+
+    /**
+     * {@link HttpResponseHeader}를 HTTP Response Protocol을 준수하는 문자열로 인코딩함
+     * @return 인코딩된 HTTP 응답 헤더 문자열
+     */
+    public String encode() {
+        final String CRLF = "\r\n";
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(this.common().version().getValue()).append(" ")
+            .append(this.status().getCode()).append(" ")
+            .append(this.status().getReasonPhrase()).append(CRLF);
+        for (var field : this.common().fields()) {
+            builder.append(field.key().getValue()).append(": ")
+                .append(field.value()).append(CRLF);
+        }
+        builder.append(CRLF);
+        return builder.toString();
+    }
 }

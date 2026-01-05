@@ -23,31 +23,12 @@ public class ResponseOutputStreamWriter {
     }
 
     /**
-     * {@link HttpResponseHeader}를 HTTP Response Protocol을 준수하는 문자열로 인코딩함
-     * @return 인코딩된 HTTP 응답 헤더 문자열
-     */
-    public String encodeHeader() {
-        final String CRLF = "\r\n";
-        StringBuilder builder = new StringBuilder();
-
-        builder.append(responseHeader.common().version().getValue()).append(" ")
-            .append(responseHeader.status().getCode()).append(" ")
-            .append(responseHeader.status().getReasonPhrase()).append(CRLF);
-        for (var field : responseHeader.common().fields()) {
-            builder.append(field.key().getValue()).append(": ")
-                .append(field.value()).append(CRLF);
-        }
-        builder.append(CRLF);
-        return builder.toString();
-    }
-
-    /**
      * 인코딩된 HTTP Response Header와 body를 OutputStream에 작성하고 flush
      * @throws InternalServerErrorException 응답 작성 또는 플러시에 실패한 경우 발생
      */
     public void flushResponse() throws InternalServerErrorException {
         try {
-            dataOutputStream.writeBytes(encodeHeader());
+            dataOutputStream.writeBytes(responseHeader.encode());
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         } catch (Exception e) {
