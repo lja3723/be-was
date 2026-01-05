@@ -8,7 +8,6 @@ import http.header.HttpRequestHeader;
  * <p>구현체는 클라이언트의 HTTP request 정보를 담은 {@link HttpRequestHeader}을 기반으로
  * 적절한 적절한 HTTP Response를 생성 후 Socket의 Output으로 전송 가능해야 함</p>
  */
-//TODO: 이름을 HttpResponseHandler로 변경할 필요가 있음
 public abstract class HttpResponseHandler {
 
     protected final HttpRequestHeader httpRequestHeader;
