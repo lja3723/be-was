@@ -1,8 +1,6 @@
 package webserver;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -43,9 +41,17 @@ public class WebApplicationServer {
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                handleOpenedSocketConnection(connection);
-            }
+                logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+                    connection.getInetAddress(),
+                    connection.getPort());
 
+                // Thread 생성 대신 작업 제출
+                executor.execute(new ClientRequestHandler(
+                    connection,
+                    dependency.getHttpFieldParser(),
+                    dependency.getHttpRequestHeaderHeadParser(),
+                    dependency.getHttpRequestUrlParser()));
+            }
         } catch (IOException e) {
             // ServerSocket 생성 또는 accept 실패시 잡아냄
             // 로깅 메시지는 AI 도움을 받음
@@ -56,42 +62,9 @@ public class WebApplicationServer {
                 e.getMessage(),
                 e // 마지막 파라미터로 exception 객체 전달시 logger가 stack trace를 출력하게 됨
             );
-
         }
         finally {
             executor.shutdown();
-        }
-    }
-
-    /**
-     * 새로 열린 소켓 연결을 처리
-     * @param connection 새로 열린 소켓 연결
-     */
-    public void handleOpenedSocketConnection(Socket connection) {
-
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            logger.debug("New Client Connect! Connected IP : {}, Port : {}",
-                connection.getInetAddress(),
-                connection.getPort());
-
-            // Thread 생성 대신 작업 제출
-            executor.execute(new ClientRequestHandler(
-                in, out,
-                dependency.getHttpFieldParser(),
-                dependency.getHttpRequestHeaderHeadParser(),
-                dependency.getHttpRequestUrlParser()));
-
-        } catch (IOException e) {
-            // InputStream 또는 OutputStream 획득 실패인 경우를 잡아냄
-            // 로깅 메시지는 AI 도움을 받음
-            logger.error(
-                "Failed to initialize I/O streams for client connection. " +
-                    "Client IP: {}, Client Port: {}, Reason: {}",
-                connection.getInetAddress(),
-                connection.getPort(),
-                e.getMessage(),
-                e
-            );
         }
     }
 }
