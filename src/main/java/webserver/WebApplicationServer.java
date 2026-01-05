@@ -46,6 +46,7 @@ public class WebApplicationServer {
                     dependency.getHttpRequestHeaderHeadParser(),
                     dependency.getHttpRequestUrlParser()));
             }
+        // TODO: 서버의 Exception을 확장성 있게 잡아내어 핸들러로 넘겨주는 방식으로 수정 필요
         } catch (IOException e) {
             logger.error("Error in Web Application Server: ", e);
         }
