@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import handler.response.util.ResponseOutputStreamWriter;
+import responsehandler.util.ResponseOutputStreamWriter;
 
 class ResponseOutputStreamWriterTest {
 

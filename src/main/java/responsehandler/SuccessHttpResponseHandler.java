@@ -1,4 +1,4 @@
-package handler.response;
+package responsehandler;
 
 import exception.InternalServerErrorException;
 import exception.ResourceNotFoundException;

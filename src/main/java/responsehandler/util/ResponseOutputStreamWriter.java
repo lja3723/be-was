@@ -1,4 +1,4 @@
-package handler.response.util;
+package responsehandler.util;
 
 import http.header.HttpRequestHeader;
 import java.io.DataOutputStream;

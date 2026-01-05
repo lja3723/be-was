@@ -1,6 +1,6 @@
-package handler.response;
+package responsehandler;
 
-import handler.response.util.ResponseOutputStreamWriter;
+import responsehandler.util.ResponseOutputStreamWriter;
 import http.ContentType;
 import http.header.HttpResponseHeader;
 import java.io.OutputStream;
