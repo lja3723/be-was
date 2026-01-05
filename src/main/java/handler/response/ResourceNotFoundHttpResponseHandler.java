@@ -6,7 +6,7 @@ import http.header.HttpRequestHeader;
 /**
  * HTTP Status가 404, 리소스가 없는 경우의 HTTP Response를 핸들링하는 ResponseHandler
  */
-public class ResourceNotFoundHttpResponseHandler extends SuccessHttpResponseHandler {
+public class ResourceNotFoundHttpResponseHandler extends HttpResponseHandler {
 
     public ResourceNotFoundHttpResponseHandler(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
         super(httpRequestHeader, outputStream);
