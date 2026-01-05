@@ -17,29 +17,18 @@ public abstract class HttpResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseHandler.class);
 
-    protected final HttpRequestHeader httpRequestHeader;
-    protected final OutputStream outputStream;
-
-    /**
-     * 클라이언트의 HTTP request 정보, 클라이언트와 연결된 Socket의 OutputStream을 주입받는다.
-     * @param httpRequestHeader
-     * @param outputStream
-     */
-    public HttpResponseHandler(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
-        this.httpRequestHeader = httpRequestHeader;
-        this.outputStream = outputStream;
-    }
-
     /**
      * RequestHeader 기반 HTTP Response를 생성 후 OutputStream으로 전송
      * <p>자식 클래스는 해당 메서드를 상속할 수 없으며, {@link #createResponseHeader(ContentType, byte[])} 를 구현하여
      * HTTP Response Header를 생성해야 함</p>
+     * @param httpRequestHeader 클라이언트의 HTTP Request Header
+     * @param outputStream 클라이언트와의 통신 OutputStream
      */
-    public final void handleResponse() {
+    public final void handleResponse(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
         logger.debug("request url: {}", httpRequestHeader.url());
 
         // HTTP Response의 Header 생성
-        byte[] body = getBody(httpRequestHeader);
+        byte[] body = getBody(httpRequestHeader, outputStream);
         HttpResponseHeader responseHeader = createResponseHeader(
             httpRequestHeader.url().contentType(),
             body);
@@ -59,10 +48,11 @@ public abstract class HttpResponseHandler {
     /**
      * HTTP Response Body를 생성하는 추상 메서드
      * <p>자식 클래스는 해당 메서드를 구현하여 적절한 HTTP Response Body를 생성해야 함</p>
+     * @param outputStream 클라이언트와의 통신 OutputStream
      * @param httpRequestHeader 클라이언트의 HTTP Request Header
      * @return
      */
-    public abstract byte[] getBody(HttpRequestHeader httpRequestHeader);
+    public abstract byte[] getBody(HttpRequestHeader httpRequestHeader, OutputStream outputStream);
 
     /**
      * HTTP Response Header를 생성하는 추상 메서드

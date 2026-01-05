@@ -16,12 +16,8 @@ import http.header.HttpResponseHeader;
  */
 public class SuccessHttpResponseHandler extends HttpResponseHandler {
 
-    public SuccessHttpResponseHandler(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
-        super(httpRequestHeader, outputStream);
-    }
-
     @Override
-    public byte[] getBody(HttpRequestHeader httpRequestHeader) {
+    public byte[] getBody(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
         HttpRequestUrl httpRequestUrl = httpRequestHeader.url();
 
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(httpRequestUrl.resourcePath())) {
