@@ -4,6 +4,7 @@ import exception.InternalServerErrorException;
 import exception.ResourceNotFoundException;
 import http.ContentType;
 import http.field.HttpRequestUrl;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import http.HttpVersion;
@@ -27,7 +28,7 @@ public class SuccessHttpResponseHandler extends HttpResponseHandler {
             }
             return is.readAllBytes();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new InternalServerErrorException(outputStream, httpRequestHeader, e.getMessage(), e);
         }
     }

@@ -2,6 +2,7 @@ package responsehandler.util;
 
 import http.header.HttpRequestHeader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import exception.InternalServerErrorException;
 import http.header.HttpResponseHeader;
@@ -36,7 +37,7 @@ public class ResponseOutputStreamWriter {
             dataOutputStream.writeBytes(responseHeader.encode());
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new InternalServerErrorException(outputStream, httpRequestHeader, "Failed to flush response", e);
         }
     }
