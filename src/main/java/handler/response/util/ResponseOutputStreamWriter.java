@@ -1,5 +1,6 @@
 package handler.response.util;
 
+import http.header.HttpRequestHeader;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 import exception.InternalServerErrorException;
@@ -12,12 +13,16 @@ import http.header.HttpResponseHeader;
  */
 public class ResponseOutputStreamWriter {
 
+    private final OutputStream outputStream;
     private final DataOutputStream dataOutputStream;
+    private final HttpRequestHeader httpRequestHeader;
     private final HttpResponseHeader responseHeader;
     private final byte[] body;
 
-    public ResponseOutputStreamWriter(OutputStream outputStream, HttpResponseHeader responseHeader, byte[] body) {
-        this.dataOutputStream = new DataOutputStream(outputStream);
+    public ResponseOutputStreamWriter(OutputStream outputStream, HttpRequestHeader httpRequestHeader, HttpResponseHeader responseHeader, byte[] body) {
+        this.outputStream = outputStream;
+        this.dataOutputStream = new DataOutputStream(this.outputStream);
+        this.httpRequestHeader = httpRequestHeader;
         this.responseHeader = responseHeader;
         this.body = body;
     }
@@ -32,7 +37,7 @@ public class ResponseOutputStreamWriter {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         } catch (Exception e) {
-            throw new InternalServerErrorException("Failed to flush response", e);
+            throw new InternalServerErrorException(outputStream, httpRequestHeader, "Failed to flush response", e);
         }
     }
 }

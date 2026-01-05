@@ -3,9 +3,13 @@ package webserver.handler.response.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import http.ContentType;
+import http.HttpMethod;
 import http.HttpStatus;
 import http.HttpVersion;
+import http.field.HttpRequestUrl;
+import http.header.HttpRequestHeader;
 import http.header.HttpResponseHeader;
+import http.parser.Parser;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,11 +23,20 @@ class ResponseOutputStreamWriterTest {
     private HttpResponseHeader responseHeader;
     private MockDataOutputStream mockDos;
 
+    // Test 대상 객체
     private ResponseOutputStreamWriter responseOutputStreamWriter;
 
     @BeforeEach
     void setUp() {
+        Parser<HttpRequestUrl, String> mockParser = new MockHttpRequestUrlParser();
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.builder(mockParser)
+            .method(HttpMethod.GET)
+            .version(HttpVersion.HTTP_1_1)
+            .url("/")
+            .build();
+
         this.body = "<h1>hello</h1>";
+
         this.responseHeader = HttpResponseHeader.builder()
             .version(HttpVersion.HTTP_1_1)
             .status(HttpStatus.OK)
@@ -35,6 +48,7 @@ class ResponseOutputStreamWriterTest {
 
         this.responseOutputStreamWriter = new ResponseOutputStreamWriter(
             mockDos,
+            httpRequestHeader,
             responseHeader,
             body.getBytes()
         );
@@ -110,5 +124,16 @@ class MockOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
+    }
+}
+
+/**
+ * HttpRequestUrl을 단순히 rawData로 초기화하는 Mock Parser 구현체
+ */
+class MockHttpRequestUrlParser implements Parser<HttpRequestUrl, String> {
+
+    @Override
+    public HttpRequestUrl parse(String rawData) {
+        return new HttpRequestUrl(rawData, rawData, ContentType.TEXT_HTML);
     }
 }
