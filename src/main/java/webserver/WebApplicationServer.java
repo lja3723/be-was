@@ -49,7 +49,9 @@ public class WebApplicationServer {
                     connection,
                     dependency.getHttpFieldParser(),
                     dependency.getHttpRequestHeaderHeadParser(),
-                    dependency.getHttpRequestUrlParser()));
+                    dependency.getHttpRequestUrlParser(),
+                    dependency.getExceptionHandlerRouter(),
+                    dependency.getHttpRequestRouter()));
             }
         } catch (IOException e) {
             // ServerSocket 생성 또는 accept 실패시 잡아냄
