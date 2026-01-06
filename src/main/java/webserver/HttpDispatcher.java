@@ -19,11 +19,10 @@ import webserver.util.OutputStreamHttpResponseWriter;
  *
  * <p>{@link Socket}으로부터 클라이언트와의 {@link InputStream}과 {@link OutputStream}을 획득한 후
  * 서버가 클라이언트의 HTTP Request에 대한 적절한 Response를 생성하는 거시적인 동작을 담당한다.</p>
- * <p>클래스 이름은 AI에게 추천 받았습니다.</p>
  */
-public class HttpRequestProcessor implements Runnable {
+public class HttpDispatcher implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequestProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpDispatcher.class);
 
     private final Socket connection;
     private final WebApplicationServerDependency dependency;
@@ -33,7 +32,7 @@ public class HttpRequestProcessor implements Runnable {
      * @param connection 클라이언트와의 소켓 연결
      * @param dependency 웹 애플리케이션 서버의 의존성 제공자
      */
-    public HttpRequestProcessor(Socket connection, WebApplicationServerDependency dependency) {
+    public HttpDispatcher(Socket connection, WebApplicationServerDependency dependency) {
         this.connection = connection;
         this.dependency = dependency;
     }

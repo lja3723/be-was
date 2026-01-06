@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HttpRequestProcessorTest {
+class HttpDispatcherTest {
 
     @BeforeEach
     void setUp() {
