@@ -17,11 +17,16 @@ public class HttpFieldParser implements Parser<String, HttpField> {
     public HttpField parse(String rawFieldLine) {
         String[] split = rawFieldLine.split(":", 2);
 
+//        if (split .length != 2) {
+//            throw new BadRequestException("Invalid HTTP Field Line: " + rawFieldLine);
+//        }
+
+
         // TODO: 괄호 '()'를 모두 치환후, ','로 split후 ';'로 split. 그리고 치환되었던 ()를 원복하는 알고리즘 구현 예정
 
-        return new HttpField(
-            HttpFieldKey.fromString(split[0].trim()),
-            split[1].trim() // TODO: 추후 key에 대응하는 값을 문자열이 아닌 객체로 저장하도록 변경
-        );
+        return HttpField.builder()
+            .key(split[0])
+            .value(split[1]) // TODO: 추후 key에 대응하는 값을 문자열이 아닌 객체로 저장하도록 변경
+            .build();
     }
 }

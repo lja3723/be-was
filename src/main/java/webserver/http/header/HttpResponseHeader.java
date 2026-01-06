@@ -47,12 +47,18 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
             if (category.equals("text") || category.equals("application")) {
                 fieldValue += "; charset=UTF-8";
             }
-            this.commonBuilder.field(new HttpField(HttpFieldKey.CONTENT_TYPE, fieldValue));
+            this.commonBuilder.field(HttpField.builder()
+                .key(HttpFieldKey.CONTENT_TYPE)
+                .value(fieldValue)
+                .build());
             return this;
         }
 
         public HttpResponseHeaderBuilder body(byte[] body) {
-            this.commonBuilder.field(new HttpField(HttpFieldKey.CONTENT_LENGTH, String.valueOf(body.length)));
+            this.commonBuilder.field(HttpField.builder()
+                .key(HttpFieldKey.CONTENT_LENGTH)
+                .value(String.valueOf(body.length))
+                .build());
             return this;
         }
 
@@ -72,6 +78,7 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
      * {@link HttpResponseHeader}를 HTTP Response Protocol을 준수하는 문자열로 인코딩함
      * @return 인코딩된 HTTP 응답 헤더 문자열
      */
+    // TODO: 별도의 클래스로 분리 필요
     public String encode() {
         final String CRLF = "\r\n";
         StringBuilder builder = new StringBuilder();
@@ -79,10 +86,32 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
         builder.append(this.common().version().getValue()).append(" ")
             .append(this.status().getCode()).append(" ")
             .append(this.status().getReasonPhrase()).append(CRLF);
-        for (var field : this.common().fields()) {
-            builder.append(field.key().getValue()).append(": ")
-                .append(field.value()).append(CRLF);
-        }
+
+        this.common().fields()
+            .forEach(field -> {
+                builder.append(field.key().getValue()).append(": ");
+
+                if (field.values() != null) {
+                    String fieldValues = field.values().stream()
+                        .map(fieldValue -> {
+                            StringBuilder fieldValueBuilder = new StringBuilder();
+                            fieldValueBuilder.append(fieldValue.value());
+                            if (fieldValue.parameters() != null) {
+                                fieldValue.parameters().forEach(parameter -> fieldValueBuilder.append("; ")
+                                    .append(parameter.key())
+                                    .append("=")
+                                    .append(parameter.value()));
+                            }
+                            return fieldValueBuilder.toString();
+
+                        })
+                        .reduce((a, b) -> a + ", " + b)
+                        .orElse("");
+                    builder.append(fieldValues);
+                }
+                builder.append(CRLF);
+            });
+
         builder.append(CRLF);
         return builder.toString();
     }

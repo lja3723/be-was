@@ -19,6 +19,11 @@ public record HttpField(HttpFieldKey key, List<HttpFieldValue> values) {
             return this;
         }
 
+        public HttpFieldBuilder key(String key) {
+            this.key = HttpFieldKey.fromString(key);
+            return this;
+        }
+
         public HttpFieldBuilder value(HttpFieldValue value) {
             if (values == null) {
                 values = new ArrayList<>();
@@ -32,7 +37,7 @@ public record HttpField(HttpFieldKey key, List<HttpFieldValue> values) {
                 values = new ArrayList<>();
             }
             this.values.add(HttpFieldValue.builder()
-                .value(value)
+                .value(value.trim())
                 .build());
             return this;
         }
