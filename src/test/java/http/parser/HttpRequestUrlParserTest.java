@@ -1,8 +1,7 @@
-package webserver.handler.response.util;
+package http.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import http.parser.HttpRequestUrlParser;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

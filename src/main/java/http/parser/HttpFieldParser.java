@@ -1,7 +1,5 @@
 package http.parser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import http.field.HttpField;
 import http.field.HttpFieldKey;
 
@@ -9,7 +7,6 @@ import http.field.HttpFieldKey;
  * HTTP Header Field의 한 줄을 파싱하는 Parser 구현체
  */
 public class HttpFieldParser implements Parser<HttpField, String> {
-    private static final Logger log = LoggerFactory.getLogger(HttpFieldParser.class);
 
     /**
      * HTTP Header Field의 한 줄을 파싱하여 {@link HttpField} 객체로 반환한다.
