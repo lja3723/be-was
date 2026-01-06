@@ -12,10 +12,10 @@ import app.responsehandler.ResourceNotFoundHttpResponseHandler;
 /**
  * Exception에 따른 HttpResponseHandler를 라우팅하는 Router
  */
-public class ExceptionHandlerRouter implements Router<Exception, HttpResponseHandler> {
+public class ExceptionHandlerRouter implements Router<Throwable, HttpResponseHandler> {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerRouter.class);
-    private final Map<Class<? extends Exception>, HttpResponseHandler> exceptionHandlerMap;
+    private final Map<Class<? extends Throwable>, HttpResponseHandler> exceptionHandlerMap;
 
     public ExceptionHandlerRouter() {
 
@@ -29,7 +29,7 @@ public class ExceptionHandlerRouter implements Router<Exception, HttpResponseHan
 
     // TODO: 정적 리소스에 대한 라우팅과 Restful API에 대한 라우팅을 분리하는 법 고민하기
     @Override
-    public HttpResponseHandler route(Exception e) {
+    public HttpResponseHandler route(Throwable e) {
         HttpResponseHandler handler = exceptionHandlerMap.get(e.getClass());
 
         if (handler == null) {
