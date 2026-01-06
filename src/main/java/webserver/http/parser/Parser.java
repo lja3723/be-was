@@ -7,5 +7,5 @@ package webserver.http.parser;
  */
 public interface Parser<T, V> {
 
-    T parse(V rawData);
+    V parse(T rawData);
 }

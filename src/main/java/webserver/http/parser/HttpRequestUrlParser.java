@@ -7,7 +7,7 @@ import webserver.http.field.HttpRequestUrl;
  * HTTP request의 URL을 파싱하는 파서 클래스
  */
 // TODO: 추후 쿼리 파라미터 등도 처리할 수 있도록 확장 필요
-public class HttpRequestUrlParser implements Parser<HttpRequestUrl, String> {
+public class HttpRequestUrlParser implements Parser<String, HttpRequestUrl> {
 
     @Override
     public HttpRequestUrl parse(String rawUrl) {

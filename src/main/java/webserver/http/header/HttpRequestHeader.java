@@ -17,12 +17,12 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
      */
     public static class HttpRequestHeaderBuilder {
 
-        private final Parser<HttpRequestUrl, String> httpRequestUrlParser;
+        private final Parser<String, HttpRequestUrl> httpRequestUrlParser;
         private final HttpHeaderBuilder commonBuilder;
         private HttpMethod method;
         private String url;
 
-        public HttpRequestHeaderBuilder(Parser<HttpRequestUrl, String> httpRequestUrlParser) {
+        public HttpRequestHeaderBuilder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
             this.httpRequestUrlParser = httpRequestUrlParser;
             this.commonBuilder = HttpHeader.builder();
         }
@@ -59,7 +59,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
     /**
      * HttpRequestHeaderBuilder 인스턴스를 반환하는 정적 팩토리 메서드
      */
-    public static HttpRequestHeaderBuilder builder(Parser<HttpRequestUrl, String> httpRequestUrlParser) {
+    public static HttpRequestHeaderBuilder builder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
         return new HttpRequestHeaderBuilder(httpRequestUrlParser);
     }
 }

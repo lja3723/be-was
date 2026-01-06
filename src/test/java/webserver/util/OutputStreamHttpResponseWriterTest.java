@@ -27,7 +27,7 @@ class OutputStreamHttpResponseWriterTest {
 
     @BeforeEach
     void setUp() {
-        Parser<HttpRequestUrl, String> mockParser = new MockHttpRequestUrlParser();
+        Parser<String, HttpRequestUrl> mockParser = new MockHttpRequestUrlParser();
         httpRequest = new HttpRequest(
             HttpRequestHeader.builder(mockParser)
                 .method(HttpMethod.GET)

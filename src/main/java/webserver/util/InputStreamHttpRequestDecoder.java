@@ -25,9 +25,9 @@ public class InputStreamHttpRequestDecoder {
      */
     public static HttpRequest decode(
         InputStream in,
-        Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
-        Parser<HttpField, String> httpFieldParser,
-        Parser<HttpRequestUrl, String> httpRequestUrlParser) {
+        Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser,
+        Parser<String, HttpField> httpFieldParser,
+        Parser<String, HttpRequestUrl> httpRequestUrlParser) {
 
         try {
             // InputStream을 행 단위로 읽기 준비

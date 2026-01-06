@@ -7,7 +7,7 @@ import webserver.http.parser.Parser;
 /**
  * HttpRequestUrl을 단순히 rawData로 초기화하는 Mock Parser 구현체
  */
-public class MockHttpRequestUrlParser implements Parser<HttpRequestUrl, String> {
+public class MockHttpRequestUrlParser implements Parser<String, HttpRequestUrl> {
 
     @Override
     public HttpRequestUrl parse(String rawData) {

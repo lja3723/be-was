@@ -10,7 +10,7 @@ class HttpFieldParserTest {
     @Test
     void parse() {
         // given
-        Parser<HttpField, String> parser = new HttpFieldParser();
+        Parser<String, HttpField> parser = new HttpFieldParser();
         String rawFieldLine = "Content-Type: text/html; charset=UTF-8";
 
         // when

@@ -16,17 +16,17 @@ public interface WebApplicationServerDependency {
     /**
      * HTTP Header Field 파서를 반환
      */
-    Parser<HttpField, String> getHttpFieldParser();
+    Parser<String, HttpField> getHttpFieldParser();
 
     /**
      * HTTP Request Head 파서를 반환
      */
-    Parser<HttpRequestHeaderHead, String> getHttpRequestHeaderHeadParser();
+    Parser<String, HttpRequestHeaderHead> getHttpRequestHeaderHeadParser();
 
     /**
      * HTTP Request URL 파서를 반환
      */
-    Parser<HttpRequestUrl, String> getHttpRequestUrlParser();
+    Parser<String, HttpRequestUrl> getHttpRequestUrlParser();
 
     /**
      * Exception Handler Router를 반환

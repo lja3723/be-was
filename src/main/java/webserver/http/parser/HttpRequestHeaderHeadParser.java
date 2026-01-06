@@ -7,7 +7,7 @@ import webserver.http.header.HttpRequestHeaderHead;
 /**
  * HTTP Request의 Head 부분을 파싱하는 Parser 인터페이스 구현체
  */
-public class HttpRequestHeaderHeadParser implements Parser<HttpRequestHeaderHead, String> {
+public class HttpRequestHeaderHeadParser implements Parser<String, HttpRequestHeaderHead> {
 
     @Override
     public HttpRequestHeaderHead parse(String rawRequestLine) {

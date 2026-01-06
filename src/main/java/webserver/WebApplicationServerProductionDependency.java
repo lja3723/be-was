@@ -18,24 +18,24 @@ import webserver.router.Router;
  */
 public class WebApplicationServerProductionDependency implements WebApplicationServerDependency {
 
-    private final Parser<HttpField, String> httpFieldParser = new HttpFieldParser();
-    private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
-    private final Parser<HttpRequestUrl, String> httpRequestUrlParser = new HttpRequestUrlParser();
+    private final Parser<String, HttpField> httpFieldParser = new HttpFieldParser();
+    private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
+    private final Parser<String, HttpRequestUrl> httpRequestUrlParser = new HttpRequestUrlParser();
     private final Router<Throwable, HttpResponseHandler> exceptionHandlerRouter = new ExceptionHandlerRouter();
     private final Router<HttpRequest, HttpResponseHandler> httpRequestRouter = new HttpRequestRouter();
 
     @Override
-    public Parser<HttpField, String> getHttpFieldParser() {
+    public Parser<String, HttpField> getHttpFieldParser() {
         return httpFieldParser;
     }
 
     @Override
-    public Parser<HttpRequestHeaderHead, String> getHttpRequestHeaderHeadParser() {
+    public Parser<String, HttpRequestHeaderHead> getHttpRequestHeaderHeadParser() {
         return httpRequestHeaderHeadParser;
     }
 
     @Override
-    public Parser<HttpRequestUrl, String> getHttpRequestUrlParser() {
+    public Parser<String, HttpRequestUrl> getHttpRequestUrlParser() {
         return httpRequestUrlParser;
     }
 

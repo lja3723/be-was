@@ -6,7 +6,7 @@ import webserver.http.field.HttpFieldKey;
 /**
  * HTTP Header Field의 한 줄을 파싱하는 Parser 구현체
  */
-public class HttpFieldParser implements Parser<HttpField, String> {
+public class HttpFieldParser implements Parser<String, HttpField> {
 
     /**
      * HTTP Header Field의 한 줄을 파싱하여 {@link HttpField} 객체로 반환한다.

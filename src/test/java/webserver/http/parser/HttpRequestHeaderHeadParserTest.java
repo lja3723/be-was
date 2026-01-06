@@ -12,7 +12,7 @@ class HttpRequestHeaderHeadParserTest {
     @Test
     void parse() {
         // given
-        Parser<HttpRequestHeaderHead, String> parser = new HttpRequestHeaderHeadParser();
+        Parser<String, HttpRequestHeaderHead> parser = new HttpRequestHeaderHeadParser();
         String rawRequestLine = "GET /index.html HTTP/1.1";
 
         // when
