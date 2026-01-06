@@ -1,6 +1,8 @@
 package webserver;
 
-import webserver.http.field.HttpRequestUrl;
+import app.responsehandler.HttpResponseHandler;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,12 +10,9 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import app.responsehandler.HttpResponseHandler;
-import webserver.http.field.HttpField;
-import webserver.http.header.HttpRequestHeader;
-import webserver.http.header.HttpRequestHeaderHead;
-import webserver.http.parser.Parser;
 import webserver.router.Router;
+import webserver.util.InputStreamDecoder;
+import webserver.util.ResponseOutputStreamWriter;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
@@ -27,32 +26,16 @@ public class HttpRequestProcessor implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestProcessor.class);
 
     private final Socket connection;
-    private final Parser<HttpField, String> httpFieldParser;
-    private final Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser;
-    private final Parser<HttpRequestUrl, String> httpRequestUrlParser;
-    private final Router<Exception, HttpResponseHandler> exceptionHandlerRouter;
-    private final Router<HttpRequestHeader, HttpResponseHandler> httpRequestRouter;
+    private final WebApplicationServerDependency dependency;
 
     /**
      * 서버의 Response 생성을 위해 필요한 의존성을 주입받는다.
      * @param connection 클라이언트와의 소켓 연결
-     * @param httpFieldParser HTTP header field parser의 구현체
-     * @param httpRequestHeaderHeadParser HTTP header head field parser 구현체
-     * @param httpRequestUrlParser HTTP request URL parser 구현체
+     * @param dependency 웹 애플리케이션 서버의 의존성 제공자
      */
-    public HttpRequestProcessor(
-            Socket connection,
-            Parser<HttpField, String> httpFieldParser,
-            Parser<HttpRequestHeaderHead, String> httpRequestHeaderHeadParser,
-            Parser<HttpRequestUrl, String> httpRequestUrlParser,
-            Router<Exception, HttpResponseHandler> exceptionHandlerRouter,
-            Router<HttpRequestHeader, HttpResponseHandler> httpRequestRouter) {
+    public HttpRequestProcessor(Socket connection, WebApplicationServerDependency dependency) {
         this.connection = connection;
-        this.httpFieldParser = httpFieldParser;
-        this.httpRequestHeaderHeadParser = httpRequestHeaderHeadParser;
-        this.httpRequestUrlParser = httpRequestUrlParser;
-        this.exceptionHandlerRouter = exceptionHandlerRouter;
-        this.httpRequestRouter = httpRequestRouter;
+        this.dependency = dependency;
     }
 
     /**
@@ -83,37 +66,51 @@ public class HttpRequestProcessor implements Runnable {
      * @param out 클라이언트로의 OutputStream
      */
     public void handleIOStreams(InputStream in, OutputStream out) {
-        // InputStream으로부터 HTTP request header 파싱
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.decodeInputStream(
+        // InputStream으로부터 HTTP request 파싱
+        HttpRequest httpRequest = InputStreamDecoder.decode(
             in,
-            httpRequestHeaderHeadParser,
-            httpFieldParser,
-            httpRequestUrlParser);
-        logHttpRequestHeader(httpRequestHeader);
+            dependency.getHttpRequestHeaderHeadParser(),
+            dependency.getHttpFieldParser(),
+            dependency.getHttpRequestUrlParser());
+
+        logHttpRequestHeader(httpRequest);
 
         try {
-            // HTTP request를 적절한 핸들러로 라우팅
-            httpRequestRouter
-                .route(httpRequestHeader)
-                .handleResponse(httpRequestHeader, out);
+            handleResponse(out, httpRequest, dependency.getHttpRequestRouter(), httpRequest);
 
         } catch (Exception e) {
-            // 라우팅 또는 핸들러 처리 중 예외 발생 시 적절한 예외 핸들러로 라우팅
-            exceptionHandlerRouter
-                .route(e)
-                .handleResponse(httpRequestHeader, out);
+            handleResponse(out, httpRequest, dependency.getExceptionHandlerRouter(), e);
         }
     }
 
     /**
-     * 파싱된 HTTP request header 내용을 logging
-     * @param header
+     * OutputStream에 HTTP response를 작성
+     * @param out 클라이언트로의 OutputStream
+     * @param httpRequest 파싱된 HTTP request 객체
+     * @param router 라우터 객체
+     * @param routeKey 라우팅 키
      */
-    private void logHttpRequestHeader(HttpRequestHeader header) {
+    private <K> void handleResponse(OutputStream out, HttpRequest httpRequest, Router<K, HttpResponseHandler> router, K routeKey) {
+        // HTTP request를 적절한 핸들러로 라우팅
+        HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
+
+        // HTTP Response를 OutputStream으로 전송
+        ResponseOutputStreamWriter responseWriter = new ResponseOutputStreamWriter(
+            out,
+            httpRequest,
+            httpResponse);
+        responseWriter.flushResponse();
+    }
+
+    /**
+     * 파싱된 HTTP request 내용을 logging
+     * @param httpRequest 파생할 객체
+     */
+    private void logHttpRequestHeader(HttpRequest httpRequest) {
         logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", header.method(), header.url(),
-            header.common().version());
-        header.common().fields().forEach(field ->
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", httpRequest.header().method(), httpRequest.header().url(),
+            httpRequest.header().common().version());
+        httpRequest.header().common().fields().forEach(field ->
             logger.debug("Key -- {} / Value -- {}", field.key(), field.value())
         );
     }

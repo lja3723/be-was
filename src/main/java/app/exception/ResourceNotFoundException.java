@@ -1,7 +1,6 @@
 package app.exception;
 
-import webserver.http.header.HttpRequestHeader;
-import java.io.OutputStream;
+import webserver.http.HttpRequest;
 
 /**
  * 요청한 자원을 찾을 수 없음을 나타내는 예외 클래스
@@ -9,20 +8,14 @@ import java.io.OutputStream;
  */
 public class ResourceNotFoundException extends RuntimeException {
 
-    private final OutputStream outputStream;
-    private final HttpRequestHeader httpRequestHeader;
+    private final HttpRequest httpRequest;
 
-    public ResourceNotFoundException(OutputStream outputStream, HttpRequestHeader HttpRequestHeader, String message) {
+    public ResourceNotFoundException(HttpRequest httpRequest, String message) {
         super(message);
-        this.outputStream = outputStream;
-        this.httpRequestHeader = HttpRequestHeader;
+        this.httpRequest = httpRequest;
     }
 
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    public HttpRequestHeader getHttpRequestHeader() {
-        return httpRequestHeader;
+    public HttpRequest getHttpRequest() {
+        return httpRequest;
     }
 }

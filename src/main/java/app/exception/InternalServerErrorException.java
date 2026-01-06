@@ -1,7 +1,6 @@
 package app.exception;
 
-import webserver.http.header.HttpRequestHeader;
-import java.io.OutputStream;
+import webserver.http.HttpRequest;
 
 /**
  * 서버 내부 오류를 나타내는 예외 클래스
@@ -9,20 +8,14 @@ import java.io.OutputStream;
  */
 public class InternalServerErrorException extends RuntimeException {
 
-    private final OutputStream outputStream;
-    private final HttpRequestHeader httpRequestHeader;
+    private final HttpRequest httpRequest;
 
-    public InternalServerErrorException(OutputStream outputStream, HttpRequestHeader httpRequestHeader, String message, Throwable cause) {
+    public InternalServerErrorException(HttpRequest httpRequest, String message, Throwable cause) {
         super(message, cause);
-        this.outputStream = outputStream;
-        this.httpRequestHeader = httpRequestHeader;
+        this.httpRequest = httpRequest;
     }
 
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    public HttpRequestHeader getHttpRequestHeader() {
-        return httpRequestHeader;
+    public HttpRequest getHttpRequest() {
+        return httpRequest;
     }
 }
