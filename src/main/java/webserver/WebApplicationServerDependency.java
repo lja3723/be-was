@@ -5,7 +5,7 @@ import webserver.http.field.HttpRequestUrl;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.Parser;
-import responsehandler.HttpResponseHandler;
+import app.responsehandler.HttpResponseHandler;
 import webserver.router.Router;
 
 /**
