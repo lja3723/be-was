@@ -1,7 +1,9 @@
 package webserver.router;
 
+import app.exception.BadRequestException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
+import app.responsehandler.BadRequestHttpResponseHandler;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ public class ExceptionHandlerRouter implements Router<Throwable, HttpResponseHan
         // Exception 클래스별 HttpResponseHandler 매핑 초기화
         // TODO: 추후 더 나은 방법이 있는지 고민하기
         this.exceptionHandlerMap = Map.of(
+            BadRequestException.class, new BadRequestHttpResponseHandler(),
             ResourceNotFoundException.class, new ResourceNotFoundHttpResponseHandler(),
             InterruptedException.class, new InternalServerErrorHttpResponseHandler()
         );
