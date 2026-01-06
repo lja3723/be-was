@@ -3,39 +3,23 @@ package webserver.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import webserver.http.ContentType;
-import webserver.http.HttpMethod;
-import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
-import webserver.http.field.HttpRequestUrl;
-import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpResponseHeader;
-import webserver.http.parser.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import _support.mock_objects.MockDataOutputStream;
 import _support.mock_objects.MockOutputStream;
-import _support.mock_objects.webserver.http.parser.MockHttpRequestUrlParser;
 
 class OutputStreamHttpResponseWriterTest {
 
     private String body;
-    private HttpRequest httpRequest;
     private HttpResponse httpResponse;
     private MockDataOutputStream mockDos;
 
     @BeforeEach
     void setUp() {
-        Parser<String, HttpRequestUrl> mockParser = new MockHttpRequestUrlParser();
-        httpRequest = new HttpRequest(
-            HttpRequestHeader.builder(mockParser)
-                .method(HttpMethod.GET)
-                .version(HttpVersion.HTTP_1_1)
-                .url("/")
-                .build(),
-            "");
-
         this.body = "<h1>hello</h1>";
 
         this.httpResponse = new HttpResponse(
@@ -55,7 +39,6 @@ class OutputStreamHttpResponseWriterTest {
         // given & when
         OutputStreamHttpResponseWriter.flush(
             mockDos,
-            httpRequest,
             httpResponse);
 
         // then

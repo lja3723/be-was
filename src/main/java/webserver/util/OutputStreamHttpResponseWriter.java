@@ -1,6 +1,5 @@
 package webserver.util;
 
-import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class OutputStreamHttpResponseWriter {
      * 인코딩된 HTTP Response Header와 body를 OutputStream에 작성하고 flush
      * @throws InternalServerErrorException 응답 작성 또는 플러시에 실패한 경우 발생
      */
-     public static void flush(OutputStream outputStream, HttpRequest httpRequest, HttpResponse httpResponse)
+     public static void flush(OutputStream outputStream, HttpResponse httpResponse)
             throws InternalServerErrorException {
         try {
             DataOutputStream dos = new DataOutputStream(outputStream);
@@ -27,7 +26,7 @@ public class OutputStreamHttpResponseWriter {
             dos.write(httpResponse.body(), 0, httpResponse.body().length);
             dos.flush();
         } catch (IOException e) {
-            throw new InternalServerErrorException(httpRequest, "Failed to flush response", e);
+            throw new InternalServerErrorException("Failed to flush response", e);
         }
     }
 }

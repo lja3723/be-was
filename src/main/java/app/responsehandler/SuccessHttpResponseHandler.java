@@ -23,7 +23,7 @@ public class SuccessHttpResponseHandler extends HttpResponseHandler {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(httpRequestUrl.resourcePath())) {
             // 요청에 맞는 리소스가 존재하지 않음
             if (is == null) {
-                throw new ResourceNotFoundException(httpRequest, "Resource not found: " + httpRequestUrl);
+                throw new ResourceNotFoundException("Resource not found: " + httpRequestUrl);
             }
             byte[] body = is.readAllBytes();
 
@@ -37,7 +37,7 @@ public class SuccessHttpResponseHandler extends HttpResponseHandler {
                 body);
 
         } catch (IOException e) {
-            throw new InternalServerErrorException(httpRequest, e.getMessage(), e);
+            throw new InternalServerErrorException(e.getMessage(), e);
         }
     }
 }

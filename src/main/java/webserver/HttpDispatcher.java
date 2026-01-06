@@ -85,7 +85,6 @@ public class HttpDispatcher implements Runnable {
     /**
      * OutputStream에 HTTP response를 작성
      * @param out 클라이언트로의 OutputStream
-     * @param httpRequest 파싱된 HTTP request 객체
      * @param router 라우터 객체
      * @param routeKey 라우팅 키
      */
@@ -94,7 +93,7 @@ public class HttpDispatcher implements Runnable {
         HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
 
         // HTTP Response를 OutputStream으로 전송
-        OutputStreamHttpResponseWriter.flush(out, httpRequest, httpResponse);
+        OutputStreamHttpResponseWriter.flush(out, httpResponse);
     }
 
     /**
