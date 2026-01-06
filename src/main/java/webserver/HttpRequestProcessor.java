@@ -11,8 +11,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.router.Router;
-import webserver.util.InputStreamDecoder;
-import webserver.util.ResponseOutputStreamWriter;
+import webserver.util.InputStreamHttpRequestDecoder;
+import webserver.util.OutputStreamHttpResponseWriter;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.
@@ -67,7 +67,7 @@ public class HttpRequestProcessor implements Runnable {
      */
     public void handleIOStreams(InputStream in, OutputStream out) {
         // InputStream으로부터 HTTP request 파싱
-        HttpRequest httpRequest = InputStreamDecoder.decode(
+        HttpRequest httpRequest = InputStreamHttpRequestDecoder.decode(
             in,
             dependency.getHttpRequestHeaderHeadParser(),
             dependency.getHttpFieldParser(),
@@ -95,7 +95,7 @@ public class HttpRequestProcessor implements Runnable {
         HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
 
         // HTTP Response를 OutputStream으로 전송
-        ResponseOutputStreamWriter responseWriter = new ResponseOutputStreamWriter(
+        OutputStreamHttpResponseWriter responseWriter = new OutputStreamHttpResponseWriter(
             out,
             httpRequest,
             httpResponse);

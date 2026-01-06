@@ -16,7 +16,7 @@ import webserver.http.parser.Parser;
 /**
  * InputStream을 파싱하여 HttpRequest 객체를 생성하는 클래스
  */
-public class InputStreamDecoder {
+public class InputStreamHttpRequestDecoder {
 
     /**
      * InputStream을 파싱하여 HttpRequest 객체를 생성하는 클래스

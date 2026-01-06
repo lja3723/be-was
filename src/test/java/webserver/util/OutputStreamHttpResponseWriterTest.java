@@ -18,14 +18,14 @@ import _support.mock_objects.MockDataOutputStream;
 import _support.mock_objects.MockOutputStream;
 import _support.mock_objects.webserver.http.parser.MockHttpRequestUrlParser;
 
-class ResponseOutputStreamWriterTest {
+class OutputStreamHttpResponseWriterTest {
 
     private String body;
     private HttpResponse httpResponse;
     private MockDataOutputStream mockDos;
 
     // Test 대상 객체
-    private ResponseOutputStreamWriter responseOutputStreamWriter;
+    private OutputStreamHttpResponseWriter outputStreamHttpResponseWriter;
 
     @BeforeEach
     void setUp() {
@@ -53,7 +53,7 @@ class ResponseOutputStreamWriterTest {
 
         this.mockDos = new MockDataOutputStream(new MockOutputStream());
 
-        this.responseOutputStreamWriter = new ResponseOutputStreamWriter(
+        this.outputStreamHttpResponseWriter = new OutputStreamHttpResponseWriter(
             mockDos,
             httpRequest,
             httpResponse
@@ -63,7 +63,7 @@ class ResponseOutputStreamWriterTest {
     @Test
     void flushResponse() {
         // given & when
-        this.responseOutputStreamWriter.flushResponse();
+        this.outputStreamHttpResponseWriter.flushResponse();
 
         // then
         // 메서드 호출 횟수는 각각 1번이어야 함
