@@ -1,4 +1,4 @@
-package _support.mock_objects.http.parser;
+package _support.mock_objects.webserver.http.parser;
 
 import webserver.http.ContentType;
 import webserver.http.field.HttpRequestUrl;

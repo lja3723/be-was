@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import _support.mock_objects.MockDataOutputStream;
 import _support.mock_objects.MockOutputStream;
-import _support.mock_objects.http.parser.MockHttpRequestUrlParser;
+import _support.mock_objects.webserver.http.parser.MockHttpRequestUrlParser;
 
 class ResponseOutputStreamWriterTest {
 

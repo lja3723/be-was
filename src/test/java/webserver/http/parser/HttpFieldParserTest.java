@@ -1,4 +1,4 @@
-package webserver.parser;
+package webserver.http.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
