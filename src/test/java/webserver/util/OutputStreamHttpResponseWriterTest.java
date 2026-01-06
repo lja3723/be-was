@@ -21,16 +21,14 @@ import _support.mock_objects.webserver.http.parser.MockHttpRequestUrlParser;
 class OutputStreamHttpResponseWriterTest {
 
     private String body;
+    private HttpRequest httpRequest;
     private HttpResponse httpResponse;
     private MockDataOutputStream mockDos;
-
-    // Test 대상 객체
-    private OutputStreamHttpResponseWriter outputStreamHttpResponseWriter;
 
     @BeforeEach
     void setUp() {
         Parser<HttpRequestUrl, String> mockParser = new MockHttpRequestUrlParser();
-        HttpRequest httpRequest = new HttpRequest(
+        httpRequest = new HttpRequest(
             HttpRequestHeader.builder(mockParser)
                 .method(HttpMethod.GET)
                 .version(HttpVersion.HTTP_1_1)
@@ -49,21 +47,16 @@ class OutputStreamHttpResponseWriterTest {
                 .build(),
             body.getBytes());
 
-
-
         this.mockDos = new MockDataOutputStream(new MockOutputStream());
-
-        this.outputStreamHttpResponseWriter = new OutputStreamHttpResponseWriter(
-            mockDos,
-            httpRequest,
-            httpResponse
-        );
     }
 
     @Test
-    void flushResponse() {
+    void flush() {
         // given & when
-        this.outputStreamHttpResponseWriter.flushResponse();
+        OutputStreamHttpResponseWriter.flush(
+            mockDos,
+            httpRequest,
+            httpResponse);
 
         // then
         // 메서드 호출 횟수는 각각 1번이어야 함
@@ -75,7 +68,6 @@ class OutputStreamHttpResponseWriterTest {
 
         // 총 작성된 바이트 수는 헤더 길이 + 바디 길이와 같아야 함
         assertEquals(headerLength + bodyLength, mockDos.getWrittenBytes());
-
     }
 }
 

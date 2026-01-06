@@ -95,11 +95,7 @@ public class HttpRequestProcessor implements Runnable {
         HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
 
         // HTTP Response를 OutputStream으로 전송
-        OutputStreamHttpResponseWriter responseWriter = new OutputStreamHttpResponseWriter(
-            out,
-            httpRequest,
-            httpResponse);
-        responseWriter.flushResponse();
+        OutputStreamHttpResponseWriter.flush(out, httpRequest, httpResponse);
     }
 
     /**
