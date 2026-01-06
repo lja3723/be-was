@@ -1,4 +1,4 @@
-package webserver.handler.response.util;
+package responsehandler.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,12 +10,11 @@ import http.field.HttpRequestUrl;
 import http.header.HttpRequestHeader;
 import http.header.HttpResponseHeader;
 import http.parser.Parser;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import responsehandler.util.ResponseOutputStreamWriter;
+import test_support.mock_objects.MockDataOutputStream;
+import test_support.mock_objects.MockOutputStream;
+import test_support.mock_objects.http.parser.MockHttpRequestUrlParser;
 
 class ResponseOutputStreamWriterTest {
 
@@ -73,67 +72,3 @@ class ResponseOutputStreamWriterTest {
     }
 }
 
-/**
- * 메서드 호출 횟수 및 작성된 바이트 수를 추적하는 Mock DataOutputStream
- */
-class MockDataOutputStream extends DataOutputStream {
-
-    private int flushCallCount;
-    private int write3ArgCallCount;
-
-    public MockDataOutputStream(OutputStream out) {
-        super(out);
-        this.flushCallCount = 0;
-        this.write3ArgCallCount = 0;
-    }
-
-    @Override
-    public void write(int b) throws IOException {
-        super.write(b);
-    }
-
-    @Override
-    public synchronized void write(byte[] b, int off, int len) throws IOException {
-        super.write(b, off, len);
-        write3ArgCallCount++;
-    }
-
-    @Override
-    public void flush() {
-        flushCallCount++;
-    }
-
-    public int getWrittenBytes() {
-        // 부모 클래스의 written 필드에 접근하여 작성된 바이트 수 반환
-        return super.written;
-    }
-
-    public int getFlushCallCount() {
-        return flushCallCount;
-    }
-
-    public int getWrite3ArgCallCount() {
-        return write3ArgCallCount;
-    }
-}
-
-/**
- * MockDataOutputStream에 전달할 단순 OutputStream 구현체
- */
-class MockOutputStream extends OutputStream {
-
-    @Override
-    public void write(int b) throws IOException {
-    }
-}
-
-/**
- * HttpRequestUrl을 단순히 rawData로 초기화하는 Mock Parser 구현체
- */
-class MockHttpRequestUrlParser implements Parser<HttpRequestUrl, String> {
-
-    @Override
-    public HttpRequestUrl parse(String rawData) {
-        return new HttpRequestUrl(rawData, rawData, ContentType.TEXT_HTML);
-    }
-}
