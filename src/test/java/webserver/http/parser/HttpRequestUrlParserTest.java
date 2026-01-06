@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import _support.Pair;
 import webserver.http.ContentType;
-import webserver.http.parser.HttpRequestUrlParser;
 
 class HttpRequestUrlParserTest {
 

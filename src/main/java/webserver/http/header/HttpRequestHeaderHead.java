@@ -1,6 +1,5 @@
 package webserver.http.header;
 
-
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 

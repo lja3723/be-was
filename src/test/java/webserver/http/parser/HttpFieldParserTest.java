@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import webserver.http.field.HttpField;
-import webserver.http.parser.HttpFieldParser;
-import webserver.http.parser.Parser;
 
 class HttpFieldParserTest {
 

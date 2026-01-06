@@ -6,8 +6,6 @@ import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.header.HttpRequestHeaderHead;
 import org.junit.jupiter.api.Test;
-import webserver.http.parser.HttpRequestHeaderHeadParser;
-import webserver.http.parser.Parser;
 
 class HttpRequestHeaderHeadParserTest {
 
