@@ -45,13 +45,7 @@ public class WebApplicationServer {
                     connection.getPort());
 
                 // Thread 생성 대신 작업 제출
-                executor.execute(new HttpRequestProcessor(
-                    connection,
-                    dependency.getHttpFieldParser(),
-                    dependency.getHttpRequestHeaderHeadParser(),
-                    dependency.getHttpRequestUrlParser(),
-                    dependency.getExceptionHandlerRouter(),
-                    dependency.getHttpRequestRouter()));
+                executor.execute(new HttpRequestProcessor(connection, dependency));
             }
         } catch (IOException e) {
             // ServerSocket 생성 또는 accept 실패시 잡아냄
