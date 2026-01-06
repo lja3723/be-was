@@ -1,67 +1,20 @@
 package app.responsehandler;
 
-import webserver.util.ResponseOutputStreamWriter;
-import webserver.http.ContentType;
-import webserver.http.header.HttpResponseHeader;
-import java.io.OutputStream;
-import webserver.http.header.HttpRequestHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 
 /**
- * HTTP Protocol을 준수하는 HTTP Response를 Output stream으로 전송할 수 있다.
- * <p>구현체는 클라이언트의 HTTP request 정보를 담은 {@link HttpRequestHeader}을 기반으로
- * 적절한 적절한 HTTP Response를 생성 후 Socket의 Output으로 전송 가능해야 함</p>
+ * HTTP Request 기반으로 HTTP Response를 생성한다.
  */
+// TODO: 추후 이름을 HttpRequestHandler로 변경 고려
 public abstract class HttpResponseHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponseHandler.class);
-
     /**
-     * RequestHeader 기반 HTTP Response를 생성 후 OutputStream으로 전송
-     * <p>자식 클래스는 해당 메서드를 상속할 수 없으며, {@link #createResponseHeader(ContentType, byte[])} 를 구현하여
-     * HTTP Response Header를 생성해야 함</p>
-     * @param httpRequestHeader 클라이언트의 HTTP Request Header
-     * @param outputStream 클라이언트와의 통신 OutputStream
+     * HttpRequest를 기반으로 HttpResponse를 생성함
+     * @param httpRequest 클라이언트의 HTTP Request
+     * @return 생성된 HTTP Response
      */
-    public final void handleResponse(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
-        logger.debug("request url: {}", httpRequestHeader.url());
-
-        // HTTP Response의 Header 생성
-        byte[] body = getBody(httpRequestHeader, outputStream);
-        HttpResponseHeader responseHeader = createResponseHeader(
-            httpRequestHeader.url().contentType(),
-            body);
-
-        // HTTP Response를 OutputStream으로 전송
-        ResponseOutputStreamWriter responseWriter = new ResponseOutputStreamWriter(
-            outputStream,
-            httpRequestHeader,
-            responseHeader,
-            body);
-
-        responseWriter.flushResponse();
-        // response200Header(dos, body.length);
-        // responseBody(dos, body);
-    }
-
-    /**
-     * HTTP Response Body를 생성하는 추상 메서드
-     * <p>자식 클래스는 해당 메서드를 구현하여 적절한 HTTP Response Body를 생성해야 함</p>
-     * @param outputStream 클라이언트와의 통신 OutputStream
-     * @param httpRequestHeader 클라이언트의 HTTP Request Header
-     * @return
-     */
-    public abstract byte[] getBody(HttpRequestHeader httpRequestHeader, OutputStream outputStream);
-
-    /**
-     * HTTP Response Header를 생성하는 추상 메서드
-     * <p>자식 클래스는 해당 메서드를 구현하여 적절한 HTTP Response Header를 생성해야 함</p>
-     * @param bodyContentType Response Body의 Content-Type
-     * @param body Response Body의 byte 배열
-     * @return 생성된 HTTP Response Header
-     */
-    public abstract HttpResponseHeader createResponseHeader(ContentType bodyContentType, byte[] body);
+    public abstract HttpResponse handleResponse(HttpRequest httpRequest);
 
     // TODO: 추후 리팩터링 끝나면 제거 예정
 

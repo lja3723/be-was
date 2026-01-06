@@ -1,11 +1,11 @@
 package app.responsehandler;
 
 import webserver.http.ContentType;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
 import webserver.http.header.HttpResponseHeader;
-import java.io.OutputStream;
-import webserver.http.header.HttpRequestHeader;
 
 /**
  * HTTP Status가 404, 리소스가 없는 경우의 HTTP Response를 핸들링하는 ResponseHandler
@@ -13,19 +13,17 @@ import webserver.http.header.HttpRequestHeader;
 public class ResourceNotFoundHttpResponseHandler extends HttpResponseHandler {
 
     @Override
-    public byte[] getBody(HttpRequestHeader httpRequestHeader, OutputStream outputStream) {
+    public HttpResponse handleResponse(HttpRequest httpRequest) {
         // TODO: 정적 리소스로 분리 후 정적 리소스 로드하기
-        return "<html><body><h1>404 Not Found</h1><p>요청하신 리소스를 찾을 수 없습니다.</p></body></html>"
-            .getBytes();
-    }
+        byte[] body = "<html><body><h1>404 Not Found</h1><p>요청하신 리소스를 찾을 수 없습니다.</p></body></html>".getBytes();
 
-    @Override
-    public HttpResponseHeader createResponseHeader(ContentType bodyContentType, byte[] body) {
-        return HttpResponseHeader.builder()
-            .version(HttpVersion.HTTP_1_1)
-            .status(HttpStatus.NOT_FOUND)
-            .contentType(ContentType.TEXT_HTML)
-            .body(body)
-            .build();
+        return new HttpResponse(
+            HttpResponseHeader.builder()
+                .version(HttpVersion.HTTP_1_1)
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(ContentType.TEXT_HTML)
+                .body(body)
+                .build(),
+            body);
     }
 }
