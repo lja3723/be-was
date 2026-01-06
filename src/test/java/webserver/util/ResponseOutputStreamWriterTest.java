@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import webserver.http.ContentType;
 import webserver.http.HttpMethod;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpRequestUrl;
@@ -19,7 +21,7 @@ import _support.mock_objects.webserver.http.parser.MockHttpRequestUrlParser;
 class ResponseOutputStreamWriterTest {
 
     private String body;
-    private HttpResponseHeader responseHeader;
+    private HttpResponse httpResponse;
     private MockDataOutputStream mockDos;
 
     // Test 대상 객체
@@ -28,28 +30,33 @@ class ResponseOutputStreamWriterTest {
     @BeforeEach
     void setUp() {
         Parser<HttpRequestUrl, String> mockParser = new MockHttpRequestUrlParser();
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.builder(mockParser)
-            .method(HttpMethod.GET)
-            .version(HttpVersion.HTTP_1_1)
-            .url("/")
-            .build();
+        HttpRequest httpRequest = new HttpRequest(
+            HttpRequestHeader.builder(mockParser)
+                .method(HttpMethod.GET)
+                .version(HttpVersion.HTTP_1_1)
+                .url("/")
+                .build(),
+            "");
 
         this.body = "<h1>hello</h1>";
 
-        this.responseHeader = HttpResponseHeader.builder()
-            .version(HttpVersion.HTTP_1_1)
-            .status(HttpStatus.OK)
-            .contentType(ContentType.TEXT_HTML)
-            .body(body.getBytes())
-            .build();
+        this.httpResponse = new HttpResponse(
+            HttpResponseHeader.builder()
+                .version(HttpVersion.HTTP_1_1)
+                .status(HttpStatus.OK)
+                .contentType(ContentType.TEXT_HTML)
+                .body(body.getBytes())
+                .build(),
+            body.getBytes());
+
+
 
         this.mockDos = new MockDataOutputStream(new MockOutputStream());
 
         this.responseOutputStreamWriter = new ResponseOutputStreamWriter(
             mockDos,
-            httpRequestHeader,
-            responseHeader,
-            body.getBytes()
+            httpRequest,
+            httpResponse
         );
     }
 
@@ -63,7 +70,7 @@ class ResponseOutputStreamWriterTest {
         assertEquals(1, mockDos.getWrite3ArgCallCount());
         assertEquals(1, mockDos.getFlushCallCount());
 
-        int headerLength = this.responseHeader.encode().length();
+        int headerLength = this.httpResponse.header().encode().length();
         int bodyLength = this.body.length();
 
         // 총 작성된 바이트 수는 헤더 길이 + 바디 길이와 같아야 함

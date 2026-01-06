@@ -1,6 +1,7 @@
 package webserver.util;
 
-import webserver.http.header.HttpRequestHeader;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,18 +15,14 @@ import webserver.http.header.HttpResponseHeader;
  */
 public class ResponseOutputStreamWriter {
 
-    private final OutputStream outputStream;
-    private final DataOutputStream dataOutputStream;
-    private final HttpRequestHeader httpRequestHeader;
-    private final HttpResponseHeader responseHeader;
-    private final byte[] body;
+    private final DataOutputStream dos;
+    private final HttpRequest httpRequest;
+    private final HttpResponse httpResponse;
 
-    public ResponseOutputStreamWriter(OutputStream outputStream, HttpRequestHeader httpRequestHeader, HttpResponseHeader responseHeader, byte[] body) {
-        this.outputStream = outputStream;
-        this.dataOutputStream = new DataOutputStream(this.outputStream);
-        this.httpRequestHeader = httpRequestHeader;
-        this.responseHeader = responseHeader;
-        this.body = body;
+    public ResponseOutputStreamWriter(OutputStream outputStream, HttpRequest httpRequest, HttpResponse httpResponse) {
+        this.dos = new DataOutputStream(outputStream);
+        this.httpRequest = httpRequest;
+        this.httpResponse = httpResponse;
     }
 
     /**
@@ -34,11 +31,11 @@ public class ResponseOutputStreamWriter {
      */
     public void flushResponse() throws InternalServerErrorException {
         try {
-            dataOutputStream.writeBytes(responseHeader.encode());
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
+            dos.writeBytes(httpResponse.header().encode());
+            dos.write(httpResponse.body(), 0, httpResponse.body().length);
+            dos.flush();
         } catch (IOException e) {
-            throw new InternalServerErrorException(outputStream, httpRequestHeader, "Failed to flush response", e);
+            throw new InternalServerErrorException(httpRequest, "Failed to flush response", e);
         }
     }
 }
