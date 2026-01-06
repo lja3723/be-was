@@ -1,17 +1,17 @@
 package webserver;
 
-import http.field.HttpField;
-import http.field.HttpRequestUrl;
-import http.header.HttpRequestHeader;
-import http.header.HttpRequestHeaderHead;
-import http.parser.HttpFieldParser;
-import http.parser.HttpRequestHeaderHeadParser;
-import http.parser.HttpRequestUrlParser;
-import http.parser.Parser;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpRequestUrl;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeaderHead;
+import webserver.http.parser.HttpFieldParser;
+import webserver.http.parser.HttpRequestHeaderHeadParser;
+import webserver.http.parser.HttpRequestUrlParser;
+import webserver.http.parser.Parser;
 import responsehandler.HttpResponseHandler;
-import router.ExceptionHandlerRouter;
-import router.HttpRequestRouter;
-import router.Router;
+import webserver.router.ExceptionHandlerRouter;
+import webserver.router.HttpRequestRouter;
+import webserver.router.Router;
 
 /**
  * Web Application Server의 Production Environment에서 사용되는 의존성 구현체

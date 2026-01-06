@@ -1,6 +1,6 @@
 package webserver;
 
-import http.field.HttpRequestUrl;
+import webserver.http.field.HttpRequestUrl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,11 +9,11 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import responsehandler.HttpResponseHandler;
-import http.field.HttpField;
-import http.header.HttpRequestHeader;
-import http.header.HttpRequestHeaderHead;
-import http.parser.Parser;
-import router.Router;
+import webserver.http.field.HttpField;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeaderHead;
+import webserver.http.parser.Parser;
+import webserver.router.Router;
 
 /**
  * {@link Socket}을 통해 연결된 클라이언트와의 통신을 핸들링한다.

@@ -1,4 +1,4 @@
-package http.parser;
+package webserver.http.parser;
 
 /**
  * 일반적인 파서 인터페이스

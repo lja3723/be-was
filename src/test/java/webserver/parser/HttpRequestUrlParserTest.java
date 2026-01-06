@@ -1,4 +1,4 @@
-package http.parser;
+package webserver.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,7 +6,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test_support.Pair;
-import http.ContentType;
+import webserver.http.ContentType;
+import webserver.http.parser.HttpRequestUrlParser;
 
 class HttpRequestUrlParserTest {
 

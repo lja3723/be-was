@@ -1,11 +1,11 @@
 package responsehandler;
 
-import http.ContentType;
-import http.HttpStatus;
-import http.HttpVersion;
-import http.header.HttpResponseHeader;
+import webserver.http.ContentType;
+import webserver.http.HttpStatus;
+import webserver.http.HttpVersion;
+import webserver.http.header.HttpResponseHeader;
 import java.io.OutputStream;
-import http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeader;
 
 /**
  * HTTP Status가 500, 서버 프로그램 내부에 오류가 있을 경우의 HTTP Response를 핸들링하는 ResponseHandler

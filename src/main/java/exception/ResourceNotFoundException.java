@@ -1,6 +1,6 @@
 package exception;
 
-import http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeader;
 import java.io.OutputStream;
 
 /**

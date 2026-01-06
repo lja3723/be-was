@@ -1,8 +1,8 @@
 package test_support.mock_objects.responsehandler;
 
-import http.ContentType;
-import http.header.HttpRequestHeader;
-import http.header.HttpResponseHeader;
+import webserver.http.ContentType;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.header.HttpResponseHeader;
 import java.io.OutputStream;
 import responsehandler.HttpResponseHandler;
 

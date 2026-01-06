@@ -1,11 +1,11 @@
 package responsehandler.util;
 
-import http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import exception.InternalServerErrorException;
-import http.header.HttpResponseHeader;
+import webserver.http.header.HttpResponseHeader;
 
 /**
  * HTTP 응답을 작성하고 출력 스트림에 플러시하는 유틸리티 클래스

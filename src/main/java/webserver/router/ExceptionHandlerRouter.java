@@ -1,4 +1,4 @@
-package router;
+package webserver.router;
 
 import exception.InternalServerErrorException;
 import exception.ResourceNotFoundException;

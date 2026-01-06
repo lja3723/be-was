@@ -2,15 +2,15 @@ package responsehandler;
 
 import exception.InternalServerErrorException;
 import exception.ResourceNotFoundException;
-import http.ContentType;
-import http.field.HttpRequestUrl;
+import webserver.http.ContentType;
+import webserver.http.field.HttpRequestUrl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import http.HttpVersion;
-import http.header.HttpRequestHeader;
-import http.HttpStatus;
-import http.header.HttpResponseHeader;
+import webserver.http.HttpVersion;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.HttpStatus;
+import webserver.http.header.HttpResponseHeader;
 
 /**
  * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler

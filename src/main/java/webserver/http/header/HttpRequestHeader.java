@@ -1,16 +1,16 @@
-package http.header;
+package webserver.http.header;
 
-import http.field.HttpRequestUrl;
+import webserver.http.field.HttpRequestUrl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
-import http.HttpMethod;
-import http.HttpVersion;
-import http.field.HttpField;
-import http.header.HttpHeader.HttpHeaderBuilder;
-import http.parser.Parser;
+import webserver.http.HttpMethod;
+import webserver.http.HttpVersion;
+import webserver.http.field.HttpField;
+import webserver.http.header.HttpHeader.HttpHeaderBuilder;
+import webserver.http.parser.Parser;
 
 /**
  * HTTP Request Header를 표현하는 Data Class

@@ -1,9 +1,11 @@
 package responsehandler;
 
-import http.ContentType;
-import http.header.HttpResponseHeader;
+import webserver.http.ContentType;
+import webserver.http.HttpStatus;
+import webserver.http.HttpVersion;
+import webserver.http.header.HttpResponseHeader;
 import java.io.OutputStream;
-import http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeader;
 
 /**
  * HTTP Status가 404, 리소스가 없는 경우의 HTTP Response를 핸들링하는 ResponseHandler
@@ -20,8 +22,8 @@ public class ResourceNotFoundHttpResponseHandler extends HttpResponseHandler {
     @Override
     public HttpResponseHeader createResponseHeader(ContentType bodyContentType, byte[] body) {
         return HttpResponseHeader.builder()
-            .version(http.HttpVersion.HTTP_1_1)
-            .status(http.HttpStatus.NOT_FOUND)
+            .version(HttpVersion.HTTP_1_1)
+            .status(HttpStatus.NOT_FOUND)
             .contentType(ContentType.TEXT_HTML)
             .body(body)
             .build();

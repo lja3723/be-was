@@ -1,6 +1,6 @@
-package http;
+package webserver.http;
 
-import http.header.HttpResponseHeader;
+import webserver.http.header.HttpResponseHeader;
 
 /**
  * HTTP Response를 표현하는 Data Class

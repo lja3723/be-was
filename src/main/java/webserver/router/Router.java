@@ -1,4 +1,4 @@
-package router;
+package webserver.router;
 
 /**
  * 입력 타입 T에 따라 출력 타입 V를 라우팅하는 Router 인터페이스

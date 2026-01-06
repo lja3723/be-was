@@ -1,8 +1,8 @@
 package test_support.mock_objects.http.parser;
 
-import http.ContentType;
-import http.field.HttpRequestUrl;
-import http.parser.Parser;
+import webserver.http.ContentType;
+import webserver.http.field.HttpRequestUrl;
+import webserver.http.parser.Parser;
 
 /**
  * HttpRequestUrl을 단순히 rawData로 초기화하는 Mock Parser 구현체

@@ -1,8 +1,8 @@
-package http.parser;
+package webserver.http.parser;
 
-import http.HttpMethod;
-import http.HttpVersion;
-import http.header.HttpRequestHeaderHead;
+import webserver.http.HttpMethod;
+import webserver.http.HttpVersion;
+import webserver.http.header.HttpRequestHeaderHead;
 
 /**
  * HTTP Request의 Head 부분을 파싱하는 Parser 인터페이스 구현체

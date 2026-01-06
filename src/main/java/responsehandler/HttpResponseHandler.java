@@ -1,10 +1,10 @@
 package responsehandler;
 
 import responsehandler.util.ResponseOutputStreamWriter;
-import http.ContentType;
-import http.header.HttpResponseHeader;
+import webserver.http.ContentType;
+import webserver.http.header.HttpResponseHeader;
 import java.io.OutputStream;
-import http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

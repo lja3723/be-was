@@ -2,14 +2,14 @@ package responsehandler.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import http.ContentType;
-import http.HttpMethod;
-import http.HttpStatus;
-import http.HttpVersion;
-import http.field.HttpRequestUrl;
-import http.header.HttpRequestHeader;
-import http.header.HttpResponseHeader;
-import http.parser.Parser;
+import webserver.http.ContentType;
+import webserver.http.HttpMethod;
+import webserver.http.HttpStatus;
+import webserver.http.HttpVersion;
+import webserver.http.field.HttpRequestUrl;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.header.HttpResponseHeader;
+import webserver.http.parser.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import test_support.mock_objects.MockDataOutputStream;

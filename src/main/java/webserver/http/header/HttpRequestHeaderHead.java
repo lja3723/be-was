@@ -1,8 +1,8 @@
-package http.header;
+package webserver.http.header;
 
 
-import http.HttpMethod;
-import http.HttpVersion;
+import webserver.http.HttpMethod;
+import webserver.http.HttpVersion;
 
 /**
  * HTTP Request Header의 Head 부분을 표현하는 Data Class

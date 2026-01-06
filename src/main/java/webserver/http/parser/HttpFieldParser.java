@@ -1,7 +1,7 @@
-package http.parser;
+package webserver.http.parser;
 
-import http.field.HttpField;
-import http.field.HttpFieldKey;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpFieldKey;
 
 /**
  * HTTP Header Field의 한 줄을 파싱하는 Parser 구현체

@@ -1,11 +1,11 @@
-package http.header;
+package webserver.http.header;
 
-import http.ContentType;
-import http.HttpStatus;
-import http.HttpVersion;
-import http.header.HttpHeader.HttpHeaderBuilder;
-import http.field.HttpField;
-import http.field.HttpFieldKey;
+import webserver.http.ContentType;
+import webserver.http.HttpStatus;
+import webserver.http.HttpVersion;
+import webserver.http.header.HttpHeader.HttpHeaderBuilder;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpFieldKey;
 
 /**
  * HTTP Response Header를 표현하는 Data Class

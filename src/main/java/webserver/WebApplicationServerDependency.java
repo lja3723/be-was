@@ -1,12 +1,12 @@
 package webserver;
 
-import http.field.HttpField;
-import http.field.HttpRequestUrl;
-import http.header.HttpRequestHeader;
-import http.header.HttpRequestHeaderHead;
-import http.parser.Parser;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpRequestUrl;
+import webserver.http.header.HttpRequestHeader;
+import webserver.http.header.HttpRequestHeaderHead;
+import webserver.http.parser.Parser;
 import responsehandler.HttpResponseHandler;
-import router.Router;
+import webserver.router.Router;
 
 /**
  * 웹 애플리케이션 서버가 필요로 하는 의존성들을 제공하는 인터페이스
