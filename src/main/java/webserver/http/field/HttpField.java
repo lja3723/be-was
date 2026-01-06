@@ -1,11 +1,48 @@
 package webserver.http.field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * HTTP request/response Header의 Field를 표현
- * @param key
- * @param value
+ * @param key HTTP Header Field의 Key
+ * @param values HTTP Header Field의 Value 목록으로, nullable함
  */
-// TODO: 추후 key에 대응하는 값을 문자열이 아닌 객체로 저장하도록 변경
-public record HttpField(HttpFieldKey key, String value /*List<HttpFieldValue> values*/) {
+public record HttpField(HttpFieldKey key, List<HttpFieldValue> values) {
 
+    public static class HttpFieldBuilder {
+        private HttpFieldKey key = null;
+        private List<HttpFieldValue> values = null;
+
+        public HttpFieldBuilder key(HttpFieldKey key) {
+            this.key = key;
+            return this;
+        }
+
+        public HttpFieldBuilder value(HttpFieldValue value) {
+            if (values == null) {
+                values = new ArrayList<>();
+            }
+            this.values.add(value);
+            return this;
+        }
+
+        public HttpFieldBuilder value(String value) {
+            if (values == null) {
+                values = new ArrayList<>();
+            }
+            this.values.add(HttpFieldValue.builder()
+                .value(value)
+                .build());
+            return this;
+        }
+
+        public HttpField build() {
+            return new HttpField(key, values);
+        }
+    }
+
+    public static HttpFieldBuilder builder() {
+        return new HttpFieldBuilder();
+    }
 }

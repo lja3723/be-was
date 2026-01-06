@@ -6,4 +6,26 @@ package webserver.http.field;
  */
 public record HttpFieldValueParameter(String key, String value) {
 
+    public static class HttpFieldValueParameterBuilder {
+        private String key;
+        private String value;
+
+        public HttpFieldValueParameterBuilder key(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public HttpFieldValueParameterBuilder value(String value) {
+            this.value = value;
+            return this;
+        }
+
+        public HttpFieldValueParameter build() {
+            return new HttpFieldValueParameter(key, value);
+        }
+    }
+
+    public static HttpFieldValueParameterBuilder builder() {
+        return new HttpFieldValueParameterBuilder();
+    }
 }
