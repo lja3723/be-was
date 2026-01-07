@@ -28,4 +28,16 @@ public record HttpFieldValueParameter(String key, String value) {
     public static HttpFieldValueParameterBuilder builder() {
         return new HttpFieldValueParameterBuilder();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        HttpFieldValueParameter that = (HttpFieldValueParameter)obj;
+        return key.equals(that.key) && value.equals(that.value);
+    }
 }
