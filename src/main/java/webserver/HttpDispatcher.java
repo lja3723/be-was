@@ -1,5 +1,6 @@
 package webserver;
 
+import dependency.WebApplicationServerDependency;
 import webserver.handler.HttpRequestHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;

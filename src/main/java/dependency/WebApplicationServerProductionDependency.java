@@ -1,4 +1,4 @@
-package webserver;
+package dependency;
 
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
