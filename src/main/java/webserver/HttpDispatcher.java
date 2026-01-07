@@ -1,6 +1,6 @@
 package webserver;
 
-import app.responsehandler.HttpResponseHandler;
+import app.requesthandler.HttpResponseHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import java.io.IOException;

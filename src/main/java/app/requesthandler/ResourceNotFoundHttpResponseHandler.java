@@ -1,4 +1,4 @@
-package app.responsehandler;
+package app.requesthandler;
 
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;

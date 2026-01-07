@@ -1,4 +1,4 @@
-package app.responsehandler;
+package app.requesthandler;
 
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;
@@ -7,18 +7,21 @@ import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
 import webserver.http.header.HttpResponseHeader;
 
-public class BadRequestHttpResponseHandler extends HttpResponseHandler {
+/**
+ * HTTP Status가 500, 서버 프로그램 내부에 오류가 있을 경우의 HTTP Response를 핸들링하는 ResponseHandler
+ */
+public class InternalServerErrorHttpResponseHandler extends HttpResponseHandler {
 
     @Override
     public HttpResponse handleResponse(HttpRequest httpRequest) {
         // TODO: 정적 리소스로 분리 후 정적 리소스 로드하기
-        byte[] body = "<html><body><h1>400 Bad Request</h1><p>잘못된 요청을 시도하였습니다.</p></body></html>"
+        byte[] body = "<html><body><h1>500 Internal Server Error</h1><p>서버 내부 오류가 발생했습니다.</p></body></html>"
             .getBytes();
 
         return new HttpResponse(
             HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(ContentType.TEXT_HTML)
                 .body(body)
                 .build(),
