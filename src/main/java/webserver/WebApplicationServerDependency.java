@@ -1,12 +1,12 @@
 package webserver;
 
-import http.field.HttpField;
-import http.field.HttpRequestUrl;
-import http.header.HttpRequestHeader;
-import http.header.HttpRequestHeaderHead;
-import http.parser.Parser;
-import responsehandler.HttpResponseHandler;
-import router.Router;
+import webserver.http.HttpRequest;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpRequestUrl;
+import webserver.http.header.HttpRequestHeaderHead;
+import webserver.http.parser.Parser;
+import app.responsehandler.HttpResponseHandler;
+import webserver.router.Router;
 
 /**
  * 웹 애플리케이션 서버가 필요로 하는 의존성들을 제공하는 인터페이스
@@ -16,25 +16,25 @@ public interface WebApplicationServerDependency {
     /**
      * HTTP Header Field 파서를 반환
      */
-    Parser<HttpField, String> getHttpFieldParser();
+    Parser<String, HttpField> getHttpFieldParser();
 
     /**
      * HTTP Request Head 파서를 반환
      */
-    Parser<HttpRequestHeaderHead, String> getHttpRequestHeaderHeadParser();
+    Parser<String, HttpRequestHeaderHead> getHttpRequestHeaderHeadParser();
 
     /**
      * HTTP Request URL 파서를 반환
      */
-    Parser<HttpRequestUrl, String> getHttpRequestUrlParser();
+    Parser<String, HttpRequestUrl> getHttpRequestUrlParser();
 
     /**
      * Exception Handler Router를 반환
      */
-    Router<Exception, HttpResponseHandler> getExceptionHandlerRouter();
+    Router<Throwable, HttpResponseHandler> getExceptionHandlerRouter();
 
     /**
      * HTTP Request Router를 반환
      */
-    Router<HttpRequestHeader, HttpResponseHandler> getHttpRequestRouter();
+    Router<HttpRequest, HttpResponseHandler> getHttpRequestRouter();
 }
