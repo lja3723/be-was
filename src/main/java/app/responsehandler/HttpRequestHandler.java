@@ -1,4 +1,4 @@
-package app.requesthandler;
+package app.responsehandler;
 
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -6,8 +6,7 @@ import webserver.http.HttpResponse;
 /**
  * HTTP Request 기반으로 HTTP Response를 생성한다.
  */
-// TODO: 추후 이름을 HttpRequestHandler로 변경 고려
-public abstract class HttpResponseHandler {
+public abstract class HttpRequestHandler {
 
     /**
      * HttpRequest를 기반으로 HttpResponse를 생성함

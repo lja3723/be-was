@@ -8,7 +8,7 @@ import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeaderHeadParser;
 import webserver.http.parser.HttpRequestUrlParser;
 import webserver.http.parser.Parser;
-import app.requesthandler.HttpResponseHandler;
+import app.responsehandler.HttpRequestHandler;
 import webserver.router.ExceptionHandlerRouter;
 import webserver.router.HttpRequestRouter;
 import webserver.router.Router;
@@ -21,8 +21,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private final Parser<String, HttpField> httpFieldParser = new HttpFieldParser();
     private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
     private final Parser<String, HttpRequestUrl> httpRequestUrlParser = new HttpRequestUrlParser();
-    private final Router<Throwable, HttpResponseHandler> exceptionHandlerRouter = new ExceptionHandlerRouter();
-    private final Router<HttpRequest, HttpResponseHandler> httpRequestRouter = new HttpRequestRouter();
+    private final Router<Throwable, HttpRequestHandler> exceptionHandlerRouter = new ExceptionHandlerRouter();
+    private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter = new HttpRequestRouter();
 
     @Override
     public Parser<String, HttpField> getHttpFieldParser() {
@@ -40,12 +40,12 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     }
 
     @Override
-    public Router<Throwable, HttpResponseHandler> getExceptionHandlerRouter() {
+    public Router<Throwable, HttpRequestHandler> getExceptionHandlerRouter() {
         return exceptionHandlerRouter;
     }
 
     @Override
-    public Router<HttpRequest, HttpResponseHandler> getHttpRequestRouter() {
+    public Router<HttpRequest, HttpRequestHandler> getHttpRequestRouter() {
         return httpRequestRouter;
     }
 }
