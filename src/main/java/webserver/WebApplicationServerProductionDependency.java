@@ -1,5 +1,6 @@
 package webserver;
 
+import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
 import webserver.http.field.HttpRequestUrl;
@@ -21,7 +22,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private final Parser<String, HttpField> httpFieldParser = new HttpFieldParser();
     private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
     private final Parser<String, HttpRequestUrl> httpRequestUrlParser = new HttpRequestUrlParser();
-    private final Router<Throwable, HttpRequestHandler> exceptionHandlerRouter = new ExceptionHandlerRouter();
+    private final Router<Throwable, ExceptionHandler> exceptionHandlerRouter = new ExceptionHandlerRouter();
     private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter = new HttpRequestRouter();
 
     @Override
@@ -40,7 +41,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     }
 
     @Override
-    public Router<Throwable, HttpRequestHandler> getExceptionHandlerRouter() {
+    public Router<Throwable, ExceptionHandler> getExceptionHandlerRouter() {
         return exceptionHandlerRouter;
     }
 

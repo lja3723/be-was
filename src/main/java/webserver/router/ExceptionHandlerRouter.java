@@ -7,17 +7,17 @@ import app.handler.exception.BadRequestHttpRequestHandler;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.HttpRequestHandler;
+import webserver.handler.exception.ExceptionHandler;
 import webserver.handler.exception.InternalServerErrorHttpRequestHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 
 /**
  * Exception에 따른 HttpResponseHandler를 라우팅하는 Router
  */
-public class ExceptionHandlerRouter implements Router<Throwable, HttpRequestHandler> {
+public class ExceptionHandlerRouter implements Router<Throwable, ExceptionHandler> {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerRouter.class);
-    private final Map<Class<? extends Throwable>, HttpRequestHandler> exceptionHandlerMap;
+    private final Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlerMap;
 
     public ExceptionHandlerRouter() {
 
@@ -32,8 +32,8 @@ public class ExceptionHandlerRouter implements Router<Throwable, HttpRequestHand
 
     // TODO: 정적 리소스에 대한 라우팅과 Restful API에 대한 라우팅을 분리하는 법 고민하기
     @Override
-    public HttpRequestHandler route(Throwable e) {
-        HttpRequestHandler handler = exceptionHandlerMap.get(e.getClass());
+    public ExceptionHandler route(Throwable e) {
+        ExceptionHandler handler = exceptionHandlerMap.get(e.getClass());
 
         if (handler == null) {
             logger.error("Internal Server Error occured: {}, {}", e.getMessage(), e.getCause(), e);

@@ -1,5 +1,6 @@
 package webserver;
 
+import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
 import webserver.http.field.HttpRequestUrl;
@@ -31,7 +32,7 @@ public interface WebApplicationServerDependency {
     /**
      * Exception Handler Router를 반환
      */
-    Router<Throwable, HttpRequestHandler> getExceptionHandlerRouter();
+    Router<Throwable, ExceptionHandler> getExceptionHandlerRouter();
 
     /**
      * HTTP Request Router를 반환
