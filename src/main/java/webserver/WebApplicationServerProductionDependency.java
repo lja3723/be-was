@@ -8,7 +8,7 @@ import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeaderHeadParser;
 import webserver.http.parser.HttpRequestUrlParser;
 import webserver.http.parser.Parser;
-import app.handler.HttpRequestHandler;
+import webserver.handler.HttpRequestHandler;
 import webserver.router.ExceptionHandlerRouter;
 import webserver.router.HttpRequestRouter;
 import webserver.router.Router;

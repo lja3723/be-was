@@ -2,6 +2,7 @@ package app.handler;
 
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
+import webserver.handler.HttpRequestHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.field.HttpRequestUrl;

@@ -1,7 +1,7 @@
 package webserver.router;
 
 import webserver.http.HttpRequest;
-import app.handler.HttpRequestHandler;
+import webserver.handler.HttpRequestHandler;
 import app.handler.SuccessHttpRequestHandler;
 
 /**

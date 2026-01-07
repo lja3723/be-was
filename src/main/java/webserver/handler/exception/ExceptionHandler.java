@@ -1,6 +1,6 @@
-package app.handler.exception;
+package webserver.handler.exception;
 
-import app.handler.HttpRequestHandler;
+import webserver.handler.HttpRequestHandler;
 
 /**
  * 예외 상황에 대한 HTTP Response를 핸들링하는 추상 클래스

@@ -1,4 +1,4 @@
-package app.handler.exception;
+package webserver.handler.exception;
 
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;

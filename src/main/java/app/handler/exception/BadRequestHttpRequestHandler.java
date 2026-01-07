@@ -1,5 +1,6 @@
 package app.handler.exception;
 
+import webserver.handler.exception.ExceptionHandler;
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
