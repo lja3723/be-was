@@ -26,7 +26,7 @@ public class ExceptionHandlerRouter implements Router<Throwable, HttpResponseHan
         this.exceptionHandlerMap = Map.of(
             BadRequestException.class, new BadRequestHttpResponseHandler(),
             ResourceNotFoundException.class, new ResourceNotFoundHttpResponseHandler(),
-            InterruptedException.class, new InternalServerErrorHttpResponseHandler()
+            InternalServerErrorException.class, new InternalServerErrorHttpResponseHandler()
         );
     }
 
