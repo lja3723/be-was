@@ -1,4 +1,4 @@
-package app.responsehandler;
+package app.handler;
 
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;

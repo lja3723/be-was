@@ -1,8 +1,8 @@
 package webserver.router;
 
 import webserver.http.HttpRequest;
-import app.responsehandler.HttpRequestHandler;
-import app.responsehandler.SuccessHttpRequestHandler;
+import app.handler.HttpRequestHandler;
+import app.handler.SuccessHttpRequestHandler;
 
 /**
  * HttpRequestHeader에 따른 HttpResponseHandler를 라우팅하는 Router
