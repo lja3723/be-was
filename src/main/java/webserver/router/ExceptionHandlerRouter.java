@@ -3,13 +3,13 @@ package webserver.router;
 import app.exception.BadRequestException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
-import app.handler.BadRequestHttpRequestHandler;
+import app.handler.exception.BadRequestHttpRequestHandler;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import app.handler.HttpRequestHandler;
-import app.handler.InternalServerErrorHttpRequestHandler;
-import app.handler.ResourceNotFoundHttpRequestHandler;
+import app.handler.exception.InternalServerErrorHttpRequestHandler;
+import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 
 /**
  * Exception에 따른 HttpResponseHandler를 라우팅하는 Router

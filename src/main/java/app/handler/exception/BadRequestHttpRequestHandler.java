@@ -1,4 +1,4 @@
-package app.handler;
+package app.handler.exception;
 
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;
@@ -7,7 +7,7 @@ import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
 import webserver.http.header.HttpResponseHeader;
 
-public class BadRequestHttpRequestHandler extends HttpRequestHandler {
+public class BadRequestHttpRequestHandler extends ExceptionHandler {
 
     @Override
     public HttpResponse handleResponse(HttpRequest httpRequest) {
