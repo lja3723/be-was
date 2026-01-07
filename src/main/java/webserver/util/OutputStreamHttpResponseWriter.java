@@ -22,7 +22,7 @@ public class OutputStreamHttpResponseWriter {
             throws InternalServerErrorException {
         try {
             DataOutputStream dos = new DataOutputStream(outputStream);
-            dos.writeBytes(httpResponse.header().encode());
+            dos.writeBytes(HttpResponseHeaderEncoder.encode(httpResponse.header()));
             dos.write(httpResponse.body(), 0, httpResponse.body().length);
             dos.flush();
         } catch (IOException e) {

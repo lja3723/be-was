@@ -35,6 +35,7 @@ public enum HttpFieldKey {
     ORIGIN("Origin"),
     REFERER("Referer"),
     VIA("Via"),
+    EXPIRES("Expires"),
     WARNING("Warning"),
     UNKNOWN("Unknown");
 

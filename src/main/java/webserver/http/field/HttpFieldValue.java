@@ -32,11 +32,10 @@ public record HttpFieldValue(String value, List<HttpFieldValueParameter> paramet
             if (parameters == null) {
                 parameters = new ArrayList<>();
             }
-            this.parameters.add(HttpFieldValueParameter.builder()
+            return this.parameter(HttpFieldValueParameter.builder()
                 .key(key)
                 .value(value)
                 .build());
-            return this;
         }
 
         public HttpFieldValue build() {

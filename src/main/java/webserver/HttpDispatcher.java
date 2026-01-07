@@ -1,6 +1,6 @@
 package webserver;
 
-import app.responsehandler.HttpResponseHandler;
+import webserver.handler.HttpRequestHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class HttpDispatcher implements Runnable {
      * @param router 라우터 객체
      * @param routeKey 라우팅 키
      */
-    private <K> void handleResponse(OutputStream out, HttpRequest httpRequest, Router<K, HttpResponseHandler> router, K routeKey) {
+    private <K> void handleResponse(OutputStream out, HttpRequest httpRequest, Router<K, ? extends HttpRequestHandler> router, K routeKey) {
         // HTTP request를 적절한 핸들러로 라우팅
         HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
 

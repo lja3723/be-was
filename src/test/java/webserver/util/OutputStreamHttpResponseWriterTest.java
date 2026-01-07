@@ -46,7 +46,7 @@ class OutputStreamHttpResponseWriterTest {
         assertEquals(1, mockDos.getWrite3ArgCallCount());
         assertEquals(1, mockDos.getFlushCallCount());
 
-        int headerLength = this.httpResponse.header().encode().length();
+        int headerLength = HttpResponseHeaderEncoder.encode(this.httpResponse.header()).length();
         int bodyLength = this.body.length();
 
         // 총 작성된 바이트 수는 헤더 길이 + 바디 길이와 같아야 함
