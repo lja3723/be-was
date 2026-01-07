@@ -1,8 +1,13 @@
 package webserver.http.parser;
 
 import app.exception.BadRequestException;
+import java.util.Arrays;
 import webserver.http.field.HttpField;
+import webserver.http.field.HttpField.HttpFieldBuilder;
 import webserver.http.field.HttpFieldKey;
+import webserver.http.field.HttpFieldValue;
+import webserver.http.field.HttpFieldValue.HttpFieldValueBuilder;
+import webserver.http.field.HttpFieldValueParameter;
 
 /**
  * HTTP Header Field의 한 줄을 파싱하는 Parser 구현체
@@ -29,7 +34,8 @@ public class HttpFieldParser implements Parser<String, HttpField> {
         return switch (fieldKey) {
             // AI를 활용하여 comment 문법이 사용될 수 있는 모든 필드 유형을 알아내었음
             // 해당 필드는 value를 통째로 사용, comment를 처리하도록 별도 메서드로 위임
-            case USER_AGENT, SERVER, VIA -> parseCommentableField(fieldKey, split[1]);
+            // TODO: 향후 Date 필드는 별도의 파싱이 필요할 수 있음
+            case USER_AGENT, SERVER, VIA, DATE -> parseCommentableField(fieldKey, split[1]);
             default -> parseUncommentableField(fieldKey, split[1]);
         };
     }
@@ -42,10 +48,44 @@ public class HttpFieldParser implements Parser<String, HttpField> {
     }
 
     public HttpField parseUncommentableField(HttpFieldKey key, String rawValue) {
-        // ','로 split후 ';'로 split하는 알고리즘 구현 예정
-        return HttpField.builder()
-            .key(key)
-            .value(rawValue) // TODO: 추후 key에 대응하는 값을 문자열이 아닌 객체로 저장하도록 변경
+        HttpFieldBuilder builder = HttpField.builder().key(key);
+
+        // ",,," 같은 경우도 "", "", "", "" 으로 인식하기 위해 split의 두번째 인자에 -1을 넣음
+        String[] HttpFieldValues = rawValue.trim().split(",", -1);
+        for (var httpFieldValue : HttpFieldValues) {
+            builder.value(parseFieldValue(httpFieldValue.trim()));
+        }
+
+        return builder.build();
+    }
+
+    public HttpFieldValue parseFieldValue(String rawFieldValue) {
+        HttpFieldValueBuilder fieldValueBuilder = HttpFieldValue.builder();
+        String[] parts = rawFieldValue.trim().split(";", -1);
+        if (parts.length <= 1) {
+            return fieldValueBuilder
+                .value(parts.length == 0 ? "" : parts[0].trim())
+                .build();
+        }
+
+        fieldValueBuilder.value(parts[0].trim());
+        Arrays.stream(parts)
+            .skip(1)
+            .map(this::parseFieldValueParameter)
+            .forEach(fieldValueBuilder::parameter);
+
+        return fieldValueBuilder.build();
+    }
+
+    public HttpFieldValueParameter parseFieldValueParameter(String rawParameter) {
+        String[] paramSplit = rawParameter.trim().split("=", 2);
+        if (paramSplit.length == 0) {
+            throw new BadRequestException("Invalid HTTP Field Value Parameter: " + rawParameter);
+        }
+
+        return HttpFieldValueParameter.builder()
+            .key(paramSplit[0].trim())
+            .value((paramSplit.length == 2) ? paramSplit[1].trim() : "")
             .build();
     }
 }
