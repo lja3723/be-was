@@ -1,8 +1,7 @@
-package app.handler;
+package webserver.handler;
 
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
-import webserver.handler.HttpRequestHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.field.HttpRequestUrl;
@@ -15,7 +14,7 @@ import webserver.http.header.HttpResponseHeader;
 /**
  * HTTP Status가 200번대인 HTTP Response를 핸들링하는 ResponseHandler
  */
-public class SuccessHttpRequestHandler extends HttpRequestHandler {
+public class StaticResourceHandler extends HttpRequestHandler {
 
     @Override
     public HttpResponse handleResponse(HttpRequest httpRequest) {
