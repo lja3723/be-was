@@ -24,6 +24,6 @@ public class MainApplication {
         WebApplicationServer webApplicationServer = new WebApplicationServer(
             port, DEFAULT_THREAD_POOL_SIZE, new WebApplicationServerProductionDependency());
 
-        webApplicationServer.run();
+        webApplicationServer.startServer();
     }
 }

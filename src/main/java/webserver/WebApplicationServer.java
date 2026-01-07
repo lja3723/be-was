@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import handler.ClientRequestHandler;
 
 /**
  * ServerSocket을 생성하고 클라이언트의 요청을 처리하는 Web Application Server 클래스
@@ -32,22 +31,38 @@ public class WebApplicationServer {
         this.executor = Executors.newFixedThreadPool(threadPoolSize);
     }
 
-    public void run() {
-
+    /**
+     * 서버를 시작하고 클라이언트의 연결을 수락
+     */
+    public void startServer() {
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
 
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
+                logger.debug("New Client Connect! Connected IP : {}, Port : {}",
+                    connection.getInetAddress(),
+                    connection.getPort());
+
                 // Thread 생성 대신 작업 제출
-                executor.execute(new ClientRequestHandler(
+                executor.execute(new HttpRequestProcessor(
                     connection,
                     dependency.getHttpFieldParser(),
                     dependency.getHttpRequestHeaderHeadParser(),
-                    dependency.getHttpRequestUrlParser()));
+                    dependency.getHttpRequestUrlParser(),
+                    dependency.getExceptionHandlerRouter(),
+                    dependency.getHttpRequestRouter()));
             }
         } catch (IOException e) {
-            logger.error("Error in Web Application Server: ", e);
+            // ServerSocket 생성 또는 accept 실패시 잡아냄
+            // 로깅 메시지는 AI 도움을 받음
+            logger.error(
+                "Fatal error in Web Application Server. " +
+                    "Failed to bind or accept connections on port {}. Reason: {}",
+                port,
+                e.getMessage(),
+                e // 마지막 파라미터로 exception 객체 전달시 logger가 stack trace를 출력하게 됨
+            );
         }
         finally {
             executor.shutdown();
