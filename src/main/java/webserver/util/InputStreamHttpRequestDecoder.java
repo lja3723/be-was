@@ -1,13 +1,16 @@
 package webserver.util;
 
+import app.exception.BadRequestException;
+import app.exception.InternalServerErrorException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.uri.HttpRequestUri;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpRequestHeader.HttpRequestHeaderBuilder;
 import webserver.http.header.HttpRequestHeaderHead;
@@ -26,8 +29,7 @@ public class InputStreamHttpRequestDecoder {
     public static HttpRequest decode(
         InputStream in,
         Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser,
-        Parser<String, HttpField> httpFieldParser,
-        Parser<String, HttpRequestUri> httpRequestUriParser) {
+        Parser<String, HttpField> httpFieldParser) {
 
         try {
             // InputStream을 행 단위로 읽기 준비
@@ -36,12 +38,11 @@ public class InputStreamHttpRequestDecoder {
                 .orElseThrow(() -> new RuntimeException("Empty request"));
 
             // Request의 첫 line(Head 부분) 파싱
-            // TODO: 추후 Builder 로 책임 위임 필요 (아닌가)
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
             HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
                 .version(httpRequestHead.version())
                 .method(httpRequestHead.method())
-                .uri(httpRequestUriParser.parse(httpRequestHead.rawRequestUri()));
+                .uri(new URI(httpRequestHead.rawRequestUri()));
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {
@@ -52,7 +53,9 @@ public class InputStreamHttpRequestDecoder {
             return new HttpRequest( builder.build(), "");
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading request", e);
+            throw new InternalServerErrorException("Error reading request", e);
+        } catch (URISyntaxException e) {
+            throw new BadRequestException("Invalid URI syntax: " + e.getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 package webserver.http.header;
 
-import webserver.http.uri.HttpRequestUri;
+import java.net.URI;
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
@@ -9,7 +9,7 @@ import webserver.http.header.HttpHeader.HttpHeaderBuilder;
 /**
  * HTTP Request Header를 표현하는 Data Class
  */
-public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpRequestUri uri) {
+public record HttpRequestHeader(HttpHeader common, HttpMethod method, URI uri) {
 
     /**
      * HttpRequestHeader 객체를 빌드하기 위한 빌더 클래스
@@ -18,7 +18,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
 
         private final HttpHeaderBuilder commonBuilder;
         private HttpMethod method;
-        private HttpRequestUri uri;
+        private URI uri;
 
         public HttpRequestHeaderBuilder() {
             this.commonBuilder = HttpHeader.builder();
@@ -39,7 +39,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
             return this;
         }
 
-        public HttpRequestHeaderBuilder uri(HttpRequestUri uri) {
+        public HttpRequestHeaderBuilder uri(URI uri) {
             this.uri = uri;
             return this;
         }
