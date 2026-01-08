@@ -38,10 +38,10 @@ public class InputStreamHttpRequestDecoder {
             // Request의 첫 line(Head 부분) 파싱
             // TODO: 추후 Builder 로 책임 위임 필요 (아닌가)
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
-            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder(httpRequestUriParser)
+            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
                 .version(httpRequestHead.version())
                 .method(httpRequestHead.method())
-                .uri(httpRequestHead.path());
+                .uri(httpRequestUriParser.parse(httpRequestHead.rawRequestUri()));
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {
