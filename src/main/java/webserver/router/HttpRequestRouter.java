@@ -6,6 +6,7 @@ import java.util.Objects;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
 import webserver.handler.HttpRequestHandler;
+import webserver.util.FileExtensionExtractor;
 
 /**
  * HttpRequestHeader에 따른 HttpResponseHandler를 라우팅하는 Router
@@ -22,8 +23,14 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
 
     @Override
     public HttpRequestHandler route(HttpRequest httpRequest) {
+
+        // 확장자가 붙은 요청은 정적 리소스 핸들러로 라우팅
+        if (FileExtensionExtractor.get(httpRequest.header().uri().getPath()) != null) {
+            return staticResourceHandler;
+        }
+
         ApplicationHandler applicationHandler = applicationHandlerMap.get(
-            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().resourcePath())
+            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().getPath())
         );
 
         return Objects.requireNonNullElse(applicationHandler, staticResourceHandler);
