@@ -1,20 +1,31 @@
 package webserver.router;
 
+import app.handler.ApplicationHandler;
+import java.util.Map;
+import java.util.Objects;
+import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
 import webserver.handler.HttpRequestHandler;
-import webserver.handler.StaticResourceHandler;
 
 /**
  * HttpRequestHeader에 따른 HttpResponseHandler를 라우팅하는 Router
  */
 public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler> {
 
+    private final Map<HttpEndpoint, ApplicationHandler> applicationHandlerMap;
+    private final HttpRequestHandler staticResourceHandler;
+
+    public HttpRequestRouter(Map<HttpEndpoint, ApplicationHandler> applicationHandlerMap, HttpRequestHandler staticResourceHandler) {
+        this.applicationHandlerMap = applicationHandlerMap;
+        this.staticResourceHandler = staticResourceHandler;
+    }
+
     @Override
     public HttpRequestHandler route(HttpRequest httpRequest) {
+        ApplicationHandler applicationHandler = applicationHandlerMap.get(
+            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().url().resourcePath())
+        );
 
-        // TODO: 핸들러 로직 구현
-        // HTTP request header를 기반으로 OutputStream에 HttpResponse를 전송하는 작업을 위임함
-        // 현재는 모든 요청에 대해 200 응답의 SuccessHttpResponseHandler를 사용하도록 구현되어 있음
-        return new StaticResourceHandler();
+        return Objects.requireNonNullElse(applicationHandler, staticResourceHandler);
     }
 }
