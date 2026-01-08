@@ -1,10 +1,12 @@
 package dependency;
 
+import app.business.impl.UserBusinessImpl;
+import app.db.adapter.UserDatabaseAdapter;
 import app.exception.BadRequestException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
 import app.handler.ApplicationHandler;
-import app.handler.TestHandler;
+import app.handler.RegistrationHandler;
 import app.handler.exception.BadRequestHttpRequestHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 import java.util.List;
@@ -52,7 +54,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
-            new TestHandler()
+            new RegistrationHandler(new UserBusinessImpl(new UserDatabaseAdapter()))
         );
 
         return applicationHandlers.stream().collect(
