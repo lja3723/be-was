@@ -8,8 +8,6 @@ import webserver.http.field.HttpField;
  */
 public class HttpFieldEncoder {
 
-    public static final String CRLF = "\r\n";
-
     public static String encode(HttpField field) {
         StringBuilder builder = new StringBuilder();
         builder.append(field.key().getValue()).append(": ");
@@ -31,6 +29,6 @@ public class HttpFieldEncoder {
                 .orElse("");
             builder.append(fieldValues);
         }
-        return builder.append(CRLF).toString();
+        return builder.toString();
     }
 }
