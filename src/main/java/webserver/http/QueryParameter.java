@@ -26,7 +26,7 @@ public class QueryParameter {
         return result;
     }
 
-    public Optional<String> getParameter(String key) {
+    public Optional<String> getValue(String key) {
         return Optional.ofNullable(parameters.get(key));
     }
 }
