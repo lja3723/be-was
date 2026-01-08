@@ -29,6 +29,7 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
             return staticResourceHandler;
         }
 
+        // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
         ApplicationHandler applicationHandler = applicationHandlerMap.get(
             new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().getPath())
         );

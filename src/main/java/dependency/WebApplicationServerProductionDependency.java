@@ -49,6 +49,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
 
     // ApplicationHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
+    // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
             new TestHandler()
