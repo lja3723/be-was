@@ -1,5 +1,6 @@
 package webserver.http.parser;
 
+import app.exception.BadRequestException;
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.header.HttpRequestHeaderHead;
@@ -13,13 +14,13 @@ public class HttpRequestHeaderHeadParser implements Parser<String, HttpRequestHe
     public HttpRequestHeaderHead parse(String rawRequestLine) {
         String[] parts = rawRequestLine.split(" ");
         if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid HTTP request line: " + rawRequestLine);
+            throw new BadRequestException("Invalid HTTP request line: " + rawRequestLine);
         }
 
-        return new HttpRequestHeaderHead(
-            HttpMethod.fromString(parts[0]),
-            parts[1],
-            HttpVersion.fromString(parts[2])
-        );
+        return HttpRequestHeaderHead.builder()
+            .method(HttpMethod.fromString(parts[0]))
+            .rawRequestUri(parts[1])
+            .version(HttpVersion.fromString(parts[2]))
+            .build();
     }
 }
