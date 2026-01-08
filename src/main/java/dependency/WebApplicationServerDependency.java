@@ -38,4 +38,9 @@ public interface WebApplicationServerDependency {
      * HTTP Request Router를 반환
      */
     Router<HttpRequest, HttpRequestHandler> getHttpRequestRouter();
+
+    /**
+     * Static Resource Handler를 반환
+     */
+    HttpRequestHandler getStaticResourceHandler();
 }
