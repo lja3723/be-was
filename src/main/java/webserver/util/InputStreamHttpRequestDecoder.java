@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpRequestHeader;
@@ -20,6 +22,8 @@ import webserver.http.parser.Parser;
  * InputStream을 파싱하여 HttpRequest 객체를 생성하는 클래스
  */
 public class InputStreamHttpRequestDecoder {
+
+    private static final Logger log = LoggerFactory.getLogger(InputStreamHttpRequestDecoder.class);
 
     /**
      * InputStream을 파싱하여 HttpRequest 객체를 생성하는 클래스
@@ -35,7 +39,7 @@ public class InputStreamHttpRequestDecoder {
             // InputStream을 행 단위로 읽기 준비
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line = Optional.ofNullable(reader.readLine())
-                .orElseThrow(() -> new RuntimeException("Empty request"));
+                .orElseThrow(() -> new BadRequestException("Empty request"));
 
             // Request의 첫 line(Head 부분) 파싱
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
@@ -49,8 +53,23 @@ public class InputStreamHttpRequestDecoder {
                 builder.field(httpFieldParser.parse(line));
             }
 
-            // TODO: Body 파싱 필요
-            return new HttpRequest( builder.build(), "");
+            log.debug("End: {}", line == null ? "null" : "empty string");
+            log.debug("reader.ready()? {}", reader.ready());
+
+            // 헤더만 있는 경우
+            if (!reader.ready()) {
+                return new HttpRequest(builder.build(), null);
+            }
+
+            // header & body 구분을 위한 빈 줄 읽기
+            reader.readLine();
+
+            StringBuilder bodyBuilder = new StringBuilder();
+            while ((line = reader.readLine()) != null && !line.isEmpty()) {
+                bodyBuilder.append(line).append("\n");
+            }
+
+            return new HttpRequest( builder.build(), bodyBuilder.toString());
 
         } catch (IOException e) {
             throw new InternalServerErrorException("Error reading request", e);
