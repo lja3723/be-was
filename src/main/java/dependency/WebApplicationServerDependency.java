@@ -3,7 +3,6 @@ package dependency;
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.uri.HttpRequestUri;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.Parser;
 import webserver.handler.HttpRequestHandler;
@@ -23,11 +22,6 @@ public interface WebApplicationServerDependency {
      * HTTP Request Head 파서를 반환
      */
     Parser<String, HttpRequestHeaderHead> getHttpRequestHeaderHeadParser();
-
-    /**
-     * HTTP Request URL 파서를 반환
-     */
-    Parser<String, HttpRequestUri> getHttpRequestUriParser();
 
     /**
      * Exception Handler Router를 반환

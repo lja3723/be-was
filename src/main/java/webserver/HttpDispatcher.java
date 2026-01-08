@@ -70,8 +70,7 @@ public class HttpDispatcher implements Runnable {
         HttpRequest httpRequest = InputStreamHttpRequestDecoder.decode(
             in,
             dependency.getHttpRequestHeaderHeadParser(),
-            dependency.getHttpFieldParser(),
-            dependency.getHttpRequestUriParser());
+            dependency.getHttpFieldParser());
 
         logHttpRequestHeader(httpRequest);
 
