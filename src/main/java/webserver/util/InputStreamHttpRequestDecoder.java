@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Optional;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.field.HttpRequestUrl;
+import webserver.http.field.HttpRequestUri;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpRequestHeader.HttpRequestHeaderBuilder;
 import webserver.http.header.HttpRequestHeaderHead;
@@ -27,7 +27,7 @@ public class InputStreamHttpRequestDecoder {
         InputStream in,
         Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser,
         Parser<String, HttpField> httpFieldParser,
-        Parser<String, HttpRequestUrl> httpRequestUrlParser) {
+        Parser<String, HttpRequestUri> httpRequestUriParser) {
 
         try {
             // InputStream을 행 단위로 읽기 준비
@@ -38,10 +38,10 @@ public class InputStreamHttpRequestDecoder {
             // Request의 첫 line(Head 부분) 파싱
             // TODO: 추후 Builder 로 책임 위임 필요 (아닌가)
             HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
-            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder(httpRequestUrlParser)
+            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder(httpRequestUriParser)
                 .version(httpRequestHead.version())
                 .method(httpRequestHead.method())
-                .url(httpRequestHead.path());
+                .uri(httpRequestHead.path());
 
             // 나머지 필드 파싱
             while ((line = reader.readLine()) != null && !line.isEmpty()) {

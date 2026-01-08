@@ -16,11 +16,11 @@ import webserver.handler.exception.InternalServerErrorHttpRequestHandler;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.field.HttpRequestUrl;
+import webserver.http.field.HttpRequestUri;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeaderHeadParser;
-import webserver.http.parser.HttpRequestUrlParser;
+import webserver.http.parser.HttpRequestUriParser;
 import webserver.http.parser.Parser;
 import webserver.handler.HttpRequestHandler;
 import webserver.router.ExceptionHandlerRouter;
@@ -34,7 +34,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
 
     private final Parser<String, HttpField> httpFieldParser = new HttpFieldParser();
     private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
-    private final Parser<String, HttpRequestUrl> httpRequestUrlParser = new HttpRequestUrlParser();
+    private final Parser<String, HttpRequestUri> httpRequestUriParser = new HttpRequestUriParser();
     private final Router<Throwable, ExceptionHandler> exceptionHandlerRouter = new ExceptionHandlerRouter(exceptionHandlerMap());
     private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter = new HttpRequestRouter(getApplicationHandlerMap(), getStaticResourceHandler());
 
@@ -76,8 +76,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     }
 
     @Override
-    public Parser<String, HttpRequestUrl> getHttpRequestUrlParser() {
-        return httpRequestUrlParser;
+    public Parser<String, HttpRequestUri> getHttpRequestUriParser() {
+        return httpRequestUriParser;
     }
 
     @Override

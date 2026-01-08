@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 import _support.Pair;
 import webserver.http.ContentType;
 
-class HttpRequestUrlParserTest {
+class HttpRequestUriParserTest {
 
-    private HttpRequestUrlParser parser;
-    private String httpRequestUrl;
+    private HttpRequestUriParser parser;
+    private String httpRequestUri;
 
     @BeforeEach
     void setUp() {
-        parser = new HttpRequestUrlParser();
-        httpRequestUrl = "/img/myimage.png";
+        parser = new HttpRequestUriParser();
+        httpRequestUri = "/img/myimage.png";
     }
 
     @Test
@@ -24,7 +24,7 @@ class HttpRequestUrlParserTest {
         // given
         String expected = "static/img/myimage.png";
         // when
-        String actual = parser.parse(httpRequestUrl).resourcePath();
+        String actual = parser.parse(httpRequestUri).resourcePath();
         // then
         assertEquals(expected, actual);
     }
@@ -45,7 +45,7 @@ class HttpRequestUrlParserTest {
         // given
         String expected = "myimage.png";
         // when
-        String actual = parser.parse(httpRequestUrl).fileName();
+        String actual = parser.parse(httpRequestUri).fileName();
         // then
         assertEquals(expected, actual);
     }

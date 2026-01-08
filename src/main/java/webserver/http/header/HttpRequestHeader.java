@@ -1,6 +1,6 @@
 package webserver.http.header;
 
-import webserver.http.field.HttpRequestUrl;
+import webserver.http.field.HttpRequestUri;
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
@@ -10,20 +10,20 @@ import webserver.http.parser.Parser;
 /**
  * HTTP Request Header를 표현하는 Data Class
  */
-public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpRequestUrl url) {
+public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpRequestUri uri) {
 
     /**
      * HttpRequestHeader 객체를 빌드하기 위한 빌더 클래스
      */
     public static class HttpRequestHeaderBuilder {
 
-        private final Parser<String, HttpRequestUrl> httpRequestUrlParser;
+        private final Parser<String, HttpRequestUri> httpRequestUriParser;
         private final HttpHeaderBuilder commonBuilder;
         private HttpMethod method;
-        private String url;
+        private String uri;
 
-        public HttpRequestHeaderBuilder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
-            this.httpRequestUrlParser = httpRequestUrlParser;
+        public HttpRequestHeaderBuilder(Parser<String, HttpRequestUri> httpRequestUriParser) {
+            this.httpRequestUriParser = httpRequestUriParser;
             this.commonBuilder = HttpHeader.builder();
         }
 
@@ -42,8 +42,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
             return this;
         }
 
-        public HttpRequestHeaderBuilder url(String url) {
-            this.url = url;
+        public HttpRequestHeaderBuilder uri(String uri) {
+            this.uri = uri;
             return this;
         }
 
@@ -51,7 +51,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
             return new HttpRequestHeader(
                 commonBuilder.build(),
                 method,
-                httpRequestUrlParser.parse(url)
+                httpRequestUriParser.parse(uri)
             );
         }
     }
@@ -59,7 +59,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
     /**
      * HttpRequestHeaderBuilder 인스턴스를 반환하는 정적 팩토리 메서드
      */
-    public static HttpRequestHeaderBuilder builder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
-        return new HttpRequestHeaderBuilder(httpRequestUrlParser);
+    public static HttpRequestHeaderBuilder builder(Parser<String, HttpRequestUri> httpRequestUriParser) {
+        return new HttpRequestHeaderBuilder(httpRequestUriParser);
     }
 }

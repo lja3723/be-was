@@ -71,7 +71,7 @@ public class HttpDispatcher implements Runnable {
             in,
             dependency.getHttpRequestHeaderHeadParser(),
             dependency.getHttpFieldParser(),
-            dependency.getHttpRequestUrlParser());
+            dependency.getHttpRequestUriParser());
 
         logHttpRequestHeader(httpRequest);
 
@@ -103,7 +103,7 @@ public class HttpDispatcher implements Runnable {
      */
     private void logHttpRequestHeader(HttpRequest httpRequest) {
         logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", httpRequest.header().method(), httpRequest.header().url(),
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", httpRequest.header().method(), httpRequest.header().uri(),
             httpRequest.header().common().version());
         httpRequest.header().common().fields().forEach(field ->
             logger.debug("Key -- {} / Value -- {}", field.key(), field) // TODO: field를 제대로 출력하도록 수정

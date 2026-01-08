@@ -23,7 +23,7 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
     @Override
     public HttpRequestHandler route(HttpRequest httpRequest) {
         ApplicationHandler applicationHandler = applicationHandlerMap.get(
-            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().url().resourcePath())
+            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().resourcePath())
         );
 
         return Objects.requireNonNullElse(applicationHandler, staticResourceHandler);

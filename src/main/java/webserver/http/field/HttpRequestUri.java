@@ -10,6 +10,6 @@ import webserver.http.ContentType;
  * <ol>   예: {@code "index.html" -> "html", "style.css" -> "css", "/about -> html"}</ol><p/>
  */
 // TODO: 추후 resourcePath를 더 체계적으로 표현 필요, 파라미터 & 쿼리 요청도 받을 수 있도록 확장 필요
-public record HttpRequestUrl(String resourcePath, String fileName, ContentType contentType) {
+public record HttpRequestUri(String resourcePath, String fileName, ContentType contentType) {
 
 }
