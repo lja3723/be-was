@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 // 테스트 대상 객체인 Database의 private static 필드 접근을 위하여 리플렉션 API를 활용하였습니다.
 // 리플렉션 API의 구체적인 사용방법은 AI를 참고하였습니다.
-class DatabaseTest {
+class UserDatabaseTest {
 
     // Database 객체의 내부 private static 필드 핸들
     private Map<String, User> users;
@@ -29,7 +29,7 @@ class DatabaseTest {
     private Field getUnlockedUsersField() {
         // private static field인 "users"의 Field 정보를 리플렉션으로 가져옴
         try {
-            Class<Database> clazz = Database.class;
+            Class<UserDatabase> clazz = UserDatabase.class;
             Field result = clazz.getDeclaredField("users");
             result.setAccessible(true);
             return result;
@@ -74,7 +74,7 @@ class DatabaseTest {
         assertEquals(UserConstants.NUM_OF_USERS - 1, users.size());
 
         User toAdd = UserConstants.getUserOf(UserConstants.NUM_OF_USERS - 1);
-        Database.addUser(toAdd);
+        UserDatabase.addUser(toAdd);
 
         assertEquals(UserConstants.NUM_OF_USERS, users.size());
         for (int i = 0; i < UserConstants.NUM_OF_USERS; i++) {
@@ -91,7 +91,7 @@ class DatabaseTest {
         for (int i = 0; i < UserConstants.NUM_OF_USERS - 1; i++) {
             String userId = UserConstants.USERS_ID[i];
 
-            User user = Database.findUserById(userId);
+            User user = UserDatabase.findUserById(userId);
 
             assertEquals(UserConstants.USERS_ID[i], user.getUserId());
             assertEquals(UserConstants.USERS_PASSWORD[i], user.getPassword());
@@ -102,11 +102,11 @@ class DatabaseTest {
 
     @Test
     void findAll() {
-        Collection<User> found = Database.findAll();
+        Collection<User> found = UserDatabase.findAll();
 
         assertEquals(UserConstants.NUM_OF_USERS - 1, found.size());
 
-        for(var user: Database.findAll()) {
+        for(var user: UserDatabase.findAll()) {
             assertTrue(users.containsValue(user));
         }
     }
