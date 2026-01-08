@@ -3,7 +3,7 @@ package dependency;
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.Parser;
 import webserver.handler.HttpRequestHandler;

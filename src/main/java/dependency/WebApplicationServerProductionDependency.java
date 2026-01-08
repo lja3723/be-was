@@ -16,7 +16,7 @@ import webserver.handler.exception.InternalServerErrorHttpRequestHandler;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.HttpFieldParser;
 import webserver.http.parser.HttpRequestHeaderHeadParser;

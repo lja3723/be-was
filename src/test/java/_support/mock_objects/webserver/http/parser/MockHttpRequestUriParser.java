@@ -1,7 +1,7 @@
 package _support.mock_objects.webserver.http.parser;
 
 import webserver.http.ContentType;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import webserver.http.parser.Parser;
 
 /**

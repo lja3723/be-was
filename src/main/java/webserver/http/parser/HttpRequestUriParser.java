@@ -1,7 +1,7 @@
 package webserver.http.parser;
 
 import webserver.http.ContentType;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 
 /**
  * HTTP request의 URL을 파싱하는 파서 클래스

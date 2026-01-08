@@ -1,6 +1,6 @@
 package webserver.http.header;
 
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;

@@ -4,7 +4,7 @@ import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import java.io.IOException;
 import java.io.InputStream;
 import webserver.http.HttpVersion;

@@ -1,4 +1,4 @@
-package webserver.http.field;
+package webserver.http.uri;
 
 import webserver.http.ContentType;
 

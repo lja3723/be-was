@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Optional;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
-import webserver.http.field.HttpRequestUri;
+import webserver.http.uri.HttpRequestUri;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpRequestHeader.HttpRequestHeaderBuilder;
 import webserver.http.header.HttpRequestHeaderHead;
