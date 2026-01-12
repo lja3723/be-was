@@ -1,5 +1,5 @@
 import webserver.WebApplicationServer;
-import webserver.WebApplicationServerProductionDependency;
+import dependency.WebApplicationServerProductionDependency;
 
 /**
  * Main Application Entry 클래스

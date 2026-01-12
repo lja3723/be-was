@@ -1,5 +1,6 @@
 package webserver;
 
+import dependency.WebApplicationServerDependency;
 import webserver.handler.HttpRequestHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -11,6 +12,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.router.Router;
+import webserver.util.HttpFieldEncoder;
 import webserver.util.InputStreamHttpRequestDecoder;
 import webserver.util.OutputStreamHttpResponseWriter;
 
@@ -69,16 +71,15 @@ public class HttpDispatcher implements Runnable {
         HttpRequest httpRequest = InputStreamHttpRequestDecoder.decode(
             in,
             dependency.getHttpRequestHeaderHeadParser(),
-            dependency.getHttpFieldParser(),
-            dependency.getHttpRequestUrlParser());
+            dependency.getHttpFieldParser());
 
         logHttpRequestHeader(httpRequest);
 
         try {
-            handleResponse(out, httpRequest, dependency.getHttpRequestRouter(), httpRequest);
+            handleRequest(out, httpRequest, dependency.getHttpRequestRouter(), httpRequest);
 
         } catch (Exception e) {
-            handleResponse(out, httpRequest, dependency.getExceptionHandlerRouter(), e);
+            handleRequest(out, httpRequest, dependency.getExceptionHandlerRouter(), e);
         }
     }
 
@@ -88,7 +89,7 @@ public class HttpDispatcher implements Runnable {
      * @param router 라우터 객체
      * @param routeKey 라우팅 키
      */
-    private <K> void handleResponse(OutputStream out, HttpRequest httpRequest, Router<K, ? extends HttpRequestHandler> router, K routeKey) {
+    private <K> void handleRequest(OutputStream out, HttpRequest httpRequest, Router<K, ? extends HttpRequestHandler> router, K routeKey) {
         // HTTP request를 적절한 핸들러로 라우팅
         HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
 
@@ -101,11 +102,13 @@ public class HttpDispatcher implements Runnable {
      * @param httpRequest 파생할 객체
      */
     private void logHttpRequestHeader(HttpRequest httpRequest) {
-        logger.debug("----- HTTP Request Header -----");
-        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", httpRequest.header().method(), httpRequest.header().url(),
+        logger.debug(">>>>>>>> HTTP Request Debugging >>>>>>>>");
+        logger.debug("HTTP Method: {}, Path: {}, HTTP Version: {}", httpRequest.header().method(), httpRequest.header().uri(),
             httpRequest.header().common().version());
         httpRequest.header().common().fields().forEach(field ->
-            logger.debug("Key -- {} / Value -- {}", field.key(), field) // TODO: field를 제대로 출력하도록 수정
+            logger.debug("<Field> {}", HttpFieldEncoder.encode(field))
         );
+        logger.debug("<body> {}", httpRequest.body());
+        logger.debug("<<<<<<<< HTTP Request End <<<<<<<<\n");
     }
 }

@@ -1,15 +1,10 @@
 package webserver.router;
 
-import app.exception.BadRequestException;
 import app.exception.InternalServerErrorException;
-import app.exception.ResourceNotFoundException;
-import app.handler.exception.BadRequestHttpRequestHandler;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.handler.exception.ExceptionHandler;
-import webserver.handler.exception.InternalServerErrorHttpRequestHandler;
-import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 
 /**
  * Exception에 따른 HttpResponseHandler를 라우팅하는 Router
@@ -19,18 +14,10 @@ public class ExceptionHandlerRouter implements Router<Throwable, ExceptionHandle
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerRouter.class);
     private final Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlerMap;
 
-    public ExceptionHandlerRouter() {
-
-        // Exception 클래스별 HttpResponseHandler 매핑 초기화
-        // TODO: 추후 더 나은 방법이 있는지 고민하기
-        this.exceptionHandlerMap = Map.of(
-            BadRequestException.class, new BadRequestHttpRequestHandler(),
-            ResourceNotFoundException.class, new ResourceNotFoundHttpRequestHandler(),
-            InternalServerErrorException.class, new InternalServerErrorHttpRequestHandler()
-        );
+    public ExceptionHandlerRouter(Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlerMap) {
+        this.exceptionHandlerMap = exceptionHandlerMap;
     }
 
-    // TODO: 정적 리소스에 대한 라우팅과 Restful API에 대한 라우팅을 분리하는 법 고민하기
     @Override
     public ExceptionHandler route(Throwable e) {
         ExceptionHandler handler = exceptionHandlerMap.get(e.getClass());

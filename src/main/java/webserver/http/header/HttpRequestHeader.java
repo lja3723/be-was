@@ -1,29 +1,26 @@
 package webserver.http.header;
 
-import webserver.http.field.HttpRequestUrl;
+import java.net.URI;
 import webserver.http.HttpMethod;
 import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpHeader.HttpHeaderBuilder;
-import webserver.http.parser.Parser;
 
 /**
  * HTTP Request Header를 표현하는 Data Class
  */
-public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpRequestUrl url) {
+public record HttpRequestHeader(HttpHeader common, HttpMethod method, URI uri) {
 
     /**
      * HttpRequestHeader 객체를 빌드하기 위한 빌더 클래스
      */
     public static class HttpRequestHeaderBuilder {
 
-        private final Parser<String, HttpRequestUrl> httpRequestUrlParser;
         private final HttpHeaderBuilder commonBuilder;
         private HttpMethod method;
-        private String url;
+        private URI uri;
 
-        public HttpRequestHeaderBuilder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
-            this.httpRequestUrlParser = httpRequestUrlParser;
+        public HttpRequestHeaderBuilder() {
             this.commonBuilder = HttpHeader.builder();
         }
 
@@ -42,8 +39,8 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
             return this;
         }
 
-        public HttpRequestHeaderBuilder url(String url) {
-            this.url = url;
+        public HttpRequestHeaderBuilder uri(URI uri) {
+            this.uri = uri;
             return this;
         }
 
@@ -51,7 +48,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
             return new HttpRequestHeader(
                 commonBuilder.build(),
                 method,
-                httpRequestUrlParser.parse(url)
+                uri
             );
         }
     }
@@ -59,7 +56,7 @@ public record HttpRequestHeader(HttpHeader common, HttpMethod method, HttpReques
     /**
      * HttpRequestHeaderBuilder 인스턴스를 반환하는 정적 팩토리 메서드
      */
-    public static HttpRequestHeaderBuilder builder(Parser<String, HttpRequestUrl> httpRequestUrlParser) {
-        return new HttpRequestHeaderBuilder(httpRequestUrlParser);
+    public static HttpRequestHeaderBuilder builder() {
+        return new HttpRequestHeaderBuilder();
     }
 }

@@ -6,7 +6,34 @@ import webserver.http.HttpVersion;
 /**
  * HTTP Request Header의 Head 부분을 표현하는 Data Class
  */
-// TODO: 빌더 만들기, 추후 Path 부분을 별도의 record로 분리 예정
-public record HttpRequestHeaderHead(HttpMethod method, String path, HttpVersion version) {
+public record HttpRequestHeaderHead(HttpMethod method, String rawRequestUri, HttpVersion version) {
 
+    public static class HttpRequestHeaderHeadBuilder {
+        private HttpMethod method;
+        private String rawRequestUri;
+        private HttpVersion version;
+
+        public HttpRequestHeaderHeadBuilder method(HttpMethod method) {
+            this.method = method;
+            return this;
+        }
+
+        public HttpRequestHeaderHeadBuilder rawRequestUri(String rawRequestUri) {
+            this.rawRequestUri = rawRequestUri;
+            return this;
+        }
+
+        public HttpRequestHeaderHeadBuilder version(HttpVersion version) {
+            this.version = version;
+            return this;
+        }
+
+        public HttpRequestHeaderHead build() {
+            return new HttpRequestHeaderHead(method, rawRequestUri, version);
+        }
+    }
+
+    public static HttpRequestHeaderHeadBuilder builder() {
+        return new HttpRequestHeaderHeadBuilder();
+    }
 }

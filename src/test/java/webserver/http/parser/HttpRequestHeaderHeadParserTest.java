@@ -20,7 +20,7 @@ class HttpRequestHeaderHeadParserTest {
 
         // then
         assertEquals(HttpMethod.GET, result.method());
-        assertEquals("/index.html", result.path());
+        assertEquals("/index.html", result.rawRequestUri());
         assertEquals(HttpVersion.HTTP_1_1, result.version());
     }
 }

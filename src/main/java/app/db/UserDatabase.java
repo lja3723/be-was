@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * userId를 키로 {@link User} 객체를 저장하는 단순한 In-Memory Database
  */
-public class Database {
+public class UserDatabase {
     private static Map<String, User> users = new HashMap<>();
 
     /**

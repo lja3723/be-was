@@ -20,7 +20,7 @@ public class HttpResponseHeaderEncoder {
 
         // Header Fields
         header.common().fields().forEach(field ->
-            builder.append(HttpFieldEncoder.encode(field))
+            builder.append(HttpFieldEncoder.encode(field)).append(CRLF)
         );
         return builder.append(CRLF).toString();
     }
