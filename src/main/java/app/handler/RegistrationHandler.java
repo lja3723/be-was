@@ -2,6 +2,8 @@ package app.handler;
 
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import webserver.http.ContentType;
@@ -18,37 +20,20 @@ public class RegistrationHandler extends ApplicationHandler {
     private final UserBusiness userBusiness;
 
     public RegistrationHandler(UserBusiness userBusiness) {
-        super(HttpMethod.GET, "/user/create");
+        super(HttpMethod.POST, "/user/create");
         this.userBusiness = userBusiness;
     }
 
     @Override
-    public HttpResponse handleResponse(HttpRequest httpRequest) {
-        QueryParameter queryParameter = new QueryParameter(httpRequest.header().uri().getQuery());
-
-        List<String> expectedQueries = List.of(
-            "userId",
-            "password",
-            "name",
-            "email"
-        );
-        List<String> missingQueries = expectedQueries.stream()
-            .filter(queryKey -> queryParameter.getValue(queryKey).isEmpty())
-            .toList();
-        if (!missingQueries.isEmpty()) {
-            String missingQueriesString = String.join(", ", missingQueries);
-            throw new BadRequestException("Missing required query parameters: " + missingQueriesString);
+     public HttpResponse handleResponse(HttpRequest httpRequest) {
+        if (httpRequest.body() == null) {
+            throw new BadRequestException("Request body is missing.");
         }
 
-        List<String> queryValues = expectedQueries.stream()
-            .map(queryParameter::getValue)
-            .peek(opt -> {
-                if (opt.isEmpty()) {
-                    throw new BadRequestException("Missing required query parameters.");
-                }
-            })
-            .map(Optional::get)
-            .toList();
+        List<String> queryValues = validateRequiredQueries(
+            parseQuery(httpRequest.body()),
+            List.of("userId", "password", "name", "email")
+        );
 
         userBusiness.register(
             queryValues.get(0),
@@ -68,5 +53,34 @@ public class RegistrationHandler extends ApplicationHandler {
                 .build(),
             body
         );
+    }
+
+    private QueryParameter parseQuery(String queryString) {
+        try {
+            URI uri = new URI("?" + queryString);
+            return new QueryParameter(uri.getQuery());
+        } catch (URISyntaxException e) {
+            throw new BadRequestException("Invalid query string: " + queryString);
+        }
+    }
+
+    public List<String> validateRequiredQueries(QueryParameter queryParameter, List<String> requiredQueries) {
+        List<String> missingQueries = requiredQueries.stream()
+            .filter(queryKey -> queryParameter.getValue(queryKey).isEmpty())
+            .toList();
+        if (!missingQueries.isEmpty()) {
+            String missingQueriesString = String.join(", ", missingQueries);
+            throw new BadRequestException("Missing required query parameters: " + missingQueriesString);
+        }
+
+        return requiredQueries.stream()
+            .map(queryParameter::getValue)
+            .peek(opt -> {
+                if (opt.isEmpty()) {
+                    throw new BadRequestException("Missing required query parameters.");
+                }
+            })
+            .map(Optional::get)
+            .toList();
     }
 }
