@@ -6,13 +6,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import webserver.http.ContentType;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
 import webserver.http.HttpVersion;
 import webserver.http.QueryParameter;
+import webserver.http.field.HttpField;
+import webserver.http.field.HttpFieldKey;
 import webserver.http.header.HttpResponseHeader;
 
 public class RegistrationHandler extends ApplicationHandler {
@@ -42,17 +43,16 @@ public class RegistrationHandler extends ApplicationHandler {
             queryValues.get(3)
         );
 
-        byte[] body = "<html><body><h1>Registration Successful</h1></body></html>".getBytes();
-
         return new HttpResponse(
             HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.OK)
-                .contentType(ContentType.TEXT_HTML)
-                .body(body)
-                .build(),
-            body
-        );
+                .status(HttpStatus.FOUND)
+                .field(HttpField.builder()
+                    .key(HttpFieldKey.LOCATION)
+                    .value("/")
+                    .build())
+                .build()
+            , null);
     }
 
     private QueryParameter parseQuery(String queryString) {
