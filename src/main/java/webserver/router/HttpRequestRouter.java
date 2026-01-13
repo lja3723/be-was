@@ -4,12 +4,12 @@ import app.exception.HttpMethodNotAllowedException;
 import app.handler.ApplicationHandler;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.handler.HttpRequestHandler;
 import webserver.util.FileExtensionExtractor;
+import webserver.util.StaticResourceLoader;
 
 /**
  * HttpRequestHeader에 따른 HttpResponseHandler를 라우팅하는 Router
@@ -28,20 +28,25 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
     public HttpRequestHandler route(HttpRequest httpRequest) {
 
         // 확장자가 붙은 요청은 정적 리소스 핸들러로 라우팅
-        if (FileExtensionExtractor.get(httpRequest.header().uri().getPath()) != null) {
+        String path = httpRequest.header().uri().getPath();
+        if (FileExtensionExtractor.get(path) != null) {
             return staticResourceHandler;
         }
 
         // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
         ApplicationHandler applicationHandler = applicationHandlerMap.get(
-            new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().getPath())
+            new HttpEndpoint(httpRequest.header().method(), path)
         );
 
-        if (applicationHandler == null) {
+        if (applicationHandler != null) {
+            return applicationHandler;
+        }
+
+        if (StaticResourceLoader.loadResource(path) == null) {
             checkNotAllowedMethod(httpRequest);
         }
 
-        return Objects.requireNonNullElse(applicationHandler, staticResourceHandler);
+        return staticResourceHandler;
     }
 
     public void checkNotAllowedMethod(HttpRequest httpRequest) {
