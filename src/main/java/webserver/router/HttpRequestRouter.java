@@ -1,9 +1,12 @@
 package webserver.router;
 
+import app.exception.HttpMethodNotAllowedException;
 import app.handler.ApplicationHandler;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import webserver.http.HttpEndpoint;
+import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.handler.HttpRequestHandler;
 import webserver.util.FileExtensionExtractor;
@@ -34,6 +37,22 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
             new HttpEndpoint(httpRequest.header().method(), httpRequest.header().uri().getPath())
         );
 
+        if (applicationHandler == null) {
+            checkNotAllowedMethod(httpRequest);
+        }
+
         return Objects.requireNonNullElse(applicationHandler, staticResourceHandler);
+    }
+
+    public void checkNotAllowedMethod(HttpRequest httpRequest) {
+
+        boolean hasSupportedMethod = Arrays.stream(HttpMethod.values())
+            .filter(method -> method != httpRequest.header().method())
+            .anyMatch(method -> applicationHandlerMap.containsKey(
+                new HttpEndpoint(method, httpRequest.header().uri().getPath())));
+
+        if (hasSupportedMethod) {
+            throw new HttpMethodNotAllowedException("HTTP Method " + httpRequest.header().method() + " is not allowed for " + httpRequest.header().uri().getPath());
+        }
     }
 }

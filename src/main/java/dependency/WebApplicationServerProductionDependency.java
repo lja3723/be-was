@@ -3,6 +3,7 @@ package dependency;
 import app.business.impl.UserBusinessImpl;
 import app.db.adapter.UserDatabaseAdapter;
 import app.exception.BadRequestException;
+import app.exception.HttpMethodNotAllowedException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
 import app.handler.ApplicationHandler;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import webserver.handler.StaticResourceHandler;
 import webserver.handler.exception.ExceptionHandler;
+import webserver.handler.exception.HttpMethodNotAllowedExceptionHandler;
 import webserver.handler.exception.InternalServerErrorExceptionHandler;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
@@ -45,7 +47,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         return Map.of(
             BadRequestException.class, new BadRequestHttpRequestHandler(),
             ResourceNotFoundException.class, new ResourceNotFoundHttpRequestHandler(),
-            InternalServerErrorException.class, new InternalServerErrorExceptionHandler()
+            InternalServerErrorException.class, new InternalServerErrorExceptionHandler(),
+            HttpMethodNotAllowedException.class, new HttpMethodNotAllowedExceptionHandler()
         );
     }
 
