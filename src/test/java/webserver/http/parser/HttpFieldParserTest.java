@@ -18,6 +18,8 @@ class HttpFieldParserTest {
     private Parser<String, HttpField> parser;
 
     private static final List<Pair<String, HttpField>> testCases = List.of(
+
+        // Request Fields
         new Pair<>(
             "Host: localhost:8080",
             HttpField.builder()
@@ -111,6 +113,8 @@ class HttpFieldParserTest {
                 .value("1.1 proxy1.example.com (Squid/5.7), 1.1 cache.local (Nginx reverse proxy)")
                 .build()
         ),
+
+        // Response Fields
         new Pair<>(
             "Date: Tue, 07 Jan 2026 06:30:12 GMT",
             HttpField.builder()
@@ -171,6 +175,22 @@ class HttpFieldParserTest {
                 .value("0")
                 .build()
         ),
+
+        // Cookie Field Test
+        new Pair<>(
+            "Cookie: sessionId=abc123; userId=789xyz; theme=light",
+            HttpField.builder()
+                .key(HttpFieldKey.COOKIE)
+                .value(HttpFieldValue.builder()
+                    .value("")
+                    .parameter("sessionId", "abc123")
+                    .parameter("userId", "789xyz")
+                    .parameter("theme", "light")
+                    .build())
+                .build()
+        ),
+
+        // Unknown Field Test
         new Pair<>(
             "Unknown-Field:,, , ;a=b;c=d;e=f , ",
             HttpField.builder()
