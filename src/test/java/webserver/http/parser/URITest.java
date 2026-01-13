@@ -49,4 +49,12 @@ class URITest {
         assertEquals("/sample/한글/test", uri.getPath());
         assertEquals("name=한글", uri.getQuery());
     }
+
+    @Test
+    void onlyQueryTest() throws Exception {
+        URI uri = new URI("?id=%ED%95%9C%EA%B8%80&pwd=1234");
+
+        assertEquals("", uri.getPath());
+        assertEquals("id=한글&pwd=1234", uri.getQuery());
+    }
 }

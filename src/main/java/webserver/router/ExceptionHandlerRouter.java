@@ -9,22 +9,21 @@ import webserver.handler.exception.ExceptionHandler;
 /**
  * Exception에 따른 HttpResponseHandler를 라우팅하는 Router
  */
-public class ExceptionHandlerRouter implements Router<Throwable, ExceptionHandler> {
+public class ExceptionHandlerRouter implements Router<Throwable, ExceptionHandler<? extends Throwable>> {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerRouter.class);
-    private final Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlerMap;
+    private final Map<Class<? extends Throwable>, ExceptionHandler<? extends Throwable>> exceptionHandlerMap;
 
-    public ExceptionHandlerRouter(Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlerMap) {
+    public ExceptionHandlerRouter(Map<Class<? extends Throwable>, ExceptionHandler<? extends Throwable>> exceptionHandlerMap) {
         this.exceptionHandlerMap = exceptionHandlerMap;
     }
 
     @Override
-    public ExceptionHandler route(Throwable e) {
-        ExceptionHandler handler = exceptionHandlerMap.get(e.getClass());
+    public ExceptionHandler<? extends Throwable> route(Throwable e) {
+        ExceptionHandler<? extends Throwable> handler = exceptionHandlerMap.get(e.getClass());
 
         if (handler == null) {
-            logger.error("Internal Server Error occured: {}, {}", e.getMessage(), e.getCause(), e);
-            return exceptionHandlerMap.get(InternalServerErrorException.class);
+            throw new InternalServerErrorException(e.getMessage(), e);
         }
 
         logger.info("Exception handled: {}, {}", e.getMessage(), e.getCause(), e);

@@ -2,7 +2,6 @@ package webserver.http;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class QueryParameter {
 
@@ -26,7 +25,7 @@ public class QueryParameter {
         return result;
     }
 
-    public Optional<String> getValue(String key) {
-        return Optional.ofNullable(parameters.get(key));
+    public String getValue(String key) {
+        return parameters.get(key);
     }
 }

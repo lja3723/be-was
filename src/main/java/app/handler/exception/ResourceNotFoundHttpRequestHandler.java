@@ -1,5 +1,6 @@
 package app.handler.exception;
 
+import app.exception.ResourceNotFoundException;
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;
@@ -11,10 +12,10 @@ import webserver.http.header.HttpResponseHeader;
 /**
  * HTTP Status가 404, 리소스가 없는 경우의 HTTP Response를 핸들링하는 ResponseHandler
  */
-public class ResourceNotFoundHttpRequestHandler extends ExceptionHandler {
+public class ResourceNotFoundHttpRequestHandler extends ExceptionHandler<ResourceNotFoundException> {
 
     @Override
-    public HttpResponse handleResponse(HttpRequest httpRequest) {
+    public HttpResponse handleException(HttpRequest httpRequest, ResourceNotFoundException e) {
         // TODO: 정적 리소스로 분리 후 정적 리소스 로드하기
         byte[] body = "<html><body><h1>404 Not Found</h1><p>요청하신 리소스를 찾을 수 없습니다.</p></body></html>".getBytes();
 

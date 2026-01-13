@@ -16,12 +16,23 @@ public class HttpFieldEncoder {
                 .map(fieldValue -> {
                     StringBuilder fieldValueBuilder = new StringBuilder();
                     fieldValueBuilder.append(fieldValue.value());
-                    if (fieldValue.parameters() != null) {
-                        fieldValue.parameters().forEach(parameter -> fieldValueBuilder.append("; ")
-                            .append(parameter.key())
-                            .append("=")
-                            .append(parameter.value()));
+                    if (fieldValue.parameters() == null) {
+                        return fieldValueBuilder.toString();
                     }
+
+                    for (int i = 0; i < fieldValue.parameters().size(); i++) {
+                        if (0 < i || !fieldValue.value().isEmpty()) {
+                            fieldValueBuilder.append("; ");
+                        }
+                        var parameter = fieldValue.parameters().get(i);
+                        fieldValueBuilder.append(parameter.key());
+
+                        if (parameter.value() != null) {
+                            fieldValueBuilder.append("=")
+                                .append(parameter.value());
+                        }
+                    }
+
                     return fieldValueBuilder.toString();
 
                 })
