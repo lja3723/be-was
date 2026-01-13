@@ -8,6 +8,7 @@ public enum ContentType {
     TEXT_HTML("text/html", "html"),
     TEXT_CSS("text/css", "css"),
     APPLICATION_JAVASCRIPT("application/javascript", "js"),
+    APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded", "form"),
     APPLICATION_JSON("application/json", "json"),
     IMAGE_PNG("image/png", "png"),
     IMAGE_JPG("image/jpeg", "jpg"),
