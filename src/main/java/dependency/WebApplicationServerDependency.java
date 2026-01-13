@@ -26,7 +26,7 @@ public interface WebApplicationServerDependency {
     /**
      * Exception Handler Router를 반환
      */
-    Router<Throwable, ExceptionHandler> getExceptionHandlerRouter();
+    Router<Throwable, ExceptionHandler<? extends Throwable>> getExceptionHandlerRouter();
 
     /**
      * HTTP Request Router를 반환
