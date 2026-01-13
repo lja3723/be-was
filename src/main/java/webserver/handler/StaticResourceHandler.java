@@ -1,5 +1,6 @@
 package webserver.handler;
 
+import app.exception.ResourceNotFoundException;
 import webserver.http.ContentType;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -19,12 +20,16 @@ public class StaticResourceHandler extends HttpRequestHandler {
         String path = httpRequest.header().uri().getPath();
         byte[] body = StaticResourceLoader.loadResource(path);
 
+        if (body == null) {
+            throw new ResourceNotFoundException("Resource not found: " + path);
+        }
+
         return new HttpResponse(
             HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
                 .status(HttpStatus.OK)
                 .contentType(ContentType.fromFileExtension(
-                    FileExtensionExtractor.get(path)))
+                    FileExtensionExtractor.get(StaticResourceLoader.getStaticResourcePath(path))))
                 .body(body)
                 .build(),
             body);
