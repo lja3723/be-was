@@ -34,9 +34,36 @@ class HttpFieldEncoderTest {
                     .parameter("HttpOnly", null)
                     .build())
                 .build(),
-            "Set-Cookie: sessionId=abc123; someFlag=false; Path=/; HttpOnly"
-        )
-    );
+            "Set-Cookie: sessionId=abc123; someFlag=false; Path=/; HttpOnly"),
+        new Pair<>(
+            HttpField.builder()
+                .key(HttpFieldKey.ACCEPT)
+                .value(HttpFieldValue.builder()
+                    .value("text/html")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("application/xhtml+xml")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("application/xml")
+                    .parameter("q", "0.9")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("image/avif")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("image/webp")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("image/apng")
+                    .build())
+                .value(HttpFieldValue.builder()
+                    .value("*/*")
+                    .parameter("q", "0.8")
+                    .build())
+                .build(),
+        "Accept: text/html, application/xhtml+xml, application/xml; q=0.9, image/avif, image/webp, image/apng, */*; q=0.8"
+    ));
 
     @Test
     void encode() {
