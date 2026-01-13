@@ -1,7 +1,7 @@
 package webserver;
 
 import dependency.WebApplicationServerDependency;
-import webserver.handler.HttpRequestHandler;
+import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import java.io.IOException;
@@ -11,7 +11,6 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.router.Router;
 import webserver.util.HttpFieldEncoder;
 import webserver.util.InputStreamHttpRequestDecoder;
 import webserver.util.OutputStreamHttpResponseWriter;
@@ -76,25 +75,29 @@ public class HttpDispatcher implements Runnable {
         logHttpRequestHeader(httpRequest);
 
         try {
-            handleRequest(out, httpRequest, dependency.getHttpRequestRouter(), httpRequest);
+            HttpResponse httpResponse = dependency.getHttpRequestRouter().route(httpRequest)
+                .handleResponse(httpRequest);
+            OutputStreamHttpResponseWriter.flush(out, httpResponse);
 
-        } catch (Exception e) {
-            handleRequest(out, httpRequest, dependency.getExceptionHandlerRouter(), e);
+        } catch (Throwable e) {
+            HttpResponse httpResponse = invokeHandler(dependency.getExceptionHandlerRouter().route(e), httpRequest, e);
+            OutputStreamHttpResponseWriter.flush(out, httpResponse);
         }
     }
 
     /**
-     * OutputStream에 HTTP response를 작성
-     * @param out 클라이언트로의 OutputStream
-     * @param router 라우터 객체
-     * @param routeKey 라우팅 키
+     * ExceptionHandler를 호출하여 HttpResponse 생성
+     * @param handler ExceptionHandler 객체
+     * @param request HttpRequest 객체
+     * @param exception 처리할 예외 객체
+     * @param <E> 처리할 예외 타입
+     * @return 생성된 HttpResponse 객체
      */
-    private <K> void handleRequest(OutputStream out, HttpRequest httpRequest, Router<K, ? extends HttpRequestHandler> router, K routeKey) {
-        // HTTP request를 적절한 핸들러로 라우팅
-        HttpResponse httpResponse = router.route(routeKey).handleResponse(httpRequest);
-
-        // HTTP Response를 OutputStream으로 전송
-        OutputStreamHttpResponseWriter.flush(out, httpResponse);
+    @SuppressWarnings("unchecked")
+    private <E extends Throwable> HttpResponse invokeHandler(
+        ExceptionHandler<E> handler, HttpRequest request, Throwable exception) {
+        // 내부적으로 캡슐화하여 타입 캐스팅 후 실행
+        return handler.handleException(request, (E)exception);
     }
 
     /**
