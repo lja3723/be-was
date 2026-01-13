@@ -2,6 +2,7 @@ package dependency;
 
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
+import webserver.http.HttpSession;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.Parser;
@@ -37,4 +38,9 @@ public interface WebApplicationServerDependency {
      * Static Resource Handler를 반환
      */
     HttpRequestHandler getStaticResourceHandler();
+
+    /**
+     * HttpSession 인스턴스를 반환
+     */
+    HttpSession getHttpSession();
 }

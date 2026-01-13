@@ -19,6 +19,7 @@ import webserver.handler.exception.HttpMethodNotAllowedExceptionHandler;
 import webserver.handler.exception.InternalServerErrorExceptionHandler;
 import webserver.http.HttpEndpoint;
 import webserver.http.HttpRequest;
+import webserver.http.HttpSession;
 import webserver.http.field.HttpField;
 import webserver.http.header.HttpRequestHeaderHead;
 import webserver.http.parser.HttpFieldParser;
@@ -34,11 +35,16 @@ import webserver.router.Router;
  */
 public class WebApplicationServerProductionDependency implements WebApplicationServerDependency {
 
-    private final Parser<String, HttpField> httpFieldParser = new HttpFieldParser();
-    private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser = new HttpRequestHeaderHeadParser();
-    private final Router<Throwable, ExceptionHandler<? extends Throwable>> exceptionHandlerRouter = new ExceptionHandlerRouter(exceptionHandlerMap());
-    private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter = new HttpRequestRouter(getApplicationHandlerMap(), getStaticResourceHandler());
+    private final Parser<String, HttpField> httpFieldParser =
+        new HttpFieldParser();
+    private final Parser<String, HttpRequestHeaderHead> httpRequestHeaderHeadParser =
+        new HttpRequestHeaderHeadParser();
+    private final Router<Throwable, ExceptionHandler<? extends Throwable>> exceptionHandlerRouter =
+        new ExceptionHandlerRouter(exceptionHandlerMap());
+    private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter =
+        new HttpRequestRouter(getApplicationHandlerMap(), getStaticResourceHandler());
 
+    private static final HttpSession httpSession = new HttpSession();
     private static final HttpRequestHandler staticResourceHandler = new StaticResourceHandler();
 
     // Exception 클래스별 HttpResponseHandler 매핑 초기화
@@ -91,5 +97,10 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     @Override
     public HttpRequestHandler getStaticResourceHandler() {
         return staticResourceHandler;
+    }
+
+    @Override
+    public HttpSession getHttpSession() {
+        return httpSession;
     }
 }
