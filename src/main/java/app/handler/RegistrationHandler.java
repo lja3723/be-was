@@ -2,10 +2,7 @@ package app.handler;
 
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -15,6 +12,7 @@ import webserver.http.QueryParameter;
 import webserver.http.field.HttpField;
 import webserver.http.field.HttpFieldKey;
 import webserver.http.header.HttpResponseHeader;
+import webserver.util.QueryParameterValidator;
 
 public class RegistrationHandler extends ApplicationHandler {
 
@@ -31,16 +29,16 @@ public class RegistrationHandler extends ApplicationHandler {
             throw new BadRequestException("Request body is missing.");
         }
 
-        List<String> queryValues = validateRequiredQueries(
-            parseQuery(httpRequest.body()),
+        QueryParameter queryParameter = QueryParameterValidator.validate(
+            httpRequest.body(),
             List.of("userId", "password", "name", "email")
         );
 
         userBusiness.register(
-            queryValues.get(0),
-            queryValues.get(1),
-            queryValues.get(2),
-            queryValues.get(3)
+            queryParameter.getValue("userId"),
+            queryParameter.getValue("password"),
+            queryParameter.getValue("name"),
+            queryParameter.getValue("email")
         );
 
         return new HttpResponse(
@@ -53,34 +51,5 @@ public class RegistrationHandler extends ApplicationHandler {
                     .build())
                 .build()
             , null);
-    }
-
-    private QueryParameter parseQuery(String queryString) {
-        try {
-            URI uri = new URI("?" + queryString);
-            return new QueryParameter(uri.getQuery());
-        } catch (URISyntaxException e) {
-            throw new BadRequestException("Invalid query string: " + queryString);
-        }
-    }
-
-    public List<String> validateRequiredQueries(QueryParameter queryParameter, List<String> requiredQueries) {
-        List<String> missingQueries = requiredQueries.stream()
-            .filter(queryKey -> queryParameter.getValue(queryKey).isEmpty())
-            .toList();
-        if (!missingQueries.isEmpty()) {
-            String missingQueriesString = String.join(", ", missingQueries);
-            throw new BadRequestException("Missing required query parameters: " + missingQueriesString);
-        }
-
-        return requiredQueries.stream()
-            .map(queryParameter::getValue)
-            .peek(opt -> {
-                if (opt.isEmpty()) {
-                    throw new BadRequestException("Missing required query parameters.");
-                }
-            })
-            .map(Optional::get)
-            .toList();
     }
 }
