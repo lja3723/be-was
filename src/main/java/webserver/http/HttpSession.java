@@ -2,6 +2,8 @@ package webserver.http;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Session ID로 세션을 구분하고, 각 세션마다 key-value 쌍으로 데이터를 저장하는 HttpSession 클래스
@@ -15,14 +17,29 @@ public class HttpSession {
     }
 
     /**
+     * 새로운 세션을 생성하고 세션 ID를 반환.
+     *
+     * @return 새로 생성된 세션 ID
+     */
+    public synchronized String getNewSession() {
+        String sessionId;
+        do {
+            sessionId = UUID.randomUUID().toString();
+        } while (sessions.containsKey(sessionId));
+
+        sessions.put(sessionId, new HashMap<>());
+        return sessionId;
+    }
+
+    /**
      * 주어진 세션 ID에 해당하는 세션 데이터를 반환.
-     * 세션이 존재하지 않으면 새로 생성하여 반환.
+     * 세션이 존재하지 않으면 null
      *
      * @param sessionId 세션 ID
      * @return 세션 데이터 맵
      */
     public Map<String, String> getSession(String sessionId) {
-        return sessions.computeIfAbsent(sessionId, k -> new HashMap<>());
+        return sessions.get(sessionId);
     }
 
     /**
@@ -33,8 +50,9 @@ public class HttpSession {
      * @return 데이터 값, 키가 존재하지 않으면 null 반환
      */
     public String getAttribute(String sessionId, String key) {
-        Map<String, String> session = getSession(sessionId);
-        return session.get(key);
+        return Optional.ofNullable(getSession(sessionId))
+            .map(session -> session.get(key))
+            .orElse(null);
     }
 
     /**
@@ -46,6 +64,8 @@ public class HttpSession {
      */
     public void setAttribute(String sessionId, String key, String value) {
         Map<String, String> session = getSession(sessionId);
-        session.put(key, value);
+        if (session != null) {
+            session.put(key, value);
+        }
     }
 }
