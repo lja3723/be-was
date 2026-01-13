@@ -23,8 +23,7 @@ public class ExceptionHandlerRouter implements Router<Throwable, ExceptionHandle
         ExceptionHandler<? extends Throwable> handler = exceptionHandlerMap.get(e.getClass());
 
         if (handler == null) {
-            logger.error("Internal Server Error occured: {}, {}", e.getMessage(), e.getCause(), e);
-            return exceptionHandlerMap.get(InternalServerErrorException.class);
+            throw new InternalServerErrorException(e.getMessage(), e);
         }
 
         logger.info("Exception handled: {}, {}", e.getMessage(), e.getCause(), e);

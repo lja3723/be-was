@@ -1,5 +1,6 @@
 package webserver;
 
+import app.exception.InternalServerErrorException;
 import dependency.WebApplicationServerDependency;
 import webserver.handler.exception.ExceptionHandler;
 import webserver.http.HttpRequest;
@@ -80,8 +81,15 @@ public class HttpDispatcher implements Runnable {
             OutputStreamHttpResponseWriter.flush(out, httpResponse);
 
         } catch (Throwable e) {
-            HttpResponse httpResponse = invokeHandler(dependency.getExceptionHandlerRouter().route(e), httpRequest, e);
-            OutputStreamHttpResponseWriter.flush(out, httpResponse);
+            try {
+                HttpResponse httpResponse = invokeHandler(
+                    dependency.getExceptionHandlerRouter().route(e), httpRequest, e);
+                OutputStreamHttpResponseWriter.flush(out, httpResponse);
+            } catch (InternalServerErrorException ise) {
+                HttpResponse httpResponse = invokeHandler(
+                    dependency.getExceptionHandlerRouter().route(ise), httpRequest, ise);
+                OutputStreamHttpResponseWriter.flush(out, httpResponse);
+            }
         }
     }
 
