@@ -36,8 +36,16 @@ public class HttpFieldParser implements Parser<String, HttpField> {
             // 해당 필드는 value를 통째로 사용, comment를 처리하도록 별도 메서드로 위임
             // TODO: 향후 Date 필드는 별도의 파싱이 필요할 수 있음
             case USER_AGENT, SERVER, VIA, DATE -> parseCommentableField(fieldKey, split[1]);
-            default -> parseUncommentableField(fieldKey, split[1]);
+            case COOKIE -> parseCookieField(fieldKey, split[1]);
+            default -> parseStandardField(fieldKey, split[1]);
         };
+    }
+
+    public HttpField parseCookieField(HttpFieldKey key, String rawValue) {
+        return HttpField.builder()
+            .key(key)
+            .value(parseFieldValue(";" + rawValue.trim()))
+            .build();
     }
 
     public HttpField parseCommentableField(HttpFieldKey key, String rawValue) {
@@ -47,7 +55,7 @@ public class HttpFieldParser implements Parser<String, HttpField> {
             .build();
     }
 
-    public HttpField parseUncommentableField(HttpFieldKey key, String rawValue) {
+    public HttpField parseStandardField(HttpFieldKey key, String rawValue) {
         HttpFieldBuilder builder = HttpField.builder().key(key);
 
         // ",,," 같은 경우도 "", "", "", "" 으로 인식하기 위해 split의 두번째 인자에 -1을 넣음
