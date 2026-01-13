@@ -23,7 +23,9 @@ public class OutputStreamHttpResponseWriter {
         try {
             DataOutputStream dos = new DataOutputStream(outputStream);
             dos.writeBytes(HttpResponseHeaderEncoder.encode(httpResponse.header()));
-            dos.write(httpResponse.body(), 0, httpResponse.body().length);
+            if (httpResponse.body() != null) {
+                dos.write(httpResponse.body(), 0, httpResponse.body().length);
+            }
             dos.flush();
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to flush response", e);
