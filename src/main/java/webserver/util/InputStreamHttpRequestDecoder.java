@@ -2,17 +2,24 @@ package webserver.util;
 
 import app.exception.BadRequestException;
 import app.exception.InternalServerErrorException;
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequest;
 import webserver.http.field.HttpField;
+import webserver.http.field.HttpFieldKey;
 import webserver.http.header.HttpRequestHeader;
 import webserver.http.header.HttpRequestHeader.HttpRequestHeaderBuilder;
 import webserver.http.header.HttpRequestHeaderHead;
@@ -36,45 +43,102 @@ public class InputStreamHttpRequestDecoder {
         Parser<String, HttpField> httpFieldParser) {
 
         try {
-            // InputStream을 행 단위로 읽기 준비
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = Optional.ofNullable(reader.readLine())
-                .orElseThrow(() -> new BadRequestException("Empty request"));
+            BufferedInputStream bin = new BufferedInputStream(in);
+            List<String> headerLines = readHeaderBytes(bin);
+            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder();
 
-            // Request의 첫 line(Head 부분) 파싱
-            HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(line);
-            HttpRequestHeaderBuilder builder = HttpRequestHeader.builder()
-                .version(httpRequestHead.version())
+            // 첫 줄(헤더 헤드) 파싱
+            HttpRequestHeaderHead httpRequestHead = httpRequestHeaderHeadParser.parse(headerLines.get(0));
+            builder.version(httpRequestHead.version())
                 .method(httpRequestHead.method())
                 .uri(new URI(httpRequestHead.rawRequestUri()));
 
-            // 나머지 필드 파싱
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                builder.field(httpFieldParser.parse(line));
+            // 나머지 필드 파싱 (반환값은 읽기 전용)
+            List<HttpField> readOnlyFields = parseHttpFields(headerLines, builder, httpFieldParser);
+
+            // 필드 정보를 토대로 body가 존재하는 경우에만 body를 처리
+            Optional<Integer> hasBodies = readOnlyFields.stream()
+                .filter(field -> field.key() == HttpFieldKey.CONTENT_LENGTH)
+                .map(field -> Integer.parseInt(Objects.requireNonNull(field.getFirstSingleValue())))
+                .findFirst();
+
+            if (hasBodies.isPresent()) {
+                int contentLength = hasBodies.get();
+                byte[] body = new byte[contentLength];
+                parseBody(bin, body);
+                return new HttpRequest(builder.build(), new String(body, StandardCharsets.UTF_8));
             }
 
-            log.debug("End: {}", line == null ? "null" : "empty string");
-            log.debug("reader.ready()? {}", reader.ready());
-
-            // 헤더만 있는 경우
-            if (!reader.ready()) {
-                return new HttpRequest(builder.build(), null);
-            }
-
-            // header & body 구분을 위한 빈 줄 읽기
-            reader.readLine();
-
-            StringBuilder bodyBuilder = new StringBuilder();
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                bodyBuilder.append(line).append("\n");
-            }
-
-            return new HttpRequest( builder.build(), bodyBuilder.toString());
+            return new HttpRequest(builder.build(), null);
 
         } catch (IOException e) {
             throw new InternalServerErrorException("Error reading request", e);
         } catch (URISyntaxException e) {
             throw new BadRequestException("Invalid URI syntax: " + e.getMessage());
+        }
+    }
+
+    /**
+     * InputStream에서 HTTP Header의 바이트를 읽음 (AI 도움으로 생성)
+     * @param in InputStream
+     * @return HTTP Header 바이트 배열
+     * @throws IOException 읽기 실패 시 발생
+     */
+    public static List<String> readHeaderBytes(InputStream in) throws IOException {
+        ByteArrayOutputStream headerBuffer = new ByteArrayOutputStream();
+        int prev = -1, curr;
+        int crlfCount = 0;
+
+        // 헤더의 끝 (\r\n\r\n)까지 읽기
+        while ((curr = in.read()) != -1) {
+            headerBuffer.write(curr);
+
+            if (prev == '\r' && curr == '\n') {
+                crlfCount++;
+                if (crlfCount == 2) {
+                    break;
+                }
+            } else if (curr != '\r') {
+                crlfCount = 0;
+            }
+
+            prev = curr;
+        }
+
+        String headerString = headerBuffer.toString(StandardCharsets.US_ASCII);
+        return Arrays.asList(headerString.split("\r\n"));
+    }
+
+    /**
+     * BufferedReader에서 HTTP Header 필드들을 읽고 파싱하여 HttpRequestHeaderBuilder에 추가
+     * @param lines BufferedReader
+     * @param builder HttpRequestHeaderBuilder
+     * @param httpFieldParser HttpField 파서
+     * @return 파싱된 HttpField 리스트로, 빌더로 생성된 필드 리스트와는 별도로 생성된 읽기 전용 불변 리스트
+     * @throws IOException 읽기 또는 파싱에 실패한 경우 발생
+     */
+    public static List<HttpField> parseHttpFields(List<String> lines, HttpRequestHeaderBuilder builder,
+        Parser<String, HttpField> httpFieldParser) throws IOException {
+        List<HttpField> returns = new ArrayList<>();
+
+        lines.stream().skip(1) // 첫 줄은 헤더 헤드이므로 건너뜀
+            .forEach(line -> {
+                HttpField parsedField = httpFieldParser.parse(line);
+                builder.field(parsedField);
+                returns.add(parsedField); // 별도의 리스트에도 추가
+            });
+
+        return Collections.unmodifiableList(returns);
+    }
+
+    public static void parseBody(InputStream inputStream, byte[] target) throws IOException {
+        int totalRead = 0;
+        while (totalRead < target.length) {
+            int read = inputStream.read(target, totalRead, target.length - totalRead);
+            if (read == -1) {
+                throw new IOException("Unexpected EOF while reading HTTP body");
+            }
+            totalRead += read;
         }
     }
 }
