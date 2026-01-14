@@ -61,7 +61,7 @@ public class LoginHandler extends ApplicationHandler {
                 .status(HttpStatus.FOUND)
                 .field(HttpField.builder()
                     .key(HttpFieldKey.LOCATION)
-                    .value("/")
+                    .value("/main")
                     .build())
                 .field(HttpField.builder()
                     .key(HttpFieldKey.SET_COOKIE)
