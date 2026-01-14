@@ -1,9 +1,9 @@
 package app.handler;
 
+import app.business.LoginResult;
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
 import java.util.List;
-import webserver.http.ContentType;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -39,22 +39,23 @@ public class LoginHandler extends ApplicationHandler {
             List.of("userId", "password")
         );
 
-        boolean loginSuccess = userBusiness.login(
+        LoginResult result = userBusiness.login(
             queryParameter.getValue("userId"),
             queryParameter.getValue("password")
         );
 
-        if (loginSuccess) {
+        if (result == LoginResult.SUCCESS) {
             return loginSuccessResponse(queryParameter.getValue("userId"));
         }
 
-        return loginFailureResponse();
+        return loginFailureResponse(result);
     }
 
     public HttpResponse loginSuccessResponse(String userId) {
         String sessionId = httpSession.getNewSession();
         httpSession.setAttribute(sessionId, "userId", userId);
 
+        // 로그인 성공시 "/main"으로 리다이렉트 및 세션 쿠키 설정
         return new HttpResponse(
             HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
@@ -75,18 +76,18 @@ public class LoginHandler extends ApplicationHandler {
             , null);
     }
 
-    public HttpResponse loginFailureResponse() {
-        // TODO: 정적 HTML 로더 개발 후 alert를 삽입한 현재 페이지로 리다이렉트 되도록 리팩터링
-        byte[] body = "<html><body><h1>로그인 실패</h1><p>잘못된 아이디나 비밀번호로 로그인을 시도했습니다.(이 페이지는 추후 리팩터링 예정)</p></body></html>"
-            .getBytes();
+    public HttpResponse loginFailureResponse(LoginResult loginResult) {
 
+        // 로그인 실패 시 다시 로그인 페이지로 리다이렉트
         return new HttpResponse(
             HttpResponseHeader.builder()
                 .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.BAD_REQUEST)
-                .contentType(ContentType.TEXT_HTML)
-                .body(body)
-                .build(),
-            body);
+                .status(HttpStatus.FOUND)
+                .field(HttpField.builder()
+                    .key(HttpFieldKey.LOCATION)
+                    .value("/login?retry_cause=" + loginResult.getValue())
+                    .build())
+                .build()
+            , null);
     }
 }
