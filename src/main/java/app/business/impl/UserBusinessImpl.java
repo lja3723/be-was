@@ -25,6 +25,16 @@ public class UserBusinessImpl implements UserBusiness {
     }
 
     @Override
+    public boolean login(String userId, String password) {
+        Optional<User> userOpt = userDatabaseAdapter.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            return user.getPassword().equals(password);
+        }
+        return false;
+    }
+
+    @Override
     public Optional<User> findById(String userId) {
         return userDatabaseAdapter.findById(userId);
     }
