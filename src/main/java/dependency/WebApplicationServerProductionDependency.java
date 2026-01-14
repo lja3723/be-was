@@ -18,6 +18,7 @@ import app.handler.exception.BadRequestHttpRequestHandler;
 import app.handler.exception.ForbiddenExceptionHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 import app.handler.exception.UnauthorizedExceptionHandler;
+import app.handler.view.LoginViewHandler;
 import app.model.User;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         List<ApplicationHandler> applicationHandlers = List.of(
             new RegistrationHandler(userBusiness),
             new LoginHandler(httpSession, userBusiness),
-            new LogoutHandler(securityChecker, httpSession)
+            new LogoutHandler(securityChecker, httpSession),
+            new LoginViewHandler(httpSession)
         );
 
         return applicationHandlers.stream().collect(
