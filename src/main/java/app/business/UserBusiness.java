@@ -26,7 +26,7 @@ public interface UserBusiness {
      * @param password 비밀번호
      * @return 로그인 성공 시 세션 토큰 반환, 실패 시 null 반환
      */
-    boolean login(String userId, String password);
+    LoginResult login(String userId, String password);
 
     /**
      * 사용자 ID로 사용자를 조회합니다.

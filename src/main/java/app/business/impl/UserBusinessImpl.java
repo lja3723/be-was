@@ -1,5 +1,6 @@
 package app.business.impl;
 
+import app.business.LoginResult;
 import app.business.UserBusiness;
 import app.db.adapter.DatabaseAdapter;
 import app.exception.BadRequestException;
@@ -25,13 +26,16 @@ public class UserBusinessImpl implements UserBusiness {
     }
 
     @Override
-    public boolean login(String userId, String password) {
+    public LoginResult login(String userId, String password) {
         Optional<User> userOpt = userDatabaseAdapter.findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            return user.getPassword().equals(password);
+            if (user.getPassword().equals(password)) {
+                return LoginResult.SUCCESS;
+            }
+            return LoginResult.PASSWORD_MISMATCH;
         }
-        return false;
+        return LoginResult.USER_NOT_FOUND;
     }
 
     @Override
