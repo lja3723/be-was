@@ -31,6 +31,10 @@ public class HttpSession {
         return sessionId;
     }
 
+    public void removeSession(String sessionId) {
+        sessions.remove(sessionId);
+    }
+
     /**
      * 주어진 세션 ID에 해당하는 세션 데이터를 반환.
      * 세션이 존재하지 않으면 null

@@ -1,15 +1,25 @@
 package dependency;
 
+import app.business.SecurityChecker;
 import app.business.impl.UserBusinessImpl;
+import app.db.adapter.DatabaseAdapter;
 import app.db.adapter.UserDatabaseAdapter;
 import app.exception.BadRequestException;
+import app.exception.ForbiddenException;
 import app.exception.HttpMethodNotAllowedException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
+import app.exception.UnauthorizedException;
 import app.handler.ApplicationHandler;
+import app.handler.LoginHandler;
+import app.handler.LogoutHandler;
 import app.handler.RegistrationHandler;
 import app.handler.exception.BadRequestHttpRequestHandler;
+import app.handler.exception.ForbiddenExceptionHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
+import app.handler.exception.UnauthorizedExceptionHandler;
+import app.handler.view.LoginViewHandler;
+import app.model.User;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,8 +54,9 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private final Router<HttpRequest, HttpRequestHandler> httpRequestRouter =
         new HttpRequestRouter(getApplicationHandlerMap(), getStaticResourceHandler());
 
-    private static final HttpSession httpSession = new HttpSession();
     private static final HttpRequestHandler staticResourceHandler = new StaticResourceHandler();
+    private static final HttpSession httpSession = new HttpSession();
+    private static final SecurityChecker securityChecker = new SecurityChecker(httpSession);
 
     // Exception 클래스별 HttpResponseHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
@@ -54,16 +65,24 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
             BadRequestException.class, new BadRequestHttpRequestHandler(),
             ResourceNotFoundException.class, new ResourceNotFoundHttpRequestHandler(),
             InternalServerErrorException.class, new InternalServerErrorExceptionHandler(),
-            HttpMethodNotAllowedException.class, new HttpMethodNotAllowedExceptionHandler()
+            HttpMethodNotAllowedException.class, new HttpMethodNotAllowedExceptionHandler(),
+            UnauthorizedException.class, new UnauthorizedExceptionHandler(),
+            ForbiddenException.class, new ForbiddenExceptionHandler()
         );
     }
+
+    private static final DatabaseAdapter<User, String> userDatabaseAdapter = new UserDatabaseAdapter();
+    private static final UserBusinessImpl userBusiness = new UserBusinessImpl(userDatabaseAdapter);
 
     // ApplicationHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
     // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
-            new RegistrationHandler(new UserBusinessImpl(new UserDatabaseAdapter()))
+            new RegistrationHandler(userBusiness),
+            new LoginHandler(httpSession, userBusiness),
+            new LogoutHandler(securityChecker, httpSession),
+            new LoginViewHandler(httpSession)
         );
 
         return applicationHandlers.stream().collect(
@@ -97,10 +116,5 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     @Override
     public HttpRequestHandler getStaticResourceHandler() {
         return staticResourceHandler;
-    }
-
-    @Override
-    public HttpSession getHttpSession() {
-        return httpSession;
     }
 }

@@ -21,6 +21,7 @@ public enum HttpFieldKey {
     SEC_FETCH_USER("Sec-Fetch-User"),
     SEC_FETCH_DEST("Sec-Fetch-Dest"),
     AUTHORIZATION("Authorization"),
+    WWW_AUTHENTICATE("WWW-Authenticate"),
     COOKIE("Cookie"),
     SET_COOKIE("Set-Cookie"),
     LOCATION("Location"),
