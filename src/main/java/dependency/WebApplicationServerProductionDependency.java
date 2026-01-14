@@ -1,15 +1,18 @@
 package dependency;
 
 import app.business.impl.UserBusinessImpl;
+import app.db.adapter.DatabaseAdapter;
 import app.db.adapter.UserDatabaseAdapter;
 import app.exception.BadRequestException;
 import app.exception.HttpMethodNotAllowedException;
 import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
 import app.handler.ApplicationHandler;
+import app.handler.LoginHandler;
 import app.handler.RegistrationHandler;
 import app.handler.exception.BadRequestHttpRequestHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
+import app.model.User;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,12 +61,16 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         );
     }
 
+    private static final DatabaseAdapter<User, String> userDatabaseAdapter = new UserDatabaseAdapter();
+    private static final UserBusinessImpl userBusiness = new UserBusinessImpl(userDatabaseAdapter);
+
     // ApplicationHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
     // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
-            new RegistrationHandler(new UserBusinessImpl(new UserDatabaseAdapter()))
+            new RegistrationHandler(userBusiness),
+            new LoginHandler(httpSession, userBusiness)
         );
 
         return applicationHandlers.stream().collect(
