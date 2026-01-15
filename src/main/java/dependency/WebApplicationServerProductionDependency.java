@@ -20,6 +20,7 @@ import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 import app.handler.exception.UnauthorizedExceptionHandler;
 import app.handler.view.LoginViewHandler;
 import app.handler.view.MainViewHandler;
+import app.handler.view.MyPageViewHandler;
 import app.handler.view.RootViewHandler;
 import app.model.User;
 import java.util.List;
@@ -86,7 +87,8 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
             new LogoutHandler(securityChecker, httpSession),
             new LoginViewHandler(securityChecker),
             new RootViewHandler(securityChecker),
-            new MainViewHandler(securityChecker)
+            new MainViewHandler(securityChecker),
+            new MyPageViewHandler(securityChecker)
         );
 
         return applicationHandlers.stream().collect(
