@@ -19,15 +19,11 @@ public class UserConstants {
             "Alice", "Bob", "Charlie"
     };
 
-    public static final String[] USERS_EMAIL = {
-            "alice@example.com", "bob@example.com", "charlie@example.com"
-    };
-
     public static User getUserOf(int idx) {
         if (idx >= NUM_OF_USERS) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
 
-        return new User(USERS_ID[idx], USERS_PASSWORD[idx], USERS_NAME[idx], USERS_EMAIL[idx]);
+        return new User(USERS_ID[idx], USERS_PASSWORD[idx], USERS_NAME[idx]);
     }
 }

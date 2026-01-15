@@ -43,20 +43,12 @@ class UserTest {
     }
 
     @Test
-    void getEmail() {
-        for (int i = 0; i < NUM_OF_USERS; i++) {
-            assertEquals(USERS_EMAIL[i], users[i].getEmail());
-        }
-    }
-
-    @Test
     void testToString() {
         for (int i = 0; i < NUM_OF_USERS; i++) {
             String expected = "User [" +
                     "userId=" + USERS_ID[i] +
                     ", password=" + USERS_PASSWORD[i] +
-                    ", name=" + USERS_NAME[i] +
-                    ", email=" + USERS_EMAIL[i] + "]";
+                    ", name=" + USERS_NAME[i] + "]";
 
             assertEquals(expected, users[i].toString());
         }

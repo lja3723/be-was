@@ -27,14 +27,13 @@ public class RegistrationHandler extends ApplicationHandler {
 
         QueryParameter queryParameter = QueryParameterValidator.validate(
             httpRequest.body(),
-            List.of("userId", "password", "name", "email")
+            List.of("userId", "password", "name")
         );
 
         userBusiness.register(
             queryParameter.getValue("userId"),
             queryParameter.getValue("password"),
-            queryParameter.getValue("name"),
-            queryParameter.getValue("email")
+            queryParameter.getValue("name")
         );
 
         return RedirectResponse.to("/");

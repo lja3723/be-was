@@ -16,12 +16,12 @@ public class UserBusinessImpl implements UserBusiness {
     }
 
     @Override
-    public void register(String userId, String password, String name, String email) {
+    public void register(String userId, String password, String name) {
         synchronized (userDatabaseAdapter) {
             if (userDatabaseAdapter.findById(userId).isPresent()) {
                 throw new BadRequestException("User ID already exists: " + userId);
             }
-            userDatabaseAdapter.add(new User(userId, password, name, email));
+            userDatabaseAdapter.add(new User(userId, password, name));
         }
     }
 

@@ -82,7 +82,6 @@ class UserDatabaseTest {
             assertEquals(UserConstants.USERS_ID[i], users.get(userId).getUserId());
             assertEquals(UserConstants.USERS_PASSWORD[i], users.get(userId).getPassword());
             assertEquals(UserConstants.USERS_NAME[i], users.get(userId).getName());
-            assertEquals(UserConstants.USERS_EMAIL[i], users.get(userId).getEmail());
         }
     }
 
@@ -96,7 +95,6 @@ class UserDatabaseTest {
             assertEquals(UserConstants.USERS_ID[i], user.getUserId());
             assertEquals(UserConstants.USERS_PASSWORD[i], user.getPassword());
             assertEquals(UserConstants.USERS_NAME[i], user.getName());
-            assertEquals(UserConstants.USERS_EMAIL[i], user.getEmail());
         }
     }
 

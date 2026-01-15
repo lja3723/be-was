@@ -19,21 +19,21 @@ class JacksonTest {
 
     private static class User {
         private String userId;
-        private String email;
+        private String userName;
 
         // Jackson의 역직렬화를 위해 기본 생성자가 반드시 필요함
         public User() {}
 
-        public User(String userId, String email) {
+        public User(String userId, String userName) {
             this.userId = userId;
-            this.email = email;
+            this.userName = userName;
         }
 
         // Getter/Setter
         public String getUserId() { return userId; }
         public void setUserId(String userId) { this.userId = userId; }
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
+        public String getUserName() { return userName; }
+        public void setUserName(String userName) { this.userName = userName; }
     }
 
     // Jackson의 핵심 엔진인 ObjectMapper 인스턴스 생성
@@ -43,7 +43,7 @@ class JacksonTest {
     @DisplayName("객체를 JSON 문자열로 직렬화하는 기능을 테스트한다.")
     void testSerialization() throws Exception {
         // Given
-        User user = new User("dev_user", "test@example.com");
+        User user = new User("dev_user", "testUser");
 
         // When
         String jsonResult = objectMapper.writeValueAsString(user);
@@ -51,15 +51,15 @@ class JacksonTest {
         // Then
         // 결과 JSON에 필드명이 포함되어 있는지 확인
         assertTrue(jsonResult.contains("\"userId\":\"dev_user\""));
-        assertTrue(jsonResult.contains("\"email\":\"test@example.com\""));
-        assertEquals("{\"userId\":\"dev_user\",\"email\":\"test@example.com\"}", jsonResult);
+        assertTrue(jsonResult.contains("\"userName\":\"testUser\""));
+        assertEquals("{\"userId\":\"dev_user\",\"userName\":\"testUser\"}", jsonResult);
     }
 
     @Test
     @DisplayName("JSON 문자열을 자바 객체로 역직렬화하는 기능을 테스트한다.")
     void testDeserialization() throws Exception {
         // Given
-        String jsonInput = "{\"userId\":\"dev_user\",\"email\":\"test@example.com\"}";
+        String jsonInput = "{\"userId\":\"dev_user\",\"userName\":\"testUser\"}";
 
         // When
         User user = objectMapper.readValue(jsonInput, User.class);
@@ -67,7 +67,7 @@ class JacksonTest {
         // Then
         assertNotNull(user);
         assertEquals("dev_user", user.getUserId());
-        assertEquals("test@example.com", user.getEmail());
+        assertEquals("testUser", user.getUserName());
     }
 
     @Test

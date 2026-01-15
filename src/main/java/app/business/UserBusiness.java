@@ -14,10 +14,9 @@ public interface UserBusiness {
      * @param userId   사용자 ID
      * @param password 비밀번호
      * @param name     이름
-     * @param email    이메일
      * @throws app.exception.BadRequestException 사용자 ID가 이미 존재하는 경우 발생
      */
-    void register(String userId, String password, String name, String email);
+    void register(String userId, String password, String name);
 
     /**
      * 사용자 로그인 처리
