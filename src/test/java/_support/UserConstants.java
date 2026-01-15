@@ -24,6 +24,6 @@ public class UserConstants {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
 
-        return new User(USERS_ID[idx], USERS_PASSWORD[idx], USERS_NAME[idx]);
+        return new User(USERS_ID[idx], USERS_NAME[idx], USERS_PASSWORD[idx]);
     }
 }

@@ -21,7 +21,7 @@ public class UserBusinessImpl implements UserBusiness {
             if (userDatabaseAdapter.findById(userId).isPresent()) {
                 throw new BadRequestException("User ID already exists: " + userId);
             }
-            userDatabaseAdapter.add(new User(userId, password, name));
+            userDatabaseAdapter.add(new User(userId, name, password));
         }
     }
 

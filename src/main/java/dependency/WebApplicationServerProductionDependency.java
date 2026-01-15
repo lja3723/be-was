@@ -65,7 +65,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
 
     // TODO: 테스트용 DB주입 과정은 나중에 제거 필요
     public WebApplicationServerProductionDependency() {
-        userDatabaseAdapter.add(new User("qwer", "55", "asdf"));
+        userDatabaseAdapter.add(new User("qwer", "asdf", "55"));
     }
 
     // Exception 클래스별 HttpResponseHandler 매핑 초기화
