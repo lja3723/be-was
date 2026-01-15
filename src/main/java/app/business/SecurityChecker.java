@@ -20,4 +20,9 @@ public class SecurityChecker {
         }
         return sid;
     }
+
+    public boolean isLoggedIn(HttpRequest httpRequest) {
+        String sid = CookieExtractor.getAttributeFrom(httpRequest, "sid");
+        return httpSession.getSession(sid) != null;
+    }
 }
