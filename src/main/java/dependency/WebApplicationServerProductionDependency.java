@@ -19,7 +19,6 @@ import app.handler.exception.ForbiddenExceptionHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 import app.handler.exception.UnauthorizedExceptionHandler;
 import app.handler.view.LoginViewHandler;
-import app.handler.view.MainViewHandler;
 import app.handler.view.MyPageViewHandler;
 import app.handler.view.RootViewHandler;
 import app.model.User;
@@ -86,8 +85,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
             new LoginHandler(httpSession, userBusiness),
             new LogoutHandler(httpSession, securityChecker),
             new LoginViewHandler(securityChecker),
-            new RootViewHandler(securityChecker),
-            new MainViewHandler(httpSession, securityChecker, userBusiness),
+            new RootViewHandler(httpSession, securityChecker, userBusiness),
             new MyPageViewHandler(securityChecker)
         );
 
