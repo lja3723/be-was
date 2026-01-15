@@ -44,16 +44,22 @@ public class LoginHandler extends ApplicationHandler {
         );
 
         if (result == LoginResult.SUCCESS) {
-            return loginSuccessResponse(queryParameter.getValue("userId"));
+            String userId = queryParameter.getValue("userId");
+            String userName = userBusiness.findById(userId)
+                .orElseThrow(() -> new BadRequestException("User not found after successful login."))
+                .getName();
+
+            return loginSuccessResponse(userId, userName);
         }
 
         return loginFailureResponse(result);
     }
 
-    public HttpResponse loginSuccessResponse(String userId) {
+    public HttpResponse loginSuccessResponse(String userId, String userName) {
         // 로그인 성공시 성공 응답 제공 및 세션 쿠키 설정
         String sessionId = httpSession.getNewSession();
         httpSession.setAttribute(sessionId, "userId", userId);
+        httpSession.setAttribute(sessionId, "userName", userName);
 
         HttpResponse response = JsonResponse.ok(Map.of(
             "status", "success"
