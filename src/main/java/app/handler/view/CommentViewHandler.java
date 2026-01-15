@@ -2,15 +2,20 @@ package app.handler.view;
 
 import app.business.SecurityChecker;
 import app.handler.response.RedirectResponse;
+import java.util.Map;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.HttpSession;
+import webserver.util.CookieExtractor;
 
 public class CommentViewHandler extends ViewHandler {
 
+    private final HttpSession httpSession;
     private final SecurityChecker securityChecker;
 
-    public CommentViewHandler(SecurityChecker securityChecker) {
+    public CommentViewHandler(HttpSession httpSession, SecurityChecker securityChecker) {
         super("/comment");
+        this.httpSession = httpSession;
         this.securityChecker = securityChecker;
     }
 
@@ -21,5 +26,14 @@ public class CommentViewHandler extends ViewHandler {
             return RedirectResponse.to("/login");
         }
         return null;
+    }
+
+    @Override
+    protected Map<String, Object> getTemplateValues(HttpRequest httpRequest) {
+
+        String sid = CookieExtractor.getAttributeFrom(httpRequest, "sid");
+        String userName = httpSession.getAttribute(sid, "userName");
+
+        return Map.of("userName", userName);
     }
 }

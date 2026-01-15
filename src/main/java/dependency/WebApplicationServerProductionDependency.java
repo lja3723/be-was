@@ -84,10 +84,10 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
-            new ArticleViewHandler(securityChecker),
-            new CommentViewHandler(securityChecker),
+            new ArticleViewHandler(httpSession, securityChecker),
+            new CommentViewHandler(httpSession, securityChecker),
             new LoginViewHandler(securityChecker),
-            new MyPageViewHandler(securityChecker),
+            new MyPageViewHandler(httpSession, securityChecker),
             new RegistrationViewHandler(securityChecker),
             new RootViewHandler(httpSession),
 
