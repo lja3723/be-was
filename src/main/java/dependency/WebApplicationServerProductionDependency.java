@@ -63,6 +63,11 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private static final HttpSession httpSession = new HttpSession();
     private static final SecurityChecker securityChecker = new SecurityChecker(httpSession);
 
+    // TODO: 테스트용 DB주입 과정은 나중에 제거 필요
+    public WebApplicationServerProductionDependency() {
+        userDatabaseAdapter.add(new User("qwer", "55", "asdf"));
+    }
+
     // Exception 클래스별 HttpResponseHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
     private static Map<Class<? extends Throwable>, ExceptionHandler<? extends Throwable>> exceptionHandlerMap() {
