@@ -84,7 +84,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         List<ApplicationHandler> applicationHandlers = List.of(
             new RegistrationHandler(userBusiness),
             new LoginHandler(httpSession, userBusiness),
-            new LogoutHandler(securityChecker, httpSession),
+            new LogoutHandler(httpSession, securityChecker),
             new LoginViewHandler(securityChecker),
             new RootViewHandler(securityChecker),
             new MainViewHandler(httpSession, securityChecker, userBusiness),

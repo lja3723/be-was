@@ -12,13 +12,13 @@ import webserver.http.field.HttpFieldValue;
 
 public class LogoutHandler extends ApplicationHandler {
 
-    private final SecurityChecker securityChecker;
     private final HttpSession httpSession;
+    private final SecurityChecker securityChecker;
 
-    public LogoutHandler(SecurityChecker securityChecker, HttpSession httpSession) {
+    public LogoutHandler(HttpSession httpSession, SecurityChecker securityChecker) {
         super(HttpMethod.POST, "/logout");
-        this.securityChecker = securityChecker;
         this.httpSession = httpSession;
+        this.securityChecker = securityChecker;
     }
 
     @Override
