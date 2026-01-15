@@ -73,5 +73,7 @@ public abstract class ViewHandler extends ApplicationHandler {
      *
      * @return 템플릿 치환에 사용할 키-값 맵
      */
-    protected abstract Map<String, Object> getTemplateValues(HttpRequest httpRequest);
+    protected Map<String, Object> getTemplateValues(HttpRequest httpRequest) {
+        return Map.of();
+    }
 }
