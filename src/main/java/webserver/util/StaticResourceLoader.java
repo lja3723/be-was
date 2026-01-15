@@ -41,4 +41,18 @@ public class StaticResourceLoader {
         }
         return path;
     }
+
+    public static String getPurePath(String path) {
+        path = path.replaceFirst("^static", "");
+        if (path.endsWith("/index.html")) {
+            path = path.substring(0, path.length() - "/index.html".length());
+        }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        if (path.isEmpty()) {
+            path = "/";
+        }
+        return path;
+    }
 }
