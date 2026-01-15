@@ -73,6 +73,4 @@ public record HttpResponseHeader(HttpHeader common, HttpStatus status) {
     public static HttpResponseHeaderBuilder builder() {
         return new HttpResponseHeaderBuilder();
     }
-
-
 }
