@@ -3,8 +3,9 @@ package app.handler;
 import app.business.LoginResult;
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
-import app.handler.response.RedirectResponse;
+import app.handler.response.JsonResponse;
 import java.util.List;
+import java.util.Map;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
@@ -54,7 +55,10 @@ public class LoginHandler extends ApplicationHandler {
         httpSession.setAttribute(sessionId, "userId", userId);
 
         // 로그인 성공시 "/main"으로 리다이렉트 및 세션 쿠키 설정
-        HttpResponse response = RedirectResponse.to("/main");
+        HttpResponse response = JsonResponse.ok(Map.of(
+            "status", "success",
+            "redirectUrl", "/main"
+        ));
 
         // Set-Cookie 헤더 추가
         response.header().common().fields().add(HttpField.builder()
@@ -72,6 +76,9 @@ public class LoginHandler extends ApplicationHandler {
     public HttpResponse loginFailureResponse(LoginResult loginResult) {
 
         // 로그인 실패 시 다시 로그인 페이지로 리다이렉트
-        return RedirectResponse.to("/login?retry_cause=" + loginResult.getValue());
+        return JsonResponse.unauthorized(Map.of(
+            "status", "failure",
+            "errorCode", loginResult.getValue()
+        ));
     }
 }
