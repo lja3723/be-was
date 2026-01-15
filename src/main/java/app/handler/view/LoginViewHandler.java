@@ -1,15 +1,11 @@
 package app.handler.view;
 
 import app.business.LoginResult;
+import app.handler.response.RedirectResponse;
 import java.util.Map;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpSession;
-import webserver.http.HttpStatus;
-import webserver.http.HttpVersion;
-import webserver.http.field.HttpField;
-import webserver.http.field.HttpFieldKey;
-import webserver.http.header.HttpResponseHeader;
 import webserver.util.CookieExtractor;
 import webserver.util.QueryParameterValidator;
 
@@ -28,16 +24,7 @@ public class LoginViewHandler extends ViewHandler {
 
         // 이미 로그인된 상태라면 로그인 된 메인 페이지인 "/main"으로 리다이렉트
         if (sid != null && httpSession.getSession(sid) != null) {
-            return new HttpResponse(
-                HttpResponseHeader.builder()
-                    .version(HttpVersion.HTTP_1_1)
-                    .status(HttpStatus.FOUND)
-                    .field(HttpField.builder()
-                        .key(HttpFieldKey.LOCATION)
-                        .value("/main")
-                        .build())
-                    .build()
-                , null);
+            return RedirectResponse.to("/main");
         }
         return null;
     }

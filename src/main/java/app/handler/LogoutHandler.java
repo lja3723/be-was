@@ -1,16 +1,14 @@
 package app.handler;
 
 import app.business.SecurityChecker;
+import app.handler.response.RedirectResponse;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpSession;
-import webserver.http.HttpStatus;
-import webserver.http.HttpVersion;
 import webserver.http.field.HttpField;
 import webserver.http.field.HttpFieldKey;
 import webserver.http.field.HttpFieldValue;
-import webserver.http.header.HttpResponseHeader;
 
 public class LogoutHandler extends ApplicationHandler {
 
@@ -28,24 +26,19 @@ public class LogoutHandler extends ApplicationHandler {
         String sid = securityChecker.getValidSessionId(httpRequest);
         httpSession.removeSession(sid);
 
-        return new HttpResponse(
-            HttpResponseHeader.builder()
-                .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.FOUND)
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.LOCATION)
-                    .value("/")
-                    .build())
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.SET_COOKIE)
-                    .value(HttpFieldValue.builder()
-                        .value("")
-                        .parameter("sid", "")
-                        .parameter("Max-Age", "0") // 쿠키를 만료시킨다.
-                        .parameter("Path", "/")
-                        .build())
-                    .build())
-                .build()
-            , null);
+        HttpResponse response = RedirectResponse.to("/");
+
+        // Set-Cookie 헤더 추가하여 세션 쿠키 만료
+        response.header().common().fields().add(HttpField.builder()
+            .key(HttpFieldKey.SET_COOKIE)
+            .value(HttpFieldValue.builder()
+                .value("")
+                .parameter("sid", "")
+                .parameter("Max-Age", "0") // 쿠키를 만료시킨다.
+                .parameter("Path", "/")
+                .build())
+            .build());
+
+        return response;
     }
 }

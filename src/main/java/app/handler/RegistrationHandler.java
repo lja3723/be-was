@@ -2,16 +2,12 @@ package app.handler;
 
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
+import app.handler.response.RedirectResponse;
 import java.util.List;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.HttpStatus;
-import webserver.http.HttpVersion;
 import webserver.http.QueryParameter;
-import webserver.http.field.HttpField;
-import webserver.http.field.HttpFieldKey;
-import webserver.http.header.HttpResponseHeader;
 import webserver.util.QueryParameterValidator;
 
 public class RegistrationHandler extends ApplicationHandler {
@@ -41,15 +37,6 @@ public class RegistrationHandler extends ApplicationHandler {
             queryParameter.getValue("email")
         );
 
-        return new HttpResponse(
-            HttpResponseHeader.builder()
-                .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.FOUND)
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.LOCATION)
-                    .value("/")
-                    .build())
-                .build()
-            , null);
+        return RedirectResponse.to("/");
     }
 }

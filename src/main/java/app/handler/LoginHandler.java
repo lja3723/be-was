@@ -3,18 +3,16 @@ package app.handler;
 import app.business.LoginResult;
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
+import app.handler.response.RedirectResponse;
 import java.util.List;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpSession;
-import webserver.http.HttpStatus;
-import webserver.http.HttpVersion;
 import webserver.http.QueryParameter;
 import webserver.http.field.HttpField;
 import webserver.http.field.HttpFieldKey;
 import webserver.http.field.HttpFieldValue;
-import webserver.http.header.HttpResponseHeader;
 import webserver.util.QueryParameterValidator;
 
 public class LoginHandler extends ApplicationHandler {
@@ -56,38 +54,24 @@ public class LoginHandler extends ApplicationHandler {
         httpSession.setAttribute(sessionId, "userId", userId);
 
         // 로그인 성공시 "/main"으로 리다이렉트 및 세션 쿠키 설정
-        return new HttpResponse(
-            HttpResponseHeader.builder()
-                .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.FOUND)
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.LOCATION)
-                    .value("/main")
-                    .build())
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.SET_COOKIE)
-                    .value(HttpFieldValue.builder()
-                        .value("")
-                        .parameter("sid", sessionId)
-                        .parameter("Path", "/")
-                        .build())
-                    .build())
-                .build()
-            , null);
+        HttpResponse response = RedirectResponse.to("/main");
+
+        // Set-Cookie 헤더 추가
+        response.header().common().fields().add(HttpField.builder()
+            .key(HttpFieldKey.SET_COOKIE)
+            .value(HttpFieldValue.builder()
+                .value("")
+                .parameter("sid", sessionId)
+                .parameter("Path", "/")
+                .build())
+            .build());
+
+        return response;
     }
 
     public HttpResponse loginFailureResponse(LoginResult loginResult) {
 
         // 로그인 실패 시 다시 로그인 페이지로 리다이렉트
-        return new HttpResponse(
-            HttpResponseHeader.builder()
-                .version(HttpVersion.HTTP_1_1)
-                .status(HttpStatus.FOUND)
-                .field(HttpField.builder()
-                    .key(HttpFieldKey.LOCATION)
-                    .value("/login?retry_cause=" + loginResult.getValue())
-                    .build())
-                .build()
-            , null);
+        return RedirectResponse.to("/login?retry_cause=" + loginResult.getValue());
     }
 }
