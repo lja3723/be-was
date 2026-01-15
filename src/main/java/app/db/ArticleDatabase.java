@@ -1,6 +1,7 @@
 package app.db;
 
 import app.model.Article;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +17,8 @@ public class ArticleDatabase {
         return articles.get(id);
     }
 
-    public static Map<Integer, Article> findAll() {
-        return articles;
+    public static Collection<Article> findAll() {
+        return articles.values();
     }
 
 }

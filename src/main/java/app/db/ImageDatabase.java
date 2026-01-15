@@ -1,6 +1,7 @@
 package app.db;
 
 import app.model.Image;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +17,8 @@ public class ImageDatabase {
         return images.get(url);
     }
 
-    public static Map<String, Image> findAll() {
-        return images;
+    public static Collection<Image> findAll() {
+        return images.values();
     }
 }
 

@@ -1,6 +1,7 @@
 package app.db;
 
 import app.model.Comment;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class CommentDatabase {
         return comments.get(id);
     }
 
-    public static Map<Integer, Comment> findAll() {
-        return comments;
+    public static Collection<Comment> findAll() {
+        return comments.values();
     }
 }
