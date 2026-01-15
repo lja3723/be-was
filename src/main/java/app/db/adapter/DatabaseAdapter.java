@@ -3,7 +3,7 @@ package app.db.adapter;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface DatabaseAdapter<T, Key> {
+public interface DatabaseAdapter<Key, T> {
 
     /**
      * 새로운 사용자를 데이터베이스에 추가

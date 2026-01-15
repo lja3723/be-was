@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public class UserBusinessImpl implements UserBusiness {
 
-    private final DatabaseAdapter<User, String> userDatabaseAdapter;
+    private final DatabaseAdapter<String, User> userDatabaseAdapter;
 
-    public UserBusinessImpl(DatabaseAdapter<User, String> userDatabaseAdapter) {
+    public UserBusinessImpl(DatabaseAdapter<String, User> userDatabaseAdapter) {
         this.userDatabaseAdapter = userDatabaseAdapter;
     }
 

@@ -81,7 +81,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         );
     }
 
-    private static final DatabaseAdapter<User, String> userDatabaseAdapter = new UserDatabaseAdapter();
+    private static final DatabaseAdapter<String, User> userDatabaseAdapter = new UserDatabaseAdapter();
     private static final UserBusinessImpl userBusiness = new UserBusinessImpl(userDatabaseAdapter);
 
     // ApplicationHandler 매핑 초기화
