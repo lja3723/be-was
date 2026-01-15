@@ -1,7 +1,7 @@
 package app.handler.view;
 
 import app.business.SecurityChecker;
-import app.handler.response.RedirectResponse;
+import java.util.Map;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
@@ -16,10 +16,12 @@ public class RootViewHandler extends ViewHandler {
 
     @Override
     protected HttpResponse preHandle(HttpRequest httpRequest) {
-        // 이미 로그인된 상태라면 로그인 된 메인 페이지인 "/main"으로 리다이렉트
-        if (securityChecker.isLoggedIn(httpRequest)) {
-            return RedirectResponse.to("/main");
-        }
         return null;
+    }
+
+    @Override
+    protected Map<String, Object> getTemplateValues(HttpRequest httpRequest) {
+
+        return super.getTemplateValues(httpRequest);
     }
 }

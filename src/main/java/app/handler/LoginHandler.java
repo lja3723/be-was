@@ -51,13 +51,12 @@ public class LoginHandler extends ApplicationHandler {
     }
 
     public HttpResponse loginSuccessResponse(String userId) {
+        // 로그인 성공시 성공 응답 제공 및 세션 쿠키 설정
         String sessionId = httpSession.getNewSession();
         httpSession.setAttribute(sessionId, "userId", userId);
 
-        // 로그인 성공시 "/main"으로 리다이렉트 및 세션 쿠키 설정
         HttpResponse response = JsonResponse.ok(Map.of(
-            "status", "success",
-            "redirectUrl", "/main"
+            "status", "success"
         ));
 
         // Set-Cookie 헤더 추가
@@ -75,7 +74,6 @@ public class LoginHandler extends ApplicationHandler {
 
     public HttpResponse loginFailureResponse(LoginResult loginResult) {
 
-        // 로그인 실패 시 다시 로그인 페이지로 리다이렉트
         return JsonResponse.unauthorized(Map.of(
             "status", "failure",
             "errorCode", loginResult.getValue()

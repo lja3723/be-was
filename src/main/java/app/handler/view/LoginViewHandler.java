@@ -16,9 +16,9 @@ public class LoginViewHandler extends ViewHandler {
 
     @Override
     protected HttpResponse preHandle(HttpRequest httpRequest) {
-        // 이미 로그인된 상태라면 로그인 된 메인 페이지인 "/main"으로 리다이렉트
+        // 이미 로그인된 상태라면 "/"로 리다이렉트
         if (securityChecker.isLoggedIn(httpRequest)) {
-            return RedirectResponse.to("/main");
+            return RedirectResponse.to("/");
         }
         return null;
     }
