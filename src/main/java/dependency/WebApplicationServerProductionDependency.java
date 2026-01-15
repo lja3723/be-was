@@ -85,7 +85,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
             new LoginHandler(httpSession, userBusiness),
             new LogoutHandler(httpSession, securityChecker),
             new LoginViewHandler(securityChecker),
-            new RootViewHandler(httpSession, securityChecker, userBusiness),
+            new RootViewHandler(httpSession),
             new MyPageViewHandler(securityChecker)
         );
 

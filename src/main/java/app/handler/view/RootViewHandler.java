@@ -1,41 +1,62 @@
 package app.handler.view;
 
-import app.business.SecurityChecker;
-import app.business.UserBusiness;
-import app.exception.UnauthorizedException;
-import app.model.User;
 import java.util.Map;
 import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
 import webserver.http.HttpSession;
+import webserver.util.CookieExtractor;
 
 public class RootViewHandler extends ViewHandler {
 
     private final HttpSession httpSession;
-    private final SecurityChecker securityChecker;
-    private final UserBusiness userBusiness;
 
-    public RootViewHandler(HttpSession httpSession, SecurityChecker securityChecker, UserBusiness userBusiness) {
+    public RootViewHandler(HttpSession httpSession) {
         super("/");
         this.httpSession = httpSession;
-        this.securityChecker = securityChecker;
-        this.userBusiness = userBusiness;
-    }
-
-    @Override
-    protected HttpResponse preHandle(HttpRequest httpRequest) {
-        return null;
     }
 
     @Override
     protected Map<String, Object> getTemplateValues(HttpRequest httpRequest) {
-        String userId = httpSession.getAttribute(securityChecker.getValidSessionId(httpRequest), "userId");
 
-        User user = userBusiness.findById(userId)
-            .orElseThrow(() -> new UnauthorizedException("User not found for ID: " + userId));
+        String sid = CookieExtractor.getAttributeFrom(httpRequest, "sid");
+        String userName = httpSession.getAttribute(sid, "userName");
 
-        return Map.of("username", user.getName());
+        // 로그인 된 상태에는 로그인된 헤더 블럭 렌더링
+        if (userName != null) {
+            return Map.of("headerMenuBlock", getLoggedInHeaderBlock(userName));
+        }
 
-//        return super.getTemplateValues(httpRequest);
+        // 로그아웃 된 상태에는 로그아웃된 헤더 블럭 렌더링
+        return Map.of("headerMenuBlock", getLoggedOutHeaderBlock());
+    }
+
+    private String getLoggedInHeaderBlock(String userName) {
+        return """
+            <li class="header__menu__item">
+              <a class="btn btn_ghost btn_size_s" href="/mypage">안녕하세요, %s님!</a>
+              </li>
+              <li class="header__menu__item">
+                <a class="btn btn_contained btn_size_s" href="/article">글쓰기</a>
+              </li>
+              <li class="header__menu__item">
+                <form action="/logout" method="POST" style="display: inline;">
+                  <button type="submit" id="logout-btn" class="btn btn_ghost btn_size_s">
+                    로그아웃
+                  </button>
+                </form>
+              </li>
+            """.formatted(userName);
+    }
+
+    private String getLoggedOutHeaderBlock() {
+        return """
+            <li class="header__menu__item">
+            <a class="btn btn_contained btn_size_s" href="/login">로그인</a>
+              </li>
+              <li class="header__menu__item">
+                <a class="btn btn_ghost btn_size_s" href="/registration">
+                  회원 가입
+                </a>
+              </li>
+            """;
     }
 }
