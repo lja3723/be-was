@@ -18,8 +18,11 @@ import app.handler.exception.BadRequestHttpRequestHandler;
 import app.handler.exception.ForbiddenExceptionHandler;
 import app.handler.exception.ResourceNotFoundHttpRequestHandler;
 import app.handler.exception.UnauthorizedExceptionHandler;
+import app.handler.view.ArticleViewHandler;
+import app.handler.view.CommentViewHandler;
 import app.handler.view.LoginViewHandler;
 import app.handler.view.MyPageViewHandler;
+import app.handler.view.RegistrationViewHandler;
 import app.handler.view.RootViewHandler;
 import app.model.User;
 import java.util.List;
@@ -81,12 +84,16 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
     private static Map<HttpEndpoint, ApplicationHandler> getApplicationHandlerMap() {
         List<ApplicationHandler> applicationHandlers = List.of(
+            new ArticleViewHandler(securityChecker),
+            new CommentViewHandler(securityChecker),
+            new LoginViewHandler(securityChecker),
+            new MyPageViewHandler(securityChecker),
+            new RegistrationViewHandler(securityChecker),
+            new RootViewHandler(httpSession),
+
             new RegistrationHandler(userBusiness),
             new LoginHandler(httpSession, userBusiness),
-            new LogoutHandler(httpSession, securityChecker),
-            new LoginViewHandler(securityChecker),
-            new RootViewHandler(httpSession),
-            new MyPageViewHandler(securityChecker)
+            new LogoutHandler(httpSession, securityChecker)
         );
 
         return applicationHandlers.stream().collect(
