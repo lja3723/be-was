@@ -1,29 +1,26 @@
 package app.handler.view;
 
 import app.business.LoginResult;
+import app.business.SecurityChecker;
 import app.handler.response.RedirectResponse;
 import java.util.Map;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.HttpSession;
-import webserver.util.CookieExtractor;
 import webserver.util.QueryParameterValidator;
 
 public class LoginViewHandler extends ViewHandler {
 
-    private final HttpSession httpSession;
+    private final SecurityChecker securityChecker;
 
-    public LoginViewHandler(HttpSession httpSession) {
+    public LoginViewHandler(SecurityChecker securityChecker) {
         super("/login");
-        this.httpSession = httpSession;
+        this.securityChecker = securityChecker;
     }
 
     @Override
     protected HttpResponse preHandle(HttpRequest httpRequest) {
-        String sid = CookieExtractor.getAttributeFrom(httpRequest, "sid");
-
         // 이미 로그인된 상태라면 로그인 된 메인 페이지인 "/main"으로 리다이렉트
-        if (sid != null && httpSession.getSession(sid) != null) {
+        if (securityChecker.isLoggedIn(httpRequest)) {
             return RedirectResponse.to("/main");
         }
         return null;
