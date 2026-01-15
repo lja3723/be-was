@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ArticleDatabase {
 
-    private static final Map<Integer, Article> articles = new HashMap<>();
+    private static Map<Integer, Article> articles = new HashMap<>();
 
     public static void addArticle(Article article) {
         articles.put(article.id(), article);

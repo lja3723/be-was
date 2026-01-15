@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ImageDatabase {
 
-    private static final Map<String, Image> images = new HashMap<>();
+    private static Map<String, Image> images = new HashMap<>();
 
     public static void addImage(Image image) {
         images.put(image.url(), image);

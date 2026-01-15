@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class CommentDatabase {
 
-    private static final Map<Integer, Comment> comments = new HashMap<>();
+    private static Map<Integer, Comment> comments = new HashMap<>();
 
     public static void addComment(Comment comment) {
         comments.put(comment.id(), comment);
