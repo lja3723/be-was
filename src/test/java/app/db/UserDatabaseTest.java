@@ -79,9 +79,9 @@ class UserDatabaseTest {
         assertEquals(UserConstants.NUM_OF_USERS, users.size());
         for (int i = 0; i < UserConstants.NUM_OF_USERS; i++) {
             String userId = UserConstants.USERS_ID[i];
-            assertEquals(UserConstants.USERS_ID[i], users.get(userId).getUserId());
-            assertEquals(UserConstants.USERS_PASSWORD[i], users.get(userId).getPassword());
-            assertEquals(UserConstants.USERS_NAME[i], users.get(userId).getName());
+            assertEquals(UserConstants.USERS_ID[i], users.get(userId).userId());
+            assertEquals(UserConstants.USERS_PASSWORD[i], users.get(userId).password());
+            assertEquals(UserConstants.USERS_NAME[i], users.get(userId).name());
         }
     }
 
@@ -92,9 +92,9 @@ class UserDatabaseTest {
 
             User user = UserDatabase.findUserById(userId);
 
-            assertEquals(UserConstants.USERS_ID[i], user.getUserId());
-            assertEquals(UserConstants.USERS_PASSWORD[i], user.getPassword());
-            assertEquals(UserConstants.USERS_NAME[i], user.getName());
+            assertEquals(UserConstants.USERS_ID[i], user.userId());
+            assertEquals(UserConstants.USERS_PASSWORD[i], user.password());
+            assertEquals(UserConstants.USERS_NAME[i], user.name());
         }
     }
 

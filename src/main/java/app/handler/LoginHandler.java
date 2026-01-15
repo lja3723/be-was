@@ -47,7 +47,7 @@ public class LoginHandler extends ApplicationHandler {
             String userId = queryParameter.getValue("userId");
             String userName = userBusiness.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found after successful login."))
-                .getName();
+                .name();
 
             return loginSuccessResponse(userId, userName);
         }

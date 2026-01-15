@@ -18,7 +18,7 @@ public class UserDatabase {
      * @param user 추가할 {@link User} 객체
      */
     public static void addUser(User user) {
-        users.put(user.getUserId(), user);
+        users.put(user.userId(), user);
     }
 
     /**

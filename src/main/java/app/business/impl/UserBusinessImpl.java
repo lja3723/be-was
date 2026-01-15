@@ -30,7 +30,7 @@ public class UserBusinessImpl implements UserBusiness {
         Optional<User> userOpt = userDatabaseAdapter.findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            if (user.getPassword().equals(password)) {
+            if (user.password().equals(password)) {
                 return LoginResult.SUCCESS;
             }
             return LoginResult.PASSWORD_MISMATCH;

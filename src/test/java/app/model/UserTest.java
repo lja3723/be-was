@@ -24,21 +24,21 @@ class UserTest {
     @Test
     void getUserId() {
         for (int i = 0; i < NUM_OF_USERS; i++) {
-            assertEquals(USERS_ID[i], users[i].getUserId());
+            assertEquals(USERS_ID[i], users[i].userId());
         }
     }
 
     @Test
     void getPassword() {
         for (int i = 0; i < NUM_OF_USERS; i++) {
-            assertEquals(USERS_PASSWORD[i], users[i].getPassword());
+            assertEquals(USERS_PASSWORD[i], users[i].password());
         }
     }
 
     @Test
     void getName() {
         for (int i = 0; i < NUM_OF_USERS; i++) {
-            assertEquals(USERS_NAME[i], users[i].getName());
+            assertEquals(USERS_NAME[i], users[i].name());
         }
     }
 
