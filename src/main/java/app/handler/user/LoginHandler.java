@@ -1,8 +1,9 @@
-package app.handler;
+package app.handler.user;
 
 import app.business.LoginResult;
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
+import app.handler.ApplicationHandler;
 import app.handler.response.JsonResponse;
 import java.util.List;
 import java.util.Map;

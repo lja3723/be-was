@@ -1,6 +1,7 @@
-package app.handler;
+package app.handler.user;
 
 import app.business.SecurityChecker;
+import app.handler.ApplicationHandler;
 import app.handler.response.RedirectResponse;
 import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;

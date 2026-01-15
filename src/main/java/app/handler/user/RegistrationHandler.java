@@ -1,7 +1,8 @@
-package app.handler;
+package app.handler.user;
 
 import app.business.UserBusiness;
 import app.exception.BadRequestException;
+import app.handler.ApplicationHandler;
 import app.handler.response.RedirectResponse;
 import java.util.List;
 import webserver.http.HttpMethod;
