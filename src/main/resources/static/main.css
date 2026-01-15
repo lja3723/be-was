@@ -59,16 +59,27 @@
 
 .post__menu__personal {
   display: flex;
-  gap: 8px;
+  gap: 16px;
 }
 
 .post__menu__btn {
-  width: 32px;
+  min-width: 32px;
   height: 32px;
   padding: 0;
   margin: 0;
   border: 0;
   background: transparent;
+  display: flex;         /* 아이콘과 숫자 가로 정렬 */
+  align-items: center;   /* 세로 중앙 정렬 */
+  gap: 4px;              /* 아이콘과 숫자 사이 간격 */
+  cursor: pointer;
+}
+
+.post__menu__count {
+  font-weight: 500;
+  font-size: 16px;       /* 이미지와 유사한 크기 */
+  line-height: 25.6px;
+  color: #14212b;
 }
 
 .comment {
