@@ -27,15 +27,11 @@ public class HttpRequestRouter implements Router<HttpRequest, HttpRequestHandler
     @Override
     public HttpRequestHandler route(HttpRequest httpRequest) {
 
-        // 확장자가 붙은 요청은 정적 리소스 핸들러로 라우팅
         String path = httpRequest.header().uri().getPath();
-        if (FileExtensionExtractor.get(path) != null) {
-            return staticResourceHandler;
-        }
 
         // TODO: 추후 Path Variable 지원이 필요할 경우 리팩터링 필요
         ApplicationHandler applicationHandler = applicationHandlerMap.get(
-            new HttpEndpoint(httpRequest.header().method(), path)
+            new HttpEndpoint(httpRequest.header().method(), StaticResourceLoader.getPurePath(path))
         );
 
         if (applicationHandler != null) {
