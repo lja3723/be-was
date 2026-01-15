@@ -1,6 +1,7 @@
 package dependency;
 
 import app.business.SecurityChecker;
+import app.business.impl.ArticleBusinessImpl;
 import app.business.impl.UserBusinessImpl;
 import app.db.adapter.ArticleDatabaseAdapter;
 import app.db.adapter.CommentDatabaseAdapter;
@@ -14,6 +15,7 @@ import app.exception.InternalServerErrorException;
 import app.exception.ResourceNotFoundException;
 import app.exception.UnauthorizedException;
 import app.handler.ApplicationHandler;
+import app.handler.article.ArticleHandler;
 import app.handler.user.LoginHandler;
 import app.handler.user.LogoutHandler;
 import app.handler.user.RegistrationHandler;
@@ -88,6 +90,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     private static final DatabaseAdapter<Integer, Comment> commentDatabaseAdapter = new CommentDatabaseAdapter();
 
     private static final UserBusinessImpl userBusiness = new UserBusinessImpl(userDatabaseAdapter);
+    private static final ArticleBusinessImpl articleBusiness = new ArticleBusinessImpl(articleDatabaseAdapter);
 
     // ApplicationHandler 매핑 초기화
     // TODO: 추후 애너테이션 & 리플렉션으로 자동 등록하는 방식으로 변경 고려
@@ -103,7 +106,9 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
 
             new RegistrationHandler(userBusiness),
             new LoginHandler(httpSession, userBusiness),
-            new LogoutHandler(httpSession, securityChecker)
+            new LogoutHandler(httpSession, securityChecker),
+
+            new ArticleHandler(articleBusiness)
         );
 
         return applicationHandlers.stream().collect(
@@ -118,12 +123,13 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
     public WebApplicationServerProductionDependency() {
         userDatabaseAdapter.add(new User("qwer", "asdf", "55"));
 
-        Comment c1 = new Comment(1, "account", 1, "군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다.");
-        Comment c2 = new Comment(2, "account", 1, "대통령의 임기연장 또는 중임변경을 위한 헌법개정은 그 헌법개정 제안 당시의 대통령에 대하여는 효력이 없다. 민주평화통일자문회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다.");
-        Comment c3 = new Comment(3, "account", 1, "민주평화통일자문회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다.");
-        Comment c4 = new Comment(4, "account", 1, "Hidden comment 1");
-        Comment c5 = new Comment(5, "account", 1, "Hidden comment 2");
-        Comment c6 = new Comment(6, "account", 1, "Hidden comment 3");
+        Comment c1 = new Comment(1, "account", 1, "aaaaaaaa 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다.");
+        Comment c2 = new Comment(2, "account", 1, "bbbbbbbb 대통령의 임기연장 또는 중임변경을 위한 헌법개정은 그 헌법개정 제안 당시의 대통령에 대하여는 효력이 없다. 민주평화통일자문회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다.");
+        Comment c3 = new Comment(3, "account", 1, "cccccccc 민주평화통일자문회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다.");
+        Comment c4 = new Comment(4, "account", 1, "hihihi Hidden comment 1");
+        Comment c5 = new Comment(5, "account", 1, "hihihi Hidden comment 2");
+        Comment c6 = new Comment(6, "account", 1, "hihihi Hidden comment 3");
+        Comment c7 = new Comment(7, "account", 1, "hihihi Hidden comment 4");
 
         commentDatabaseAdapter.add(c1);
         commentDatabaseAdapter.add(c2);
@@ -135,7 +141,7 @@ public class WebApplicationServerProductionDependency implements WebApplicationS
         articleDatabaseAdapter.add(new Article(1, "qwer", "",
             "우리는 시스템 아키텍처에 대한 일관성 있는 접근이 필요하며, 필요한 모든 측면은 이미 개별적으로 인식되고 있다고 생각합니다. 즉, 응답이 잘 되고, 탄력적이며 유연하고 메시지 기반으로 동작하는 시스템 입니다. 우리는 이것을 리액티브 시스템(Reactive Systems)라고 부릅니다. 리액티브 시스템으로 구축된 시스템은 보다 유연하고, 느슨한 결합을 갖고, 확장성이 있습니다. 이로 인해 개발이 더 쉬워지고 변경 사항을 적용하기 쉬워집니다. 이 시스템은 장애에 대해 더 강한 내성을 지니며, 비록 장애가 발생하더라도, 재난이 일어나기보다는 간결한 방식으로 해결합니다. 리액티브 시스템은 높은 응답성을 가지며 사용자에게 효과적인 상호적 피드백을 제공합니다.",
             List.of(),
-            List.of(c1, c2, c3, c4, c5, c6),
+            List.of(c1, c2, c3, c4, c5, c6, c7),
             0));
     }
 
